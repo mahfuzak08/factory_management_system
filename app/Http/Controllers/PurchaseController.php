@@ -140,8 +140,10 @@ class PurchaseController extends Controller
                     'account_id' => $ptype[$i],
                     'user_id' => Auth::id(),
                     'tranx_date' => $request->input('date'),
-                    'ref_id' => $order_id,
-                    'ref_type' => 'purchase_order',
+                    'ref_id' => $vendor_id,
+                    'ref_type' => 'vendor',
+                    'ref_tranx_id' => $order_id,
+                    'ref_tranx_type' => 'purchase_order',
                     'note' => '',
                     'amount' => (float) $receive_amount[$i] * -1
                 ];
@@ -163,7 +165,10 @@ class PurchaseController extends Controller
     }
 
     public function invoice($id){
-        $invoice = Purchase::findOrFail($id);
+        $invoice = Purchase::join("vendors", "purchases.vendor_id", "=", "vendors.id")
+                            ->select('purchases.*', 'vendors.name as vendor_name', 'vendors.mobile', 'vendors.address')
+                            ->where("purchases.id", $id)
+                            ->get();
         // $account = Bankacc::all();
         // $vendor = Vendor::where('is_delete', 0)->get();
         return view('admin.purchase.invoice', compact('invoice'));

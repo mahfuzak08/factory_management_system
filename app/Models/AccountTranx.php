@@ -9,5 +9,5 @@ class AccountTranx extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['account_id', 'tranx_date', 'ref_id','ref_type','amount','user_id', 'note'];
+    protected $fillable = ['account_id', 'tranx_date', 'ref_id','ref_type', 'ref_tranx_id', 'ref_tranx_type', 'amount','user_id', 'note'];
 }

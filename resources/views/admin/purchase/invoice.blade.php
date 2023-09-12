@@ -15,118 +15,63 @@
                     <div class="card">
                       <div class="card-body">
                         <h4 class="card-title">{{ __('admin.purchase_register') }}</h4>
-                        @php
-                            print_r($invoice);
-                        @endphp
-                        <form action="{{route('save-purchase')}}" method="POST" class="forms-sample table-responsive">
-                          @csrf
-                          <style>
-                            .table td{
-                              padding: 5px 2px;
-                            }
-                          </style>
-                          {{-- <table class="table" style="min-width:500px">
-                            <tr>
-                              <td width="70%">
-                                <input type="text" required name="vendor_new" list="vendor" id="vendor_id" class="form-control" placeholder="{{__('admin.vendor_name')}}">
-                                <input type="hidden" name="vendor_id" id="vendor_id_hidden">
-                                <datalist id="vendor">
-                                  @foreach($vendor as $v)
-                                    <option value="{{$v->name}}" data-id="{{$v->id}}" data-mobile="{{$v->mobile}}" data-address="{{$v->address}}">
-                                  @endforeach
-                                </datalist>
-                              </td>
-                              <td width="30%">
-                                <input type="text" required name="date" class="form-control" placeholder="YYYY-MM-DD" value="{{date('Y-m-d')}}">
-                              </td>
-                            </tr>
-                            <tr>
-                              <td width="70%">
-                                <input type="text" name="address" id="address" class="form-control" placeholder="{{__('admin.address')}}">
-                              </td>
-                              <td width="30%">
-                                <input type="text" required name="mobile" id="mobile" class="form-control" placeholder="{{__('admin.mobile')}}">
-                              </td>
-                            </tr>
-                          </table> --}}
-                          {{-- <table class="table">
-                            <thead>
-                              <tr>
-                                <th width="2%"></th>
-                                <th width="40%">{{__('admin.product_name')}}</th>
-                                <th width="15%">{{__('admin.quantity')}}</th>
-                                <th width="15%">{{__('admin.price')}}</th>
-                                <th width="15%">{{__('admin.total')}}</th>
-                                <th width="13%">{{__('admin.action')}}</th>
-                              </tr>
-                            </thead>
-                            <tbody id="items">
-                              <tr class="item">
-                                <td class="sl">1</td>
-                                <td>
-                                  <input type="text" name="product_name[]" class="form-control" placeholder="{{__('admin.product_name')}}">
-                                </td>
-                                <td>
-                                  <input type="text" name="quantity[]" class="qmp quantity form-control" placeholder="{{__('admin.quantity')}}">
-                                </td>
-                                <td>
-                                  <input type="text" name="price[]" class="qmp price form-control" placeholder="{{__('admin.price')}}">
-                                </td>
-                                <td>
-                                  <input type="text" name="total[]" disabled class="total form-control" placeholder="{{__('admin.total')}}">
-                                </td>
-                                <td>
-                                  <input type="hidden" name="product_id[]">
-                                  <button type="button" class="add_item_row btn btn-inverse-success btn-icon">
-                                    <i class="mdi mdi-plus"></i>
-                                  </button>
-                                </td>
-                              </tr>
-                            </tbody>
-                            <tfoot>
-                              <tr>
-                                <td colspan="4" class="text-right">Sub Totat</td>
-                                <td><input type="text" name="subtotal" id="subtotal" class="form-control" placeholder="{{__('admin.subtotal')}}"></td>
-                                <td></td>
-                              </tr>
-                              <tr>
-                                <td colspan="4" class="text-right">Discount</td>
-                                <td><input type="text" name="discount" id="discount" class="form-control" placeholder="{{__('admin.discount')}}"></td>
-                                <td></td>
-                              </tr>
-                              <tr>
-                                <td colspan="4" class="text-right">Total</td>
-                                <td><input type="text" required name="total" id="total" class="form-control" placeholder="{{__('admin.total')}}"></td>
-                                <td></td>
-                              </tr>
-                              <tr>
-                                <td colspan="4" class="text-right">Payment Type</td>
-                                <td>
-                                  <select name="payment_type" required id="payment_type" style="width: 100%;">
-                                  @foreach($account as $ac)
-                                    <option value="{{$ac->id}}">{{$ac->name}}</option>
-                                  @endforeach
-                                  </select>
-                                </td>
-                                <td></td>
-                              </tr>
-                              <tr>
-                                <td colspan="4" class="text-right">Receive Amout</td>
-                                <td><input type="text" required name="receive_amount" class="form-control" placeholder="{{__('admin.receive_amount')}}"></td>
-                                <td></td>
-                              </tr>
-                              <tr>
-                                <td colspan="4" class="text-right">
-                                  <button type="submit" class="btn btn-rounded btn-primary btn-sm">{{ __('admin.save_now') }}</button>
-                                </td>
-                                <td>
-                                  <button class="btn btn-rounded btn-secondary btn-sm">{{ __('admin.cancel') }}</button>
-                                </td>
-                                <td></td>
-                              </tr>
-                            </tfoot>
-                          </table> --}}
-                        </form>
+                          @php
+                              print_r($invoice);
+                          @endphp
+                          <div _ngcontent-tmn-c13="" class="row container-fluid d-flex justify-content-between">
+                            <div _ngcontent-tmn-c13="" class="col-lg-3 pl-0">
+                              <p _ngcontent-tmn-c13="" class="mt-5 mb-2"><b _ngcontent-tmn-c13="">{{$invoice[0]->vendor_name}}</b></p>
+                              <p _ngcontent-tmn-c13="">{{$invoice[0]->mobile}},<br _ngcontent-tmn-c13="">{{$invoice[0]->address}}.</p>
+                            </div>
+                            <div _ngcontent-tmn-c13="" class="col-lg-3 pr-0">
+                              <p _ngcontent-tmn-c13="" class="mt-5 mb-2 text-right"><b _ngcontent-tmn-c13="">#INV-{{$invoice[0]->id}}</b></p>
+                              <p _ngcontent-tmn-c13="" class="text-right">Date : {{$invoice[0]->date}}</p>
+                            </div>
+                          </div>
+                          <div _ngcontent-tmn-c13="" class="container-fluid mt-5 d-flex justify-content-center w-100">
+                            <div _ngcontent-tmn-c13="" class="table-responsive w-100">
+                                <table _ngcontent-tmn-c13="" class="table">
+                                  <thead _ngcontent-tmn-c13="">
+                                    <tr _ngcontent-tmn-c13="" class="bg-dark text-white">
+                                        <th _ngcontent-tmn-c13="">#</th>
+                                        <th _ngcontent-tmn-c13="">Description</th>
+                                        <th _ngcontent-tmn-c13="" class="text-right">Quantity</th>
+                                        <th _ngcontent-tmn-c13="" class="text-right">Unit cost</th>
+                                        <th _ngcontent-tmn-c13="" class="text-right">Total</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody _ngcontent-tmn-c13="">
+                                    @php
+                                      $products = json_decode($invoice[0]->products);
+                                      $c=0;
+                                      $total = 0;
+                                    @endphp
+                                    @foreach($products as $item)
+                                    @php
+                                      $total += $item->total;
+                                    @endphp
+                                    <tr _ngcontent-tmn-c13="" class="text-right">
+                                      <td _ngcontent-tmn-c13="" class="text-left">{{++$c}}</td>
+                                      <td _ngcontent-tmn-c13="" class="text-left">{{$item->product_name}}</td>
+                                      <td _ngcontent-tmn-c13="">{{$item->quantity}}</td>
+                                      <td _ngcontent-tmn-c13="">{{$item->price}}</td>
+                                      <td _ngcontent-tmn-c13="">{{$item->total}}</td>
+                                    </tr>
+                                    @endforeach
+                                  </tbody>
+                                </table>
+                              </div>
+                          </div>
+                          <div _ngcontent-tmn-c13="" class="container-fluid mt-5 w-100">
+                            <p _ngcontent-tmn-c13="" class="text-right mb-2">Sub - Total amount: {{$total}}</p>
+                            <p _ngcontent-tmn-c13="" class="text-right">Discount : {{$invoice[0]->}}</p>
+                            <h4 _ngcontent-tmn-c13="" class="text-right mb-5">Total : $13,986</h4>
+                            <hr _ngcontent-tmn-c13="">
+                          </div>
+                          <div _ngcontent-tmn-c13="" class="container-fluid w-100">
+                            <a _ngcontent-tmn-c13="" class="btn btn-primary float-right mt-4 ml-2" href="javascript:void(0)"><i _ngcontent-tmn-c13="" class="mdi mdi-printer mr-1"></i>Print</a>
+                            <a _ngcontent-tmn-c13="" class="btn btn-success float-right mt-4" href="javascript:void(0)"><i _ngcontent-tmn-c13="" class="mdi mdi-send mr-1"></i>Send Invoice</a>
+                          </div>
                       </div>
                     </div>
                   </div>

@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('purchases', function (Blueprint $table) {
-            $table->string('note')->nullable()->change();
+        Schema::table('account_tranxes', function (Blueprint $table) {
+            $table->string('ref_tranx_id')->nullable();
+            $table->string('ref_tranx_type')->nullable();
         });
     }
 
@@ -21,8 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('purchases', function (Blueprint $table) {
-            $table->float('note')->change();
+        Schema::table('account_tranxes', function (Blueprint $table) {
+            $table->dropColumn('ref_tranx_id');
+            $table->dropColumn('ref_tranx_type');
         });
     }
 };
