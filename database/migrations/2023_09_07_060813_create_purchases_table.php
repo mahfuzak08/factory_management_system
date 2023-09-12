@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('order_type')->default('purchase');
             $table->integer('user_id');
             $table->integer('vendor_id');
-            $table->string('products');
-            $table->string('return_items')->nullable();
+            $table->json('products')->nullable();
+            $table->json('return_items')->nullable();
             $table->date('date');
             $table->integer('status')->default(1);
             $table->string('discount_code')->nullable();

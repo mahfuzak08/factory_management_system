@@ -62,4 +62,10 @@ return [
     'withdrawal' => 'Withdrawal',
     'enter_your_amount' => 'Enter your amount',
     'no_data_found' => 'No Data Found',
+    'product_name_barcode' => 'Product Name/ Barcode',
+    'product_name' => 'Product Name',
+    'quantity' => 'Quantity',
+    'price' => 'Price',
+    'total' => 'Total',
+    'purchase_register' => 'Purchase Register',
 ];

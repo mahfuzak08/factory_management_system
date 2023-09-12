@@ -54,7 +54,7 @@ class VendorController extends Controller
             $input = $request->all();
             $data->fill($input)->save();
     
-            if(!empty($request->input('balance')) && $request->input('balance')>0){
+            // if(!empty($request->input('balance')) && $request->input('balance')>0){
                 $vendor_id = $data->id;
                 $due_acc_id = Bankacc::where('type', 'Cash')->pluck('id');
                 $trnxdata = [
@@ -64,11 +64,11 @@ class VendorController extends Controller
                     'ref_id' => $vendor_id,
                     'ref_type' => 'vendor',
                     'note' => 'Vendor Opening Due Balance',
-                    'amount' => ($request->input('balance') * -1)
+                    'amount' => !empty($request->input('balance')) && $request->input('balance')>0 ? ($request->input('balance') * -1) : 0
                 ];
                 $tdata = new AccountTranx();
                 $tdata->fill($trnxdata)->save();
-            }
+            // }
             flash()->addSuccess('New Data Added Successfully.');
             // If all queries succeed, commit the transaction
             DB::commit();

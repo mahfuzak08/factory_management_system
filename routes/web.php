@@ -23,7 +23,9 @@ use App\Http\Controllers\BankaccController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    // return view('welcome'); // welcome page for website
+    // redirect to login page, when just enter the domain name
+    return redirect('login');
 });
 
 Route::middleware([
@@ -36,13 +38,13 @@ Route::middleware([
     Route::get('/customer', [CustomerController::class, 'index'])->name('customer');
     
     Route::get('/purchase', [PurchaseController::class, 'index'])->name('purchase');
-    Route::get('/add_new_purchase', [PurchaseController::class, 'open_purchase_form'])->name('add-new-purchase');
     Route::post('/save_purchase', [PurchaseController::class, 'set_purchase'])->name('save-purchase');
-    Route::get('/edit_purchase/{id}', [PurchaseController::class, 'edit_purchase'])->name('edit-purchase');
-    Route::post('/edit_purchase/{id}', [PurchaseController::class, 'update_purchase'])->name('edit-purchase');
-    Route::get('/delete_purchase/{id}', [PurchaseController::class, 'delete_purchase'])->name('delete-purchase');
-    Route::get('/purchase_details/{id}', [PurchaseController::class, 'see_purchase'])->name('purchase-details');
-    Route::post('/save_purchase_amount', [PurchaseController::class, 'add_amount'])->name('save-purchase-amount');
+    Route::get('/purchase_invoice/{id}', [PurchaseController::class, 'invoice'])->name('purchase-invoice');
+    // Route::get('/edit_purchase/{id}', [PurchaseController::class, 'edit_purchase'])->name('edit-purchase');
+    // Route::post('/edit_purchase/{id}', [PurchaseController::class, 'update_purchase'])->name('edit-purchase');
+    // Route::get('/delete_purchase/{id}', [PurchaseController::class, 'delete_purchase'])->name('delete-purchase');
+    // Route::get('/purchase_details/{id}', [PurchaseController::class, 'see_purchase'])->name('purchase-details');
+    // Route::post('/save_purchase_amount', [PurchaseController::class, 'add_amount'])->name('save-purchase-amount');
 
     Route::get('/vendor', [VendorController::class, 'index'])->name('vendor');
     Route::get('/add_new_vendor', [VendorController::class, 'open_vendor_form'])->name('add-new-vendor');

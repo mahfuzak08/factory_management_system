@@ -48,8 +48,8 @@
                                         <input type="hidden" name="balance" value="{{$vendor->balance}}">
                                     </div>
                               
-                                    <button type="submit" class="btn btn-rounded btn-gradient-primary btn-sm me-2">{{ __('admin.update') }}</button><br><br>
-                                    <button class="btn btn-rounded btn-gradient-secondary btn-sm">{{ __('admin.cancel') }}</button>
+                                    <button type="submit" class="btn btn-rounded btn-primary btn-sm me-2">{{ __('admin.update') }}</button><br><br>
+                                    <button class="btn btn-rounded btn-secondary btn-sm">{{ __('admin.cancel') }}</button>
                                 </form>
                             </div>
                         </div>

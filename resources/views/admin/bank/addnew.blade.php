@@ -60,8 +60,8 @@
                                         <input type="text" class="form-control" id="exampleInputName4" name="opening_balance" placeholder="{{ __('admin.opening_balance') }}">
                                     </div>
                               
-                                    <button type="submit" class="btn btn-rounded btn-gradient-primary btn-sm me-2">{{ __('admin.save_now') }}</button><br><br>
-                                    <button class="btn btn-rounded btn-gradient-secondary btn-sm">{{ __('admin.cancel') }}</button>
+                                    <button type="submit" class="btn btn-rounded btn-primary btn-sm me-2">{{ __('admin.save_now') }}</button><br><br>
+                                    <button class="btn btn-rounded btn-secondary btn-sm">{{ __('admin.cancel') }}</button>
                                 </form>
                             </div>
                         </div>

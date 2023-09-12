@@ -92,7 +92,7 @@
                                         </select>
                                       </div>
                                     </div>
-                                    <button type="submit" class="btn btn-gradient-primary me-2 float-end">{{ __('admin.save_now') }}</button>
+                                    <button type="submit" class="btn btn-primary me-2 float-end">{{ __('admin.save_now') }}</button>
                                   </form>
                                 </div>
                                 <div class="col-md-6 d-block d-md-none text-center">

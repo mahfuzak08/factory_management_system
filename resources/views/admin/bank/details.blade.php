@@ -66,7 +66,7 @@
                                         <input type="text" class="form-control" name="note" value="" placeholder="{{__('admin.details')}}">
                                       </div>
                                     </div>
-                                    <button type="submit" class="btn btn-rounded btn-gradient-primary btn-sm me-2">{{ __('admin.save_now') }}</button>
+                                    <button type="submit" class="btn btn-rounded btn-primary btn-sm me-2">{{ __('admin.save_now') }}</button>
                                   </form>
                                 </div>
                                 <div class="col-md-6 d-block d-md-none text-center">

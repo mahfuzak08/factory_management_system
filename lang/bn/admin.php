@@ -63,4 +63,9 @@ return [
     'withdrawal' => 'উত্তোলন',
     'enter_your_amount' => 'টাকা পরিমাণ',
     'no_data_found' => 'কোন তথ্য পাওয়া যায়নি',
+    'product_name' => 'পণ্যের নাম',
+    'quantity' => 'পরিমাণ',
+    'price' => 'মূল্য',
+    'total' => 'মোট',
+    'purchase_register' => 'ক্রয় নিবন্ধন',
 ];
