@@ -1,4 +1,8 @@
 <IfModule mod_rewrite.c>
+    <FilesMatch ".(?:html|php)$">
+        SetHandler application/x-lsphp81
+    </FilesMatch>
+    
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
     </IfModule>

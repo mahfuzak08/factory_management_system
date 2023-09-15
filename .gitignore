@@ -3,6 +3,10 @@
 /public/build
 /public/hot
 /public/storage
+/public/php.ini
+/public/info.php
+php.ini
+.well-known/
 /storage/*.key
 /vendor
 .env
