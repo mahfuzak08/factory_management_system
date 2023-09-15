@@ -11,10 +11,10 @@
         <div class="main-panel">
             <div class="content-wrapper">
                 <div class="page-header">
-                  <h3 class="page-title">{{__('admin.vendor')}}</h3>
+                  <h3 class="page-title">{{__('admin.customer')}}</h3>
                   <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                      <li class="breadcrumb-item"><a href="{{route('vendor')}}" class="btn btn-sm btn-rounded btn-secondary">{{__('admin.back')}}</a></li>
+                      <li class="breadcrumb-item"><a href="{{route('customer')}}" class="btn btn-sm btn-rounded btn-secondary">{{__('admin.back')}}</a></li>
                     </ol>
                   </nav>
                 </div>
@@ -28,41 +28,42 @@
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input1" class="col-sm-3 col-form-label">{{__('admin.name')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input1" value="{{$vendor->name}}">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input1" value="{{$customer->name}}">
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input2" class="col-sm-3 col-form-label">{{__('admin.mobile')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="email" class="form-control form-control-border-off" disabled="true" id="input2" value="{{$vendor->mobile}}">
+                                        <input type="email" class="form-control form-control-border-off" disabled="true" id="input2" value="{{$customer->mobile}}">
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input3" class="col-sm-3 col-form-label">{{__('admin.address')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input3" value="{{$vendor->address}}">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input3" value="{{$customer->address}}">
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input4" class="col-sm-3 col-form-label">{{__('admin.email')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input4" value="{{$vendor->email}}">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input4" value="{{$customer->email}}">
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input5" class="col-sm-3 col-form-label">{{__('admin.balance')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input5" value="{{number_format($vendor->balance, 2)}}">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input5" value="{{number_format($customer->balance, 2)}}">
                                       </div>
                                     </div>
                                   </div>
                                 </div>
                                 <div class="col-md-6 d-none d-md-block" id="addForm">
-                                  <form class="forms-sample" method="POST" action="{{ route('save-vendor-amount') }}">
+                                  @if($customer->balance != 0)
+                                  <form class="forms-sample" method="POST" action="{{ route('save-customer-amount') }}">
                                     @csrf
-                                    <input type="hidden" name="ref_id" value="{{$vendor->id}}" />
-                                    <input type="hidden" name="ref_type" value="vendor" />
-                                    <input type="hidden" name="redirect_url" value="vendor_details/{{$vendor->id}}" />
+                                    <input type="hidden" name="ref_id" value="{{$customer->id}}" />
+                                    <input type="hidden" name="ref_type" value="customer" />
+                                    <input type="hidden" name="redirect_url" value="customer_details/{{$customer->id}}" />
                                     <input type="hidden" name="type" value="deposit" />
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input6" class="col-sm-3 col-form-label">{{__('admin.date')}}</label>
@@ -94,6 +95,7 @@
                                     </div>
                                     <button type="submit" class="btn btn-primary me-2 float-end">{{ __('admin.save_now') }}</button>
                                   </form>
+                                  @endif
                                 </div>
                                 <div class="col-md-6 d-block d-md-none text-center">
                                   <br />
@@ -103,7 +105,7 @@
                                   <br />
                                   <hr />
                                   <br />
-                                  <form action="{{route('vendor-details', $vendor->id)}}" method="GET">
+                                  <form action="{{route('customer-details', $customer->id)}}" method="GET">
                                     @csrf
                                     @php 
                                     $sv = isset($_GET['search']) ? $_GET['search'] : '';

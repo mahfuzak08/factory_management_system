@@ -24,49 +24,91 @@
                             <div class="card-body">
                               <div class="row">
                                 <div class="col-md-6">
-                                  <b>{{__('admin.account_name')}}:</b> {{$bank->name}}<hr />
-                                  <b>{{__('admin.balance')}}:</b> {{$balance}} {{$bank->currency}}<hr />
-                                  <b>{{__('admin.bank_name')}}:</b> {{$bank->bank_name}}<hr />
-                                  <b>{{__('admin.account_type')}}:</b> {{$bank->type}}<hr />
-                                  <b>{{__('admin.bank_address')}}:</b> {{$bank->bank_address}}<hr />
-                                  <b>{{__('admin.bank_acc_no')}}:</b> {{$bank->acc_no}}<hr />
+                                  <div class="forms-sample">
+                                    <div class="form-group form-group-margin-bottom-off row">
+                                      <label for="input1" class="col-sm-3 col-form-label">{{__('admin.account_name')}}</label>
+                                      <div class="col-sm-9">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input1" value="{{$bank->name}}">
+                                      </div>
+                                    </div>
+                                    <div class="form-group form-group-margin-bottom-off row">
+                                      <label for="input2" class="col-sm-3 col-form-label">{{__('admin.balance')}}</label>
+                                      <div class="col-sm-9">
+                                        <input type="email" class="form-control form-control-border-off" disabled="true" id="input2" value="{{$balance}} {{$bank->currency}}">
+                                      </div>
+                                    </div>
+                                    <div class="form-group form-group-margin-bottom-off row">
+                                      <label for="input3" class="col-sm-3 col-form-label">{{__('admin.bank_name')}}</label>
+                                      <div class="col-sm-9">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input3" value="{{$bank->bank_name}}">
+                                      </div>
+                                    </div>
+                                    <div class="form-group form-group-margin-bottom-off row">
+                                      <label for="input4" class="col-sm-3 col-form-label">{{__('admin.account_type')}}</label>
+                                      <div class="col-sm-9">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input4" value="{{$bank->type}}">
+                                      </div>
+                                    </div>
+                                    <div class="form-group form-group-margin-bottom-off row">
+                                      <label for="input5" class="col-sm-3 col-form-label">{{__('admin.bank_address')}}</label>
+                                      <div class="col-sm-9">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input5" value="{{$bank->bank_address}}">
+                                      </div>
+                                    </div>
+                                    <div class="form-group form-group-margin-bottom-off row">
+                                      <label for="input5" class="col-sm-3 col-form-label">{{__('admin.bank_acc_no')}}</label>
+                                      <div class="col-sm-9">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input5" value="{{$bank->acc_no}}">
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
                                 <div class="col-md-6 d-none d-md-block" id="addForm">
                                   <form class="forms-sample" method="POST" action="{{ route('save-amount') }}">
                                     @csrf
                                     <input type="hidden" name="account_id" value="{{$bank->id}}" />
-                                    <div class="form-group row">
-                                      <div class="col-sm-6">
-                                        <input type="text" class="form-control" name="name" value="{{ $bank->name }}" disabled="true">
-                                      </div>
-                                      <div class="col-sm-6">
-                                        <input type="text" class="form-control" name="tranx_date" value="{{date('Y-m-d')}}">
+                                    <div class="form-group form-group-margin-bottom-off row">
+                                      <label for="input6" class="col-sm-3 col-form-label">{{__('admin.date')}}</label>
+                                      <div class="col-sm-9">
+                                        <input type="text" name="tranx_date" class="form-control" id="input6" value="{{date('Y-m-d')}}">
                                       </div>
                                     </div>
-                                    <div class="form-group row">
-                                      <label for="exampleInputName5" class="col-sm-4 col-form-label">{{ __('admin.tranx_type') }}</label>
-                                      <div class="col-sm-4">
-                                        <div class="form-check">
-                                          <label class="form-check-label">
-                                            <input type="radio" class="form-check-input" name="type" id="exampleInputName51" value="deposit" checked="true"> {{__('admin.deposit')}} <i class="input-helper"></i></label>
-                                        </div>
+                                    <div class="form-group form-group-margin-bottom-off row">
+                                      <label for="input7" class="col-sm-3 col-form-label">{{__('admin.account_name')}}</label>
+                                      <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="name" value="{{ $bank->name }}" disabled="true" id="input7">
                                       </div>
-                                      <div class="col-sm-4">
-                                        <div class="form-check">
-                                          <label class="form-check-label">
-                                            <input type="radio" class="form-check-input" name="type" id="exampleInputName52" value="withdrawal"> {{__('admin.withdrawal')}} <i class="input-helper"></i></label>
+                                    </div>
+                                    <div class="form-group form-group-margin-bottom-off row">
+                                      <label for="input8" class="col-sm-3 col-form-label">{{__('admin.tranx_type')}}</label>
+                                      <div class="col-sm-9">
+                                        <div class="col-sm-6">
+                                          <div class="form-check">
+                                            <label class="form-check-label">
+                                              <input type="radio" class="form-check-input" name="type" id="exampleInputName51" value="deposit" checked="true"> {{__('admin.deposit')}} <i class="input-helper"></i></label>
+                                          </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                          <div class="form-check">
+                                            <label class="form-check-label">
+                                              <input type="radio" class="form-check-input" name="type" id="exampleInputName52" value="withdrawal"> {{__('admin.withdrawal')}} <i class="input-helper"></i></label>
+                                          </div>
                                         </div>
                                       </div>
                                     </div>
-                                    <div class="form-group row">
-                                      <div class="col-sm-6">
+                                    <div class="form-group form-group-margin-bottom-off row">
+                                      <label for="input9" class="col-sm-3 col-form-label">{{__('admin.enter_your_amount')}}</label>
+                                      <div class="col-sm-9">
                                         <input type="number" class="form-control" name="amount" value="" placeholder="{{__('admin.enter_your_amount')}}">
                                       </div>
-                                      <div class="col-sm-6">
+                                    </div>
+                                    <div class="form-group form-group-margin-bottom-off row">
+                                      <label for="input9" class="col-sm-3 col-form-label">{{__('admin.details')}}</label>
+                                      <div class="col-sm-9">
                                         <input type="text" class="form-control" name="note" value="" placeholder="{{__('admin.details')}}">
                                       </div>
                                     </div>
-                                    <button type="submit" class="btn btn-rounded btn-primary btn-sm me-2">{{ __('admin.save_now') }}</button>
+                                    <button type="submit" class="btn btn-primary me-2 float-end">{{ __('admin.save_now') }}</button>
                                   </form>
                                 </div>
                                 <div class="col-md-6 d-block d-md-none text-center">
@@ -82,14 +124,16 @@
                                     @php 
                                     $sv = isset($_GET['search']) ? $_GET['search'] : '';
                                     @endphp
-                                    
-                                    <input type="text" name="search" class="col-12 col-md-9" value="{{$sv}}" placeholder="{{__('admin.what_you_want_to_find')}}">
-                                    <button name="filter_btn" class="col-12 col-md-2 btn btn-sm btn-rounded btn-primary">{{__('admin.find')}}</button>
+                                    <div class="row">
+                                      <input type="text" name="search" class="col-12 col-md-10" value="{{$sv}}" placeholder="{{__('admin.what_you_want_to_find')}}">
+                                      <button type="submit" class="col-12 col-md-2 btn btn-info">{{__('admin.find')}}</button>
+                                    </div>
                                   </form>
                                 </div>
                               </div>
                               <br />
                               <hr />
+                              
                               <div class="row table-responsive">
                                 <table class="table table-striped">
                                     <thead>

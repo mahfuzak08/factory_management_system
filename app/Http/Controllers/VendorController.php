@@ -52,23 +52,24 @@ class VendorController extends Controller
             $data = new Vendor();
             
             $input = $request->all();
+            $input['balance'] = empty($input['balance']) || $input['balance'] == null ? 0 : $input['balance'];
+            $input['opening_balance'] = $input['balance'];
             $data->fill($input)->save();
     
-            // if(!empty($request->input('balance')) && $request->input('balance')>0){
-                $vendor_id = $data->id;
-                $due_acc_id = Bankacc::where('type', 'Cash')->pluck('id');
-                $trnxdata = [
-                    'account_id' => $due_acc_id[0],
-                    'user_id' => Auth::id(),
-                    'tranx_date' => date("Y-m-d"),
-                    'ref_id' => $vendor_id,
-                    'ref_type' => 'vendor',
-                    'note' => 'Vendor Opening Due Balance',
-                    'amount' => !empty($request->input('balance')) && $request->input('balance')>0 ? ($request->input('balance') * -1) : 0
-                ];
-                $tdata = new AccountTranx();
-                $tdata->fill($trnxdata)->save();
-            // }
+            $vendor_id = $data->id;
+            // $due_acc_id = Bankacc::where('type', 'Cash')->pluck('id');
+            // $trnxdata = [
+            //     'account_id' => $due_acc_id[0],
+            //     'user_id' => Auth::id(),
+            //     'tranx_date' => date("Y-m-d"),
+            //     'ref_id' => $vendor_id,
+            //     'ref_type' => 'vendor',
+            //     'note' => 'Vendor Opening Due Balance',
+            //     'amount' => !empty($request->input('balance')) && $request->input('balance')>0 ? ($request->input('balance') * -1) : 0
+            // ];
+            // $tdata = new AccountTranx();
+            // $tdata->fill($trnxdata)->save();
+            
             flash()->addSuccess('New Data Added Successfully.');
             // If all queries succeed, commit the transaction
             DB::commit();
@@ -82,11 +83,11 @@ class VendorController extends Controller
 
     public function edit_vendor($id){
         $vendor = Vendor::findOrFail($id);
-        $vTrnx = AccountTranx::where('ref_id', $id)
-                                ->where('ref_type', 'vendor')
-                                ->where('note', 'Vendor Opening Due Balance')
-                                ->get();
-        return view('admin.vendor.edit', compact('vendor', 'vTrnx'));
+        // $vTrnx = AccountTranx::where('ref_id', $id)
+        //                         ->where('ref_type', 'vendor')
+        //                         ->where('note', 'Vendor Opening Due Balance')
+        //                         ->get();
+        return view('admin.vendor.edit', compact('vendor'));
     }
     
     public function update_vendor(Request $request, $id){
@@ -105,28 +106,14 @@ class VendorController extends Controller
         
         DB::beginTransaction();
         try{
-            $old_trnx = $request->input('old_opening_balance');
-            
-            $trnx_need_update = 0;
-            if($old_trnx && $old_trnx != abs($request->input('opening_balance')) ){
-                $vTrnx = AccountTranx::findOrFail($request->input('old_opening_balance_id'));
-                $vTrnx->amount = $request->input('opening_balance')*1;
-                $vTrnx->save();
-
-                if($old_trnx > $request->input('opening_balance') ){
-                    $trnx_need_update = $old_trnx - $request->input('opening_balance');
-                }
-                elseif($old_trnx < $request->input('opening_balance') ){
-                    $trnx_need_update = $old_trnx - $request->input('opening_balance');
-                }
-            }
-
             $data = Vendor::findOrFail($id);
             
             $input = $request->all();
-            if($trnx_need_update != 0){
-                $input['balance'] = $data->balance - $trnx_need_update;
-            }
+            if($data->opening_balance != $input['opening_balance'])
+                $input['balance'] = $data->balance - ($data->opening_balance - $input['opening_balance']);
+            else
+                $input['balance'] = $data->balance;
+            
             $data->update($input);
 
             DB::commit();
@@ -202,7 +189,7 @@ class VendorController extends Controller
             
             $input = $request->all();
             $input['user_id'] = Auth::id();
-            
+            $input['amount'] *= -1;
             $data->fill($input)->save();
     
             flash()->addSuccess('New Data Added Successfully.');

@@ -35,7 +35,15 @@ Route::middleware([
 ])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
     Route::get('/sales', [SalesController::class, 'index'])->name('sales');
+
     Route::get('/customer', [CustomerController::class, 'index'])->name('customer');
+    Route::get('/add_new_customer', [CustomerController::class, 'open_customer_form'])->name('add-new-customer');
+    Route::post('/save_customer', [CustomerController::class, 'set_customer'])->name('save-customer');
+    Route::get('/edit_customer/{id}', [CustomerController::class, 'edit_customer'])->name('edit-customer');
+    Route::post('/edit_customer/{id}', [CustomerController::class, 'update_customer'])->name('edit-customer');
+    Route::get('/delete_customer/{id}', [CustomerController::class, 'delete_customer'])->name('delete-customer');
+    Route::get('/customer_details/{id}', [CustomerController::class, 'see_customer'])->name('customer-details');
+    Route::post('/save_customer_amount', [CustomerController::class, 'add_amount'])->name('save-customer-amount');
     
     Route::get('/purchase', [PurchaseController::class, 'index'])->name('purchase');
     Route::post('/save_purchase', [PurchaseController::class, 'set_purchase'])->name('save-purchase');

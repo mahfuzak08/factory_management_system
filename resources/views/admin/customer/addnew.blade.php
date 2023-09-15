@@ -11,10 +11,10 @@
         <div class="main-panel">
             <div class="content-wrapper">
                 <div class="page-header">
-                  <h3 class="page-title"> {{ __('admin.vendor') }} </h3>
+                  <h3 class="page-title"> {{ __('admin.customer') }} </h3>
                   <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                      <li class="breadcrumb-item"><a href="{{route('vendor')}}" class="btn btn-sm btn-rounded btn-secondary">{{__('admin.back')}}</a></li>
+                      <li class="breadcrumb-item"><a href="{{route('customer')}}" class="btn btn-sm btn-rounded btn-secondary">{{__('admin.back')}}</a></li>
                     </ol>
                   </nav>
                 </div>
@@ -22,30 +22,30 @@
                     <div class="col-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <form class="forms-sample" method="POST" action="{{ route('edit-vendor', $vendor->id) }}">
+                                <form class="forms-sample" method="POST" action="{{ route('save-customer') }}">
                                     @csrf
                                     <div class="form-group">
                                         <label for="exampleInputName1">{{ __('admin.name') }}</label>
-                                        <input type="text" class="form-control" id="exampleInputName1" name="name" value="{{$vendor->name}}" placeholder="{{ __('admin.name') }}">
+                                        <input type="text" class="form-control" id="exampleInputName1" name="name" placeholder="{{ __('admin.name') }}">
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputName2">{{ __('admin.mobile') }}</label>
-                                        <input type="text" class="form-control" id="exampleInputName2" name="mobile" value="{{$vendor->mobile}}" placeholder="{{ __('admin.mobile') }}">
+                                        <input type="text" class="form-control" id="exampleInputName2" name="mobile" placeholder="{{ __('admin.mobile') }}">
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputName6">{{ __('admin.email') }}</label>
-                                        <input type="text" class="form-control" id="exampleInputName6" name="email" value="{{$vendor->email}}" placeholder="{{ __('admin.email') }}">
+                                        <input type="text" class="form-control" id="exampleInputName6" name="email" placeholder="{{ __('admin.email') }}">
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputName7">{{ __('admin.address') }}</label>
-                                        <input type="text" class="form-control" id="exampleInputName7" name="address" value="{{$vendor->address}}" placeholder="{{ __('admin.address') }}">
+                                        <input type="text" class="form-control" id="exampleInputName7" name="address" placeholder="{{ __('admin.address') }}">
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputName4">{{ __('admin.opening_balance') }}</label>
-                                        <input type="text" class="form-control" id="exampleInputName4" name="opening_balance" value="{{$vendor->opening_balance}}" placeholder="{{ __('admin.opening_balance') }}">
+                                        <input type="text" class="form-control" id="exampleInputName4" name="balance" placeholder="{{ __('admin.opening_balance') }}">
                                     </div>
                               
-                                    <button type="submit" class="btn btn-rounded btn-primary btn-sm me-2">{{ __('admin.update') }}</button><br><br>
+                                    <button type="submit" class="btn btn-rounded btn-primary btn-sm me-2">{{ __('admin.save_now') }}</button><br><br>
                                     <button class="btn btn-rounded btn-secondary btn-sm">{{ __('admin.cancel') }}</button>
                                 </form>
                             </div>
