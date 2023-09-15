@@ -10,6 +10,7 @@ return [
     */
 
     'company' => 'Rayan Washing Plant',
+    'comingsoon'=>'Coming Soon',
     'dashboard' => 'Dashboard',
     'logout' => 'Log Out',
     'purchase' => 'Purchase',

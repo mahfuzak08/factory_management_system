@@ -17,36 +17,44 @@
     <div class="col-md-6 stretch-card grid-margin">
       <div class="card bg-gradient-info card-img-holder text-white">
         <div class="card-body">
-          <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-          <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.purchase')}}</h2>
-          <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.purchase')}} 12,45,678.00</h5>
+          <a href="{{ route('purchase') }}">
+            <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+            <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.purchase')}}</h2>
+            <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.purchase')}} 12,45,678.00</h5>
+          </a>
         </div>
       </div>
     </div>
     <div class="col-md-6 stretch-card grid-margin">
       <div class="card bg-gradient-danger card-img-holder text-white">
         <div class="card-body">
-          <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-          <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.sales')}}</h2>
-          <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.sales')}} 2,46,853.00</h5>
+          <a href="{{ route('sales') }}">
+            <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+            <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.sales')}}</h2>
+            <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.sales')}} 2,46,853.00</h5>
+          </a>
         </div>
       </div>
     </div>
     <div class="col-md-6 stretch-card grid-margin">
       <div class="card bg-gradient-success card-img-holder text-white">
         <div class="card-body">
-          <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-          <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.expense')}}</h2>
-          <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.expense')}} 24,561.00</h5>
+          <a href="{{ route('expense') }}">
+            <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+            <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.expense')}}</h2>
+            <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.expense')}} 24,561.00</h5>
+          </a>
         </div>
       </div>
     </div>
     <div class="col-md-6 stretch-card grid-margin">
       <div class="card bg-gradient-primary card-img-holder text-white">
         <div class="card-body">
-          <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-          <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.employee')}}</h2>
-          <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.employee')}} 24</h5>
+          <a href="{{ route('employee') }}">
+            <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+            <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.employee')}}</h2>
+            <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.employee')}} 24</h5>
+          </a>
         </div>
       </div>
     </div>

@@ -10,6 +10,7 @@ return [
     */
 
     'company' => 'রায়ান ওয়াশিং প্ল্যান্ট',
+    'comingsoon'=>'খুব শীঘ্রই আসছে',
     'dashboard' => 'হোম',
     'logout' => 'প্রস্থান',
     'purchase' => 'ক্রয়',

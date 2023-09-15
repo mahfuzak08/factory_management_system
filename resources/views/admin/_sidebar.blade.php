@@ -62,7 +62,7 @@
         <i class="mdi mdi-bank menu-icon"></i>
       </a>
     </li>
-    <li class="nav-item">
+    {{-- <li class="nav-item">
       <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
         <span class="menu-title">{{__('admin.settings')}}</span>
         <i class="menu-arrow"></i>
@@ -75,7 +75,7 @@
           <li class="nav-item"> <a class="nav-link" href="pttons.html">{{__('admin.activity')}}</a></li>
         </ul>
       </div>
-    </li>
+    </li> --}}
     <li class="nav-item">
       <form method="POST" action="{{ route('logout') }}" x-data>
         @csrf
