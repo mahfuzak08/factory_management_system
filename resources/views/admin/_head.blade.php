@@ -31,4 +31,12 @@
     .form-control-border-off{
         border: none;
     }
+    .nav-profile-text{
+        overflow: hidden;
+    }
+    .nav-profile-text .name-row{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 </style>

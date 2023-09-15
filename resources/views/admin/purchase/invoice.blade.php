@@ -15,9 +15,6 @@
                     <div class="card">
                       <div class="card-body">
                         <h4 class="card-title">{{ __('admin.purchase_register') }}</h4>
-                          @php
-                              print_r($invoice);
-                          @endphp
                           <div _ngcontent-tmn-c13="" class="row container-fluid d-flex justify-content-between">
                             <div _ngcontent-tmn-c13="" class="col-lg-3 pl-0">
                               <p _ngcontent-tmn-c13="" class="mt-5 mb-2"><b _ngcontent-tmn-c13="">{{$invoice[0]->vendor_name}}</b></p>
@@ -64,13 +61,14 @@
                           </div>
                           <div _ngcontent-tmn-c13="" class="container-fluid mt-5 w-100">
                             <p _ngcontent-tmn-c13="" class="text-right mb-2">Sub - Total amount: {{$total}}</p>
-                            <p _ngcontent-tmn-c13="" class="text-right">Discount : {{$invoice[0]->}}</p>
-                            <h4 _ngcontent-tmn-c13="" class="text-right mb-5">Total : $13,986</h4>
+                            <p _ngcontent-tmn-c13="" class="text-right">Discount : {{ $invoice[0]->discount }}</p>
+                            <h4 _ngcontent-tmn-c13="" class="text-right mb-5">Total : {{ $invoice[0]->total }}</h4>
                             <hr _ngcontent-tmn-c13="">
                           </div>
                           <div _ngcontent-tmn-c13="" class="container-fluid w-100">
                             <a _ngcontent-tmn-c13="" class="btn btn-primary float-right mt-4 ml-2" href="javascript:void(0)"><i _ngcontent-tmn-c13="" class="mdi mdi-printer mr-1"></i>Print</a>
-                            <a _ngcontent-tmn-c13="" class="btn btn-success float-right mt-4" href="javascript:void(0)"><i _ngcontent-tmn-c13="" class="mdi mdi-send mr-1"></i>Send Invoice</a>
+                            {{-- <a _ngcontent-tmn-c13="" class="btn btn-success float-right mt-4" href="javascript:void(0)"><i _ngcontent-tmn-c13="" class="mdi mdi-send mr-1"></i>Send Invoice</a> --}}
+                            <a _ngcontent-tmn-c13="" class="btn btn-secondary float-right mt-4" href="{{route('purchase')}}">Back</a>
                           </div>
                       </div>
                     </div>
