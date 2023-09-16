@@ -51,18 +51,18 @@ class PurchaseController extends Controller
                 $vinfo->fill($input)->save();
         
                 $vendor_id = $vinfo->id;
-                $cash_acc_id = Bankacc::where('type', 'Cash')->pluck('id');
-                $trnxdata = [
-                    'account_id' => $cash_acc_id[0],
-                    'user_id' => Auth::id(),
-                    'tranx_date' => date("Y-m-d"),
-                    'ref_id' => $vendor_id,
-                    'ref_type' => 'vendor',
-                    'note' => 'Vendor Opening Due Balance',
-                    'amount' => 0
-                ];
-                $tdata = new AccountTranx();
-                $tdata->fill($trnxdata)->save();
+                // $cash_acc_id = Bankacc::where('type', 'Cash')->pluck('id');
+                // $trnxdata = [
+                //     'account_id' => $cash_acc_id[0],
+                //     'user_id' => Auth::id(),
+                //     'tranx_date' => date("Y-m-d"),
+                //     'ref_id' => $vendor_id,
+                //     'ref_type' => 'vendor',
+                //     'note' => 'Vendor Opening Due Balance',
+                //     'amount' => 0
+                // ];
+                // $tdata = new AccountTranx();
+                // $tdata->fill($trnxdata)->save();
 
                 flash()->addSuccess('New Vendor Added Successfully.');
                 // If all queries succeed, commit the transaction
@@ -120,7 +120,6 @@ class PurchaseController extends Controller
             "vendor_id"=> $vendor_id,
             "products"=> json_encode($items),
             "date"=> $request->input('date'),
-            "vendor_id"=> $vendor_id,
             "discount"=> $discount,
             "total"=> $total,
             "payment"=> json_encode($payments),
@@ -133,8 +132,12 @@ class PurchaseController extends Controller
             $order = New Purchase();
             $order->fill($input_order)->save();
             $order_id = $order->id; 
+
+            $vinfo->balance = $asofdue;
+            $vinfo->save();
+
             for($i=0; $i<count($ptype); $i++){
-                if($ptype[$i] == $due_acc_id[0]) continue;
+                if(count($due_acc_id) > 0 && $ptype[$i] == $due_acc_id[0]) continue;
 
                 $trnxdata = [
                     'account_id' => $ptype[$i],
@@ -169,8 +172,8 @@ class PurchaseController extends Controller
                             ->select('purchases.*', 'vendors.name as vendor_name', 'vendors.mobile', 'vendors.address')
                             ->where("purchases.id", $id)
                             ->get();
-        // $account = Bankacc::all();
+        $account = Bankacc::all();
         // $vendor = Vendor::where('is_delete', 0)->get();
-        return view('admin.purchase.invoice', compact('invoice'));
+        return view('admin.purchase.invoice', compact('invoice', 'account'));
     }
 }

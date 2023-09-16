@@ -69,4 +69,9 @@ return [
     'price' => 'Price',
     'total' => 'Total',
     'purchase_register' => 'Purchase Register',
+    'sales_register' => 'Sales Register',
+    'customer_name' => 'Customer Name',
+    'subtotal' => 'Subtotal',
+    'discount' => 'Discount',
+    'receive_amount' => 'Amount Receive',
 ];

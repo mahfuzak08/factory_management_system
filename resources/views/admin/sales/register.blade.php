@@ -14,7 +14,7 @@
                   <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
                       <div class="card-body">
-                        <h4 class="card-title">{{ __('admin.purchase_register') }}</h4>
+                        <h4 class="card-title">{{ __('admin.sales_register') }}</h4>
                         {{-- <p class="card-description"> Horizontal form layout </p> --}}
                         {{-- <form class="forms-sample">
                           <div class="form-group row">
@@ -24,7 +24,7 @@
                             </div>
                           </div>
                         </form> --}}
-                        <form action="{{route('save-purchase')}}" method="POST" class="forms-sample table-responsive">
+                        <form action="{{route('save-sales')}}" method="POST" class="forms-sample table-responsive">
                           @csrf
                           <style>
                             .table td{
@@ -34,10 +34,10 @@
                           <table class="table" style="min-width:500px">
                             <tr>
                               <td width="70%">
-                                <input type="text" required name="vendor_new" list="vendor" id="vendor_id" class="form-control" placeholder="{{__('admin.vendor_name')}}">
-                                <input type="hidden" name="vendor_id" id="vendor_id_hidden">
-                                <datalist id="vendor">
-                                  @foreach($vendor as $v)
+                                <input type="text" required name="customer_new" list="customer" id="customer_id" class="form-control" placeholder="{{__('admin.customer_name')}}">
+                                <input type="hidden" name="customer_id" id="customer_id_hidden">
+                                <datalist id="customer">
+                                  @foreach($customer as $v)
                                     <option value="{{$v->name}}" data-id="{{$v->id}}" data-mobile="{{$v->mobile}}" data-address="{{$v->address}}">
                                   @endforeach
                                 </datalist>
@@ -151,15 +151,15 @@
     </div>
     @include('admin._script')
     <script>
-      // vendor selection
-      const input = document.getElementById('vendor_id');
-      const datalist = document.getElementById('vendor');
+      // customer selection
+      const input = document.getElementById('customer_id');
+      const datalist = document.getElementById('customer');
 
       input.addEventListener('input', (event) => {
         const selectedLabel = event.target.value;
         const option = [...datalist.options].find((opt) => opt.value === selectedLabel);
         if (option) {
-          $('#vendor_id_hidden').val(option.getAttribute('data-id'));
+          $('#customer_id_hidden').val(option.getAttribute('data-id'));
           $('#mobile').val(option.getAttribute('data-mobile'));
           $('#address').val(option.getAttribute('data-address'));
         }

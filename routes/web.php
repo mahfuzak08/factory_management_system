@@ -35,6 +35,8 @@ Route::middleware([
 ])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
     Route::get('/sales', [SalesController::class, 'index'])->name('sales');
+    Route::post('/save_sales', [SalesController::class, 'set_sales'])->name('save-sales');
+    Route::get('/sales_invoice/{id}', [SalesController::class, 'invoice'])->name('sales-invoice');
 
     Route::get('/customer', [CustomerController::class, 'index'])->name('customer');
     Route::get('/add_new_customer', [CustomerController::class, 'open_customer_form'])->name('add-new-customer');
@@ -48,11 +50,6 @@ Route::middleware([
     Route::get('/purchase', [PurchaseController::class, 'index'])->name('purchase');
     Route::post('/save_purchase', [PurchaseController::class, 'set_purchase'])->name('save-purchase');
     Route::get('/purchase_invoice/{id}', [PurchaseController::class, 'invoice'])->name('purchase-invoice');
-    // Route::get('/edit_purchase/{id}', [PurchaseController::class, 'edit_purchase'])->name('edit-purchase');
-    // Route::post('/edit_purchase/{id}', [PurchaseController::class, 'update_purchase'])->name('edit-purchase');
-    // Route::get('/delete_purchase/{id}', [PurchaseController::class, 'delete_purchase'])->name('delete-purchase');
-    // Route::get('/purchase_details/{id}', [PurchaseController::class, 'see_purchase'])->name('purchase-details');
-    // Route::post('/save_purchase_amount', [PurchaseController::class, 'add_amount'])->name('save-purchase-amount');
 
     Route::get('/vendor', [VendorController::class, 'index'])->name('vendor');
     Route::get('/add_new_vendor', [VendorController::class, 'open_vendor_form'])->name('add-new-vendor');

@@ -69,4 +69,9 @@ return [
     'price' => 'মূল্য',
     'total' => 'মোট',
     'purchase_register' => 'ক্রয় নিবন্ধন',
+    'sales_register' => 'বিক্রয় নিবন্ধন',
+    'customer_name' => 'ক্রেতার নাম',
+    'subtotal' => 'সর্ব মোট',
+    'discount' => 'ছাড়',
+    'receive_amount' => 'প্রাপ্তির পরিমাণ',
 ];
