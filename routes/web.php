@@ -61,6 +61,14 @@ Route::middleware([
     Route::post('/save_vendor_amount', [VendorController::class, 'add_amount'])->name('save-vendor-amount');
     
     Route::get('/employee', [EmployeeController::class, 'index'])->name('employee');
+    Route::get('/add_new_employee', [EmployeeController::class, 'open_employee_form'])->name('add-new-employee');
+    Route::post('/save_employee', [EmployeeController::class, 'set_employee'])->name('save-employee');
+    Route::get('/edit_employee/{id}', [EmployeeController::class, 'edit_employee'])->name('edit-employee');
+    Route::post('/edit_employee/{id}', [EmployeeController::class, 'update_employee'])->name('edit-employee');
+    Route::get('/delete_employee/{id}', [EmployeeController::class, 'delete_employee'])->name('delete-employee');
+    Route::get('/employee_details/{id}', [EmployeeController::class, 'see_employee'])->name('employee-details');
+    Route::post('/save_employee_amount', [EmployeeController::class, 'add_amount'])->name('save-employee-amount');
+
     Route::get('/expense', [ExpenseController::class, 'index'])->name('expense');
 
     Route::get('/bank_account', [BankaccController::class, 'index'])->name('bank_account');
