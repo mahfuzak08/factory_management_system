@@ -13,6 +13,7 @@
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^3.0",
         "php-flasher/flasher-laravel": "^1.15",
+        "spatie/laravel-activitylog": "^4.7",
         "yajra/laravel-datatables": "10.0",
         "yajra/laravel-datatables-oracle": "^10.8"
     },
