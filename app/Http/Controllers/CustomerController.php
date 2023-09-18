@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\SendSms;
 use App\Models\AccountTranx;
 use App\Models\Bankacc;
 use App\Models\Customer;
@@ -195,11 +196,15 @@ class CustomerController extends Controller
             $input['user_id'] = Auth::id();
             
             $data->fill($input)->save();
-    
+            
+            $sms = new SendSms();
+            $sms->toSms('8801719455709', config('app.name'). ' receive your payment BDT '. $input['amount'] .'. Thank you');
+
             flash()->addSuccess('New Data Added Successfully.');
             // If all queries succeed, commit the transaction
             DB::commit();
         }catch (\Exception $e) {
+            dd($e);
             // If any query fails, catch the exception and roll back the transaction
             flash()->addError('Data Not Added Successfully.');
             DB::rollback();

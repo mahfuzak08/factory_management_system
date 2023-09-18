@@ -14,6 +14,12 @@ return [
     |
     */
 
+    'bangladeshsms' => [
+        'domain' => env('SMS_DOMAIN'),
+        'api_key' => env('SMS_SECRET'),
+        'senderid' => env('SMS_SENDERID'),
+    ],
+    
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),
