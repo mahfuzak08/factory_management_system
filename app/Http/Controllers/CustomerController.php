@@ -198,7 +198,7 @@ class CustomerController extends Controller
             $data->fill($input)->save();
             
             $sms = new SendSms();
-            $sms->toSms('8801719455709', config('app.name'). ' receive your payment BDT '. $input['amount'] .'. Thank you');
+            $sms->toSms('8801866686791', config('app.name'). ' receive your payment BDT '. $input['amount'] .'. Thank you');
 
             flash()->addSuccess('New Data Added Successfully.');
             // If all queries succeed, commit the transaction
