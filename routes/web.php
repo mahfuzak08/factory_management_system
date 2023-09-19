@@ -75,8 +75,8 @@ Route::middleware([
     Route::get('/edit_expense/{id}', [ExpenseController::class, 'edit_expense'])->name('edit-expense');
     Route::post('/edit_expense/{id}', [ExpenseController::class, 'update_expense'])->name('edit-expense');
     Route::get('/delete_expense/{id}', [ExpenseController::class, 'delete_expense'])->name('delete-expense');
-    Route::get('/expense_details/{id}', [ExpenseController::class, 'acc_details'])->name('expense-details');
-    Route::post('/save_amount', [ExpenseController::class, 'add_amount'])->name('save-amount');
+    Route::get('/expense_details/{id}', [ExpenseController::class, 'expense_details'])->name('expense-details');
+    Route::post('/save_expense_amount', [ExpenseController::class, 'add_expense_amount'])->name('save-expense-amount');
 
     Route::get('/bank_account', [BankaccController::class, 'index'])->name('bank_account');
     Route::get('/add_new_account', [BankaccController::class, 'open_account_form'])->name('add-new-account');
