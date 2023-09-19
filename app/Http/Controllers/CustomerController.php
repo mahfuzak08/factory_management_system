@@ -37,7 +37,7 @@ class CustomerController extends Controller
     public function set_customer(Request $request){
         $rules = [
             'name' => ['required', 'string', 'max:255'],
-            'mobile' => ['required', 'digits:13']
+            'mobile' => ['required', 'digits:13', 'unique:customers,mobile']
         ];
         $validator = Validator::make($request->all(), $rules);
 

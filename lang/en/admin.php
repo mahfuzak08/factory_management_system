@@ -85,4 +85,5 @@ return [
     'emp_type' => 'Employee Type',
     'permanent' => 'Permanent',
     'contractual' => 'Contractual',
+    'expense_name' => 'Expense Name',
 ];

@@ -85,4 +85,5 @@ return [
     'emp_type' => 'কর্মচারীর ধরন',
     'permanent' => 'স্থায়ী',
     'contractual' => 'চুক্তিভিত্তিক',
+    'expense_name' => 'ব্যয়ের নাম',
 ];

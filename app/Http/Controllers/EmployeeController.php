@@ -36,7 +36,7 @@ class EmployeeController extends Controller
     public function set_employee(Request $request){
         $rules = [
             'name' => ['required', 'string', 'max:255'],
-            'mobile' => ['required', 'digits:13']
+            'mobile' => ['required', 'digits:13', 'unique:employees,mobile']
         ];
         $validator = Validator::make($request->all(), $rules);
 
