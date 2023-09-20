@@ -32,7 +32,7 @@
                                         <input type="text" class="form-control" id="exampleInputName1" name="name" value="{{$expense->name}}" placeholder="{{ __('admin.expense_name') }}">
                                     </div>
                                     <button type="submit" class="btn btn-rounded btn-primary btn-sm me-2">{{ __('admin.update') }}</button><br><br>
-                                    <button class="btn btn-rounded btn-secondary btn-sm">{{ __('admin.cancel') }}</button>
+                                    <a onclick="history.back()" class="btn btn-sm btn-rounded btn-secondary">{{ __('admin.cancel') }}</a>
                                 </form>
                             </div>
                         </div>

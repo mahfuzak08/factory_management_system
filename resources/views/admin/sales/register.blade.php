@@ -133,7 +133,7 @@
                                   <button type="submit" class="btn btn-rounded btn-primary btn-sm">{{ __('admin.save_now') }}</button>
                                 </td>
                                 <td>
-                                  <button class="btn btn-rounded btn-secondary btn-sm">{{ __('admin.cancel') }}</button>
+                                  <a onclick="history.back()" class="btn btn-sm btn-rounded btn-secondary">{{ __('admin.cancel') }}</a>
                                 </td>
                                 <td></td>
                               </tr>

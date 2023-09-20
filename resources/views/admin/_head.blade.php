@@ -39,4 +39,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
+    .collapse.show{
+        visibility: visible !important;
+    }
 </style>
