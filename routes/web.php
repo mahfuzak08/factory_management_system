@@ -10,6 +10,7 @@ use App\Http\Controllers\VendorController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\BankaccController;
+use App\Http\Controllers\SettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,5 +87,9 @@ Route::middleware([
     Route::get('/delete_account/{id}', [BankaccController::class, 'delete_account'])->name('delete-account');
     Route::get('/account_details/{id}', [BankaccController::class, 'acc_details'])->name('account-details');
     Route::post('/save_amount', [BankaccController::class, 'add_amount'])->name('save-amount');
+
+    
+    Route::get('/language', [SettingsController::class, 'language'])->name('language');
+    Route::post('/language', [SettingsController::class, 'language_change'])->name('language');
 
 });

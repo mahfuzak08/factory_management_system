@@ -70,6 +70,7 @@
       </a>
       <div class="collapse" id="ui-basic">
         <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" href="{{route('language')}}">{{__('admin.language')}}</a></li>
           <li class="nav-item"> <a class="nav-link" href="#">{{__('admin.user_management')}}</a></li>
           <li class="nav-item"> <a class="nav-link" href="3">{{__('admin.role_management')}}</a></li>
           <li class="nav-item"> <a class="nav-link" href="pttons.html">{{__('admin.activity')}}</a></li>
