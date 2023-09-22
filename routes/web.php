@@ -89,7 +89,17 @@ Route::middleware([
     Route::post('/save_amount', [BankaccController::class, 'add_amount'])->name('save-amount');
 
     
+
     Route::get('/language', [SettingsController::class, 'language'])->name('language');
     Route::post('/language', [SettingsController::class, 'language_change'])->name('language');
+
+    Route::get('/user_manage', [SettingsController::class, 'user_manage'])->name('user-manage');
+    Route::get('/add_new_user', [SettingsController::class, 'open_user_form'])->name('add-new-user');
+    Route::post('/save_user', [SettingsController::class, 'set_user'])->name('save-user');
+    Route::get('/edit_user/{id}', [SettingsController::class, 'edit_user'])->name('edit-user');
+    Route::post('/edit_user/{id}', [SettingsController::class, 'update_user'])->name('edit-user');
+    Route::get('/delete_user/{id}', [SettingsController::class, 'delete_user'])->name('delete-user');
+    Route::get('/user_details/{id}', [SettingsController::class, 'see_user'])->name('user-details');
+    Route::post('/user_manage', [SettingsController::class, 'user_manage_update'])->name('user-manage');
 
 });
