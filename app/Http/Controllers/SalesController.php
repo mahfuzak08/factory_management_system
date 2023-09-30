@@ -79,6 +79,7 @@ class SalesController extends Controller
         $due_acc_id = Bankacc::where('type', 'Due')->pluck('id');
         
         $pn = $request->input('product_name');
+        $pd = $request->input('product_details');
         $qty = $request->input('quantity');
         $price = $request->input('price');
         $pid = $request->input('product_id');
@@ -93,6 +94,7 @@ class SalesController extends Controller
             $items[] = [
                 "pid"=>$pid[$i],
                 "product_name"=>$pn[$i], 
+                "product_details"=>$pd[$i], 
                 "quantity"=>(float) $qty[$i],
                 "price"=>(float) $price[$i],
                 "total"=>(float) $qty[$i] * (float) $price[$i] 

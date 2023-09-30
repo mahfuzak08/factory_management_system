@@ -41,7 +41,7 @@
                                 </datalist>
                               </td>
                               <td width="30%">
-                                <input type="text" required name="date" class="form-control" placeholder="YYYY-MM-DD" value="{{date('Y-m-d')}}">
+                                <input type="date" required name="date" class="form-control" placeholder="YYYY-MM-DD" value="{{date('Y-m-d')}}">
                               </td>
                             </tr>
                             <tr>
@@ -57,7 +57,8 @@
                             <thead>
                               <tr>
                                 <th width="2%"></th>
-                                <th width="40%">{{__('admin.product_name')}}</th>
+                                <th width="20%">{{__('admin.product_name')}}</th>
+                                <th width="20%">{{__('admin.product_details')}}</th>
                                 <th width="15%">{{__('admin.quantity')}}</th>
                                 <th width="15%">{{__('admin.price')}}</th>
                                 <th width="15%">{{__('admin.total')}}</th>
@@ -69,6 +70,9 @@
                                 <td class="sl">1</td>
                                 <td>
                                   <input type="text" name="product_name[]" class="form-control" placeholder="{{__('admin.product_name')}}">
+                                </td>
+                                <td>
+                                  <input type="text" name="product_details[]" class="form-control" placeholder="{{__('admin.product_details')}}">
                                 </td>
                                 <td>
                                   <input type="text" name="quantity[]" class="qmp quantity form-control" placeholder="{{__('admin.quantity')}}">
@@ -89,12 +93,12 @@
                             </tbody>
                             <tfoot>
                               <tr>
-                                <td colspan="4" class="text-right">{{__('admin.subtotal')}}</td>
+                                <td colspan="5" class="text-right">{{__('admin.subtotal')}}</td>
                                 <td><input type="text" name="subtotal" id="subtotal" class="form-control" placeholder="{{__('admin.subtotal')}}"></td>
                                 <td></td>
                               </tr>
                               <tr>
-                                <td colspan="4" class="text-right">{{__('admin.discount')}}</td>
+                                <td colspan="5" class="text-right">{{__('admin.discount')}}</td>
                                 <td><input type="text" name="discount" id="discount" class="form-control" placeholder="{{__('admin.discount')}}"></td>
                                 <td></td>
                               </tr>
@@ -104,12 +108,12 @@
                                 <td></td>
                               </tr> --}}
                               <tr>
-                                <td colspan="4" class="text-right">{{__('admin.total')}}</td>
+                                <td colspan="5" class="text-right">{{__('admin.total')}}</td>
                                 <td><input type="text" required name="total" id="total" class="form-control" placeholder="{{__('admin.total')}}"></td>
                                 <td></td>
                               </tr>
                               <tr class="payment_row">
-                                <td colspan="3" class="text-right">{{__('admin.receive_amount')}}</td>
+                                <td colspan="4" class="text-right">{{__('admin.receive_amount')}}</td>
                                 <td>
                                   <select name="payment_type[]" required id="payment_type" style="width: 100%;">
                                   @foreach($account as $ac)
@@ -127,7 +131,7 @@
                                 </td>
                               </tr>
                               <tr>
-                                <td colspan="4" class="text-right">
+                                <td colspan="5" class="text-right">
                                   <button type="submit" class="btn btn-rounded btn-primary btn-sm">{{ __('admin.save_now') }}</button>
                                 </td>
                                 <td>

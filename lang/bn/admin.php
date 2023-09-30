@@ -68,6 +68,7 @@ return [
     'enter_your_amount' => 'টাকা পরিমাণ',
     'no_data_found' => 'কোন তথ্য পাওয়া যায়নি',
     'product_name' => 'পণ্যের নাম',
+    'product_details' => 'পণ্যের বিবরণ',
     'quantity' => 'পরিমাণ',
     'price' => 'মূল্য',
     'total' => 'মোট',

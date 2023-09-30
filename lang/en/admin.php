@@ -68,6 +68,7 @@ return [
     'no_data_found' => 'No Data Found',
     'product_name_barcode' => 'Product Name/ Barcode',
     'product_name' => 'Product Name',
+    'product_details' => 'Product Details',
     'quantity' => 'Quantity',
     'price' => 'Price',
     'total' => 'Total',
