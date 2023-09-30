@@ -45,10 +45,12 @@
                                     <td> {{$bank->type}} </td>
                                     <td> {{$bank->bank_name}} </td>
                                     <td> {{$bank->currency}} </td>
-                                    <td> 
+                                    <td>
+                                      @if($bank->type != 'Due')
                                       <a href="{{route('account-details', $bank->id)}}" class="btn btn-info btn-rounded btn-sm">{{__('admin.details')}}</a> 
                                       <a href="{{route('edit-account', $bank->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
                                       <a href="{{route('delete-account', $bank->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a> 
+                                      @endif
                                     </td>
                                   </tr>
                                 @endforeach

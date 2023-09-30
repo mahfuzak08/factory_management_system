@@ -24,6 +24,8 @@
                             <div class="card-body">
                                 <form class="forms-sample" method="POST" action="{{ route('edit-user', $user->id) }}">
                                     @csrf
+                                    <input type="hidden" name="user_id" value="{{$user->id}}">
+                                    <input type="hidden" name="redirect_url" value="edit-user/{{$user->id}}">
                                     <div class="form-group">
                                         <label for="exampleInputName1">{{ __('admin.name') }}</label>
                                         <input type="text" class="form-control" id="exampleInputName1" name="name" value="{{$user->name}}" placeholder="{{ __('admin.name') }}">

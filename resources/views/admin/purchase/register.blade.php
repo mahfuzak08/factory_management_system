@@ -10,20 +10,18 @@
         @include('admin._sidebar')
         <div class="main-panel">
             <div class="content-wrapper">
+                <div class="page-header">
+                  <h3 class="page-title">{{ __('admin.purchase_register') }}</h3>
+                  <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{route('all-purchase')}}" class="btn btn-rounded btn-sm btn-success">{{__('admin.all_purchase')}}</a></li>
+                    </ol>
+                  </nav>
+                </div>
                 <div class="row">
                   <div class="col-md-12 grid-margin stretch-card">
                     <div class="card">
                       <div class="card-body">
-                        <h4 class="card-title">{{ __('admin.purchase_register') }}</h4>
-                        {{-- <p class="card-description"> Horizontal form layout </p> --}}
-                        {{-- <form class="forms-sample">
-                          <div class="form-group row">
-                            <label for="exampleInputUsername2" class="col-sm-4 col-form-label">{{__('admin.product_name_barcode')}}</label>
-                            <div class="col-sm-8">
-                              <input type="text" class="form-control" id="exampleInputUsername2" placeholder="{{__('admin.product_name_barcode')}}">
-                            </div>
-                          </div>
-                        </form> --}}
                         <form action="{{route('save-purchase')}}" method="POST" class="forms-sample table-responsive">
                           @csrf
                           <style>

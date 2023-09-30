@@ -11,10 +11,10 @@
         <div class="main-panel">
             <div class="content-wrapper">
                 <div class="page-header">
-                  <h3 class="page-title"> {{ __('admin.customer') }} </h3>
+                  <h3 class="page-title"> {{ __('admin.user_management') }} </h3>
                   <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                      <li class="breadcrumb-item"><a href="{{route('customer')}}" class="btn btn-sm btn-rounded btn-secondary">{{__('admin.back')}}</a></li>
+                      <li class="breadcrumb-item"><a href="{{route('user-manage')}}" class="btn btn-sm btn-rounded btn-secondary">{{__('admin.back')}}</a></li>
                     </ol>
                   </nav>
                 </div>
@@ -22,11 +22,15 @@
                     <div class="col-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <form class="forms-sample" method="POST" action="{{ route('save-customer') }}">
+                                <form class="forms-sample" method="POST" action="{{ route('register') }}">
                                     @csrf
                                     <div class="form-group">
                                         <label for="exampleInputName1">{{ __('admin.name') }}</label>
                                         <input type="text" class="form-control" id="exampleInputName1" name="name" placeholder="{{ __('admin.name') }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="examplepassword">{{ __('admin.password') }}</label>
+                                        <input type="password" class="form-control" id="examplepassword" name="password" placeholder="{{ __('admin.password') }}">
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputName2">{{ __('admin.mobile') }}</label>
@@ -37,14 +41,13 @@
                                         <input type="text" class="form-control" id="exampleInputName6" name="email" placeholder="{{ __('admin.email') }}">
                                     </div>
                                     <div class="form-group">
-                                        <label for="exampleInputName7">{{ __('admin.address') }}</label>
-                                        <input type="text" class="form-control" id="exampleInputName7" name="address" placeholder="{{ __('admin.address') }}">
+                                        <label for="exampleInputName7">{{ __('admin.role') }}</label>
+                                        <input type="text" class="form-control" id="exampleInputName7" name="role" placeholder="{{ __('admin.role') }}">
                                     </div>
                                     <div class="form-group">
-                                        <label for="exampleInputName4">{{ __('admin.opening_balance') }}</label>
-                                        <input type="text" class="form-control" id="exampleInputName4" name="balance" placeholder="{{ __('admin.opening_balance') }}">
+                                        <label for="exampleInputName8">{{ __('admin.address') }}</label>
+                                        <input type="text" class="form-control" id="exampleInputName8" name="address" placeholder="{{ __('admin.address') }}">
                                     </div>
-                              
                                     <button type="submit" class="btn btn-rounded btn-primary btn-sm me-2">{{ __('admin.save_now') }}</button><br><br>
                                     <a onclick="history.back()" class="btn btn-sm btn-rounded btn-secondary">{{ __('admin.cancel') }}</a>
                                 </form>

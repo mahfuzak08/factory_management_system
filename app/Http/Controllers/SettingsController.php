@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\User;
 
 class SettingsController extends Controller
 {
+    /**
+     * Language Setup
+     */
     public function language(){
         return view('admin.settings.language');
     }
@@ -24,7 +29,11 @@ class SettingsController extends Controller
         }
         return redirect('language');
     }
-    
+    // End Language Setup
+
+    /**
+     * User Management
+     */
     public function user_manage(){
         if(! empty(request()->input('search'))){
             $str = request()->input('search');
@@ -51,10 +60,16 @@ class SettingsController extends Controller
         return view('admin.settings.user-edit', compact('user'));
     }
     
-    public function update_customer(Request $request, $id){
+    public function open_user_form(){
+        return view('admin.settings.user-addnew');
+    }
+    
+    public function update_user(Request $request, $id){
         $rules = [
             'name' => ['required', 'string', 'max:255'],
-            'mobile' => ['required', 'digits:13']
+            'mobile' => ['required', 'digits:13'],
+            'email' => ['email', 'nullable'],
+            'role' => ['required']
         ];
         $validator = Validator::make($request->all(), $rules);
 
@@ -62,19 +77,14 @@ class SettingsController extends Controller
             foreach ($validator->messages()->toArray() as $key => $value) { 
                 flash()->addError($value[0]);
             }
-            return redirect('add_new_customer');
+            return redirect($request->input('redirect_url'));
         }
         
         DB::beginTransaction();
         try{
-            $data = Customer::findOrFail($id);
+            $data = User::findOrFail($id);
             
             $input = $request->all();
-            if($data->opening_balance != $input['opening_balance'])
-                $input['balance'] = $data->balance - ($data->opening_balance - $input['opening_balance']);
-            else
-                $input['balance'] = $data->balance;
-            
             $data->update($input);
 
             DB::commit();
@@ -85,7 +95,7 @@ class SettingsController extends Controller
             flash()->addError('Data Not Updated Successfully.');
             DB::rollback();
         }
-        return redirect('customer');
+        return redirect('user_manage');
     }
 
 }
