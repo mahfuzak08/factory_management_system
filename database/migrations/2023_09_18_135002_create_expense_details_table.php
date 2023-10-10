@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('expense_id');
             $table->integer('user_id');
             $table->integer('account_id');
-            $table->float('amount');
+            $table->float('amount', 14, 2);
             $table->string('title')->nullable();
             $table->string('details')->nullable();
             $table->timestamps();

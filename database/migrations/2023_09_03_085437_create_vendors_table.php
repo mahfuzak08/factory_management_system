@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('address')->nullable();
             $table->string('url')->nullable();
-            $table->float('balance')->default(0);
+            $table->float('balance', 14, 2)->default(0);
             $table->integer('is_delete')->default(0);
             $table->timestamps();
         });

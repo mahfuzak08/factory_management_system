@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('customers', function (Blueprint $table) {
-            $table->float('opening_balance')->default(0);
+            $table->float('opening_balance', 14, 2)->default(0);
         });
     }
 

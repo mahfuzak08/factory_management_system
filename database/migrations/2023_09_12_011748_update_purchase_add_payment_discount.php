@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('purchases', function (Blueprint $table) {
             $table->json('payment')->nullable();
-            $table->float('discount')->nullable();
+            $table->float('discount', 14, 2)->nullable();
             $table->dropColumn('discount_code');
         });
     }

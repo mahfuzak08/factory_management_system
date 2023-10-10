@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('tranx_date');
             $table->integer('ref_id')->default(0);
             $table->string('ref_type')->nullable();
-            $table->float('amount')->default(0);
+            $table->float('amount', 14, 2)->default(0);
             $table->integer('user_id');
             $table->string('note')->nullable();
             $table->timestamps();

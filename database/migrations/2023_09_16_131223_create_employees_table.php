@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('nid')->nullable();
             $table->string('image')->nullable();
-            $table->float('salary')->default(0);
-            $table->float('bonus')->default(0);
+            $table->float('salary', 14, 2)->default(0);
+            $table->float('bonus', 14, 2)->default(0);
             $table->string('emp_type')->default("Permanent");
             $table->date('joining')->nullable();
             $table->date('closing')->nullable();
