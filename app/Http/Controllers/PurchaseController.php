@@ -16,7 +16,20 @@ class PurchaseController extends Controller
     public function index(){
         $account = Bankacc::all();
         $vendor = Vendor::where('is_delete', 0)->get();
-        return view('admin.purchase.register', compact('vendor', 'account'));
+        if(! empty(request()->input('search'))){
+            $str = request()->input('search');
+            $datas = Vendor::where(function ($query) use ($str){
+                                $query->where('name', 'like', '%'.$str.'%')
+                                ->orWhere('mobile', 'like', '%'.$str.'%')
+                                ->orWhere('email', 'like', '%'.$str.'%')
+                                ->orWhere('address', 'like', '%'.$str.'%');
+                            })
+                            ->where('is_delete', 0)
+                            ->latest()->paginate(10);
+        }else{
+            $datas = Vendor::latest()->where('is_delete', 0)->paginate(10);
+        }
+        return view('admin.purchase.register', compact('vendor', 'account', 'datas'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
     
     public function set_purchase(Request $request){
