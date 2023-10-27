@@ -42,4 +42,15 @@
     .collapse.show{
         visibility: visible !important;
     }
+
+    /* print.css */
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+        .printable-content {
+            visibility: visible;
+        }
+    }
+
 </style>

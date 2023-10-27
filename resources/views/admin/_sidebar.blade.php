@@ -45,10 +45,18 @@
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="{{ route('employee') }}">
-        <span class="menu-title">{{ __('admin.employee') }}</span>
+      <a class="nav-link" data-bs-toggle="collapse" href="#ui-employee" aria-expanded="false" aria-controls="ui-employee">
+        <span class="menu-title">{{__('admin.employee')}}</span>
+        <i class="menu-arrow"></i>
         <i class="mdi mdi-account-check menu-icon"></i>
       </a>
+      <div class="collapse" id="ui-employee">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" href="{{route('employee')}}">{{__('admin.employee')}}</a></li>
+          <li class="nav-item"> <a class="nav-link" href="{{route('attendance')}}">{{__('admin.attendance')}}</a></li>
+          <li class="nav-item"> <a class="nav-link" href="{{route('emp-report')}}">{{__('admin.report')}}</a></li>
+        </ul>
+      </div>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="{{ route('expense') }}">

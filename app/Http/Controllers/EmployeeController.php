@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\AccountTranx;
 use App\Models\Bankacc;
 use App\Models\Employee;
+use App\Models\Attendance;
 
 class EmployeeController extends Controller
 {
@@ -22,9 +23,9 @@ class EmployeeController extends Controller
                                 ->orWhere('nid', 'like', '%'.$str.'%')
                                 ->orWhere('address', 'like', '%'.$str.'%');
                             })
-                            ->latest()->paginate(10);
+                            ->orderBy('name', 'ASC')->paginate(10);
         }else{
-            $datas = Employee::latest()->paginate(10);
+            $datas = Employee::orderBy('name', 'ASC')->paginate(10);
         }
         return view('admin.employee.manage', compact('datas'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
@@ -177,6 +178,79 @@ class EmployeeController extends Controller
             DB::rollback();
         }
         return redirect($request->input('redirect_url'));
+    }
+
+
+    public function attendance(Request $request){
+        $d = $request->input('oldDate') ? $request->input('oldDate') : date('Y-m-d');
+        $employee = Employee::all()->toArray();
+        $attendance = Attendance::where('date', $d)->where('hours', 8)->pluck('emp_id')->toArray();
+        for($i=0; $i<count($employee); $i++){
+            $employee[$i]['attendance'] = 'no';
+            if(in_array($employee[$i]['id'], $attendance)){
+                $employee[$i]['attendance'] = 'yes';
+            }
+        }
+        return view('admin.employee.attendance', compact('employee'));
+    }
+
+    public function save_attendance(Request $request){
+        $attendance_data = array();
+        $d = $request->input('attendance-date');
+        $attendance = $request->input('attendance');
+        $empid = $request->input('empid');
+        for($i=0; $i<count($attendance); $i++){
+            $status = $attendance[$i] == "true" ? 8 : 0;
+            $attendance_data = [
+                'date' => $d,
+                'emp_id'=> $empid[$i],
+                'hours'=> $status,
+                'user_id'=> Auth::id()
+            ];
+            $existingRecord = Attendance::where('date', $d)->where('emp_id', $empid[$i])->first();
+            if ($existingRecord) {
+                if($status != $existingRecord->hours){
+                    $existingRecord->update([
+                        'hours' => $status,
+                        'user_id' => Auth::id()
+                    ]);
+                }
+            } else {
+                $data = new Attendance();
+                $data->fill($attendance_data)->save();
+            }
+        }
+        
+        flash()->addSuccess('Attendance taken successfully.');
+        return redirect('attendance');
+    }
+
+    private function getLastDayOfMonth($year, $month) {
+        $nextMonthFirstDay = date('Y-m-d', strtotime($year . '-' . ($month + 1) . '-01'));
+        $lastDayOfMonth = date('Y-m-d', strtotime('-1 day', strtotime($nextMonthFirstDay)));
+        return $lastDayOfMonth;
+    }
+    
+    public function attendance_report(Request $request){
+        $inputYearMonth = $request->input('month') ? $request->input('month') : date('Y-m');
+        list($year, $month) = explode('-', $inputYearMonth);
+        $lastDay = $this->getLastDayOfMonth($year, $month);
+        list($year, $month, $totalDays) = explode('-', $lastDay);
+        $firstDay = $year."-".$month."-01";
+        $monthYear = date("F, Y", strtotime($year."-".$month."-01"));
+        $employee = Employee::all()->toArray();
+        $attendance = Attendance::whereBetween('date', [$firstDay, $lastDay])->get()->toArray();
+        
+        for($i=0; $i<count($employee); $i++){
+            $employee[$i]['attendance'] = array();
+            for($j=0; $j<count($attendance); $j++){
+                if($attendance[$j]['emp_id'] == $employee[$i]['id']){
+                    $employee[$i]['attendance'][] = $attendance[$j];
+                }
+            }
+        }
+        // dd($employee);
+        return view('admin.employee.attendance-report', compact('employee', 'monthYear', 'totalDays', 'inputYearMonth'));
     }
 
 }
