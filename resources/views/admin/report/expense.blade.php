@@ -95,8 +95,8 @@
                                         @endphp
                                         @foreach($datas as $row)
                                           <tr>
-                                            <td><a href="{{route('sales-invoice', $row->id)}}">{{$n++}}</a></td>
-                                            <td><a href="#">{{$row->trnx_date}}</a></td>
+                                            <td><a href="{{route('expense-invoice', $row->id)}}">{{$n++}}</a></td>
+                                            <td><a href="{{route('expense-invoice', $row->id)}}">{{$row->trnx_date}}</a></td>
                                             <td>{{$row->id}}</td>
                                             <td>{{$row->expense_name}}</td>
                                             <td>{{$row->acc_name}}</td>
