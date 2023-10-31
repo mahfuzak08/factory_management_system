@@ -8,9 +8,9 @@
     "theme_color": "#6777ef",
     "icons": [
         {
-            "src": "/admin/assets/images/rwp.gif",
-            "sizes": "192x192",
-            "type": "image/gif",
+            "src": "logo.png",
+            "sizes": "144x144",
+            "type": "image/png",
             "purpose": "any maskable"
         }
     ]
