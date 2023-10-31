@@ -193,12 +193,4 @@ class SalesController extends Controller
         return view('admin.sales.invoice', compact('invoice', 'account'));
     }
 
-    public function sales_list(){
-        $datas = Sales::join("customers", "sales.customer_id", "=", "customers.id")
-                            ->select('sales.*', 'customers.name as customer_name')
-                            ->paginate(10);
-        $account = Bankacc::all();
-
-        return view('admin.sales.manage', compact('datas', 'account'))->with('i', (request()->input('page', 1) - 1) * 10);
-    }
 }

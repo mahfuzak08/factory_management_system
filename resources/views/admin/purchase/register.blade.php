@@ -14,7 +14,7 @@
                   <h3 class="page-title">{{ __('admin.purchase_register') }}</h3>
                   <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{route('all-purchase')}}" class="btn btn-rounded btn-sm btn-success">{{__('admin.all_purchase')}}</a></li>
+                        <li class="breadcrumb-item"><a href="{{route('purchase-report')}}" class="btn btn-rounded btn-sm btn-success">{{__('admin.all_purchase')}}</a></li>
                     </ol>
                   </nav>
                 </div>

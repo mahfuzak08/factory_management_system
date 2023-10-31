@@ -30,6 +30,7 @@ return [
     'today_total' => 'Today Total',
     'profile' => 'Profile',
     'sl' => 'SL',
+    'id' => 'ID',
     'action' => 'Action',
     'details' => 'Details',
     'add_new' => 'Add New',
@@ -72,6 +73,7 @@ return [
     'quantity' => 'Quantity',
     'price' => 'Price',
     'total' => 'Total',
+    'amount' => 'Amount',
     'purchase_register' => 'Purchase Register',
     'all_purchase' => 'All Purchase',
     'inv_no' => 'Invoice No',
@@ -110,4 +112,7 @@ return [
     'October' => 'October',
     'November' => 'November',
     'December' => 'December',
+    'start_date' => 'Start Date',
+    'end_date' => 'End Date',
+    'title' => 'Title',
 ];

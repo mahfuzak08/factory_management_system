@@ -30,6 +30,7 @@ return [
     'today_total' => 'আজ মোট',
     'profile' => 'প্রোফাইল',
     'sl' => 'সিরিয়াল',
+    'id' => 'আইডি',
     'action' => 'পরিকল্পনা',
     'details' => 'বিস্তারিত',
     'no data found' => 'কোন তথ্য পাওয়া যায়নি',
@@ -72,6 +73,7 @@ return [
     'quantity' => 'পরিমাণ',
     'price' => 'মূল্য',
     'total' => 'মোট',
+    'amount' => 'পরিমাণ',
     'purchase_register' => 'ক্রয় নিবন্ধন',
     'all_purchase' => 'সমস্ত ক্রয়',
     'inv_no' => 'চালান নং',
@@ -110,4 +112,7 @@ return [
     'October' => 'অক্টোবর',
     'November' => 'নভেম্বর',
     'December' => 'ডিসেম্বর',
+    'start_date' => 'শুরুর তারিখ',
+    'end_date' => 'শেষ তারিখ',
+    'title' => 'শিরোনাম',
 ];

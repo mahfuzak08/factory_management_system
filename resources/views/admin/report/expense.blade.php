@@ -11,12 +11,12 @@
         <div class="main-panel">
             <div class="content-wrapper">
                 <div class="page-header">
-                  <h3 class="page-title">{{__('admin.all_purchase')}}</h3>
-                  <nav aria-label="breadcrumb">
+                  <h3 class="page-title">{{__('admin.expense')}}</h3>
+                  {{-- <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{route('purchase')}}" class="btn btn-rounded btn-sm btn-success">{{__('admin.back')}}</a></li>
+                        <li class="breadcrumb-item"><a href="{{route('add-new-customer')}}" class="btn btn-rounded btn-sm btn-success">{{__('admin.add_new')}}</a></li>
                     </ol>
-                  </nav>
+                  </nav> --}}
                 </div>
                 <div class="row">
                     <div class="col-12 grid-margin stretch-card">
@@ -49,9 +49,9 @@
                                             <div class="col-sm-9">
                                                 <select name="expense_type" style="width: 100%">
                                                     <option value="all">All</option>
-                                                    {{-- @foreach($expense as $row)
+                                                    @foreach($expense as $row)
                                                     <option value="{{$row->id}}">{{$row->name}}</option>
-                                                    @endforeach --}}
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>
@@ -70,13 +70,12 @@
                                     <thead>
                                         <tr>
                                             <th> {{__('admin.sl')}} </th>
-                                            <th> {{__('admin.inv_no')}} </th>
-                                            <th> {{__('admin.inv_type')}} </th>
-                                            <th> {{__('admin.vendor_name')}} </th>
-                                            <th> {{__('admin.quantity')}} </th>
-                                            <th> {{__('admin.receive_amount')}} </th>
-                                            <th> {{__('admin.due_amount')}} </th>
-                                            <th> {{__('admin.total')}} </th>
+                                            <th> {{__('admin.date')}} </th>
+                                            <th> {{__('admin.id')}} </th>
+                                            <th> {{__('admin.expense_name')}} </th>
+                                            <th> {{__('admin.account_name')}} </th>
+                                            <th> {{__('admin.amount')}} </th>
+                                            <th> {{__('admin.details')}} </th>
                                           </tr>
                                     </thead>
                                     <tbody>
@@ -89,34 +88,13 @@
                                         @endphp
                                         @foreach($datas as $row)
                                           <tr>
-                                            <td><a href="{{route('purchase-invoice', $row->id)}}">{{$n++}}</a></td>
-                                            <td><a href="{{route('purchase-invoice', $row->id)}}">{{$row->order_id}}</a></td>
-                                            <td>{{$row->order_type}}</td>
-                                            <td><a href="{{route('purchase-invoice', $row->id)}}">{{$row->vendor_name}}</a></td>
-                                            <td>
-                                              @foreach(json_decode($row->products) as $p)
-                                                  {{$p->quantity}}
-                                              @endforeach
-                                            </td>
-                                            <td>
-                                              @foreach(json_decode($row->payment) as $p)
-                                                @foreach($account as $ac)
-                                                  @if($p->pid == $ac->id && $ac->type != 'Due')
-                                                    {{$ac->name}}: {{$p->receive_amount}}<br>
-                                                  @endif
-                                                @endforeach
-                                              @endforeach
-                                            </td>
-                                            <td>
-                                              @foreach(json_decode($row->payment) as $p)
-                                                @foreach($account as $ac)
-                                                  @if($p->pid == $ac->id && $ac->type == 'Due')
-                                                    {{$p->receive_amount}}<br>
-                                                  @endif
-                                                @endforeach
-                                              @endforeach
-                                            </td>
-                                            <td>{{$row->total}}</td>
+                                            <td><a href="{{route('sales-invoice', $row->id)}}">{{$n++}}</a></td>
+                                            <td><a href="#">{{$row->trnx_date}}</a></td>
+                                            <td>{{$row->id}}</td>
+                                            <td>{{$row->expense_name}}</td>
+                                            <td>{{$row->acc_name}}</td>
+                                            <td>{{$row->amount}}</td>
+                                            <td>{{$row->title}} {{$row->details}}</td>
                                           </tr>
                                         @endforeach
                                       @else
@@ -138,10 +116,5 @@
       </div>
     </div>
     @include('admin._script')
-    <script>
-      function openForm(){
-        $('#addForm').removeClass('d-none');
-      }
-    </script>
   </body>
 </html>

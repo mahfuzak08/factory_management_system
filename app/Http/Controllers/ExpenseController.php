@@ -142,11 +142,15 @@ class ExpenseController extends Controller
                 "details"=> $request->input("details")
             ];
 
+            $ex_order->fill($ex_input)->save();
+
             $data = new AccountTranx();
             
             $input = $request->all();
             $input['user_id'] = Auth::id();
             $input['amount'] *= -1;
+            $input['ref_tranx_id'] = $ex_order->id;
+            $input['ref_tranx_type'] = "expense_order";
             
             $data->fill($input)->save();
             
@@ -158,8 +162,18 @@ class ExpenseController extends Controller
             // If any query fails, catch the exception and roll back the transaction
             flash()->addError('Data Not Added Successfully.');
             DB::rollback();
+            return redirect($request->input('redirect_url'));
         }
-        return redirect($request->input('redirect_url'));
+        return redirect("expense_invoice/$ex_order->id");
+    }
+
+    public function invoice($id){
+        $invoice = Expense_detail::join("expenses", "expense_details.expense_id", "=", "expenses.id")
+                                ->join("bankaccs", "expense_details.account_id", "=", "bankaccs.id")
+                                ->select("expense_details.*", "expenses.name as expense_name", "bankaccs.name as acc_name")
+                                ->where("expense_details.id", $id)
+                                ->get();
+        return view('admin.expense.invoice', compact('invoice'));
     }
 
 }

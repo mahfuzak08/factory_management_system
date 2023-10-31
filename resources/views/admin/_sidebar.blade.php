@@ -71,6 +71,20 @@
       </a>
     </li>
     <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="collapse" href="#report" aria-expanded="false" aria-controls="report">
+        <span class="menu-title">{{__('admin.report')}}</span>
+        <i class="menu-arrow"></i>
+        <i class="mdi mdi-file-document menu-icon"></i>
+      </a>
+      <div class="collapse" id="report">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" href="{{route('sales-report')}}">{{__('admin.sales')}}</a></li>
+          <li class="nav-item"> <a class="nav-link" href="{{route('purchase-report')}}">{{__('admin.purchase')}}</a></li>
+          <li class="nav-item"> <a class="nav-link" href="{{route('expense-report')}}">{{__('admin.expense')}}</a></li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-item">
       <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
         <span class="menu-title">{{__('admin.settings')}}</span>
         <i class="menu-arrow"></i>

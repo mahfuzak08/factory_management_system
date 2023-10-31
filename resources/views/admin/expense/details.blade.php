@@ -39,7 +39,7 @@
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input6" class="col-sm-3 col-form-label">{{__('admin.date')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="date" name="tranx_date" class="form-control" id="input6" required>
+                                        <input type="date" name="tranx_date" value="{{date('Y-m-d')}}" class="form-control" id="input6" required>
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">

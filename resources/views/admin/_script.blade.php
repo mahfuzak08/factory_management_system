@@ -1,5 +1,7 @@
 <!-- container-scroller -->
 <!-- plugins:js -->
+<button id="install-button" style="display: none;">Install App</button>
+
 <script src="{{asset('admin/assets/vendors/js/vendor.bundle.base.js')}}"></script>
 <!-- endinject -->
 <!-- Plugin js for this page -->
@@ -36,4 +38,54 @@
         // Print the new window
         printWindow.print();
     });
+</script>
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+                console.log('Service Worker registered with scope:', registration.scope);
+            }).catch(function(error) {
+                console.log('Service Worker registration failed:', error);
+            });
+        });
+    }
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent Chrome 76 and later from automatically showing the install prompt
+        e.preventDefault();
+        deferredPrompt = e;
+
+        // Show a custom install button or similar if desired
+        showInstallButton();
+    });
+
+    function showInstallButton() {
+        // Assuming you have an install button element with id "install-button"
+        const installButton = document.getElementById('install-button');
+
+        // Show the install button
+        installButton.style.display = 'block';
+
+        // Add click event listener to the install button
+        installButton.addEventListener('click', () => {
+            // Hide the install button
+            installButton.style.display = 'none';
+
+            // Show the installation prompt
+            deferredPrompt.prompt();
+
+            // Wait for the user to respond to the prompt
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the A2HS prompt');
+                } else {
+                    console.log('User dismissed the A2HS prompt');
+                }
+
+                // Reset the deferredPrompt variable
+                deferredPrompt = null;
+            });
+        });
+    }
+
 </script>

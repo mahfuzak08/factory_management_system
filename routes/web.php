@@ -10,6 +10,7 @@ use App\Http\Controllers\VendorController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\BankaccController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingsController;
 
 /*
@@ -38,7 +39,7 @@ Route::middleware([
     Route::get('/sales', [SalesController::class, 'index'])->name('sales');
     Route::post('/save_sales', [SalesController::class, 'set_sales'])->name('save-sales');
     Route::get('/sales_invoice/{id}', [SalesController::class, 'invoice'])->name('sales-invoice');
-    Route::get('/all_sales', [SalesController::class, 'sales_list'])->name('all-sales');
+    // Route::get('/all_sales', [SalesController::class, 'sales_list'])->name('all-sales');
 
     Route::get('/customer', [CustomerController::class, 'index'])->name('customer');
     Route::get('/add_new_customer', [CustomerController::class, 'open_customer_form'])->name('add-new-customer');
@@ -52,7 +53,7 @@ Route::middleware([
     Route::get('/purchase', [PurchaseController::class, 'index'])->name('purchase');
     Route::post('/save_purchase', [PurchaseController::class, 'set_purchase'])->name('save-purchase');
     Route::get('/purchase_invoice/{id}', [PurchaseController::class, 'invoice'])->name('purchase-invoice');
-    Route::get('/all_purchase', [PurchaseController::class, 'purchase_list'])->name('all-purchase');
+    // Route::get('/all_purchase', [PurchaseController::class, 'purchase_list'])->name('all-purchase');
 
     Route::get('/vendor', [VendorController::class, 'index'])->name('vendor');
     Route::get('/add_new_vendor', [VendorController::class, 'open_vendor_form'])->name('add-new-vendor');
@@ -78,6 +79,7 @@ Route::middleware([
     Route::get('/expense', [ExpenseController::class, 'index'])->name('expense');
     Route::get('/add_new_expense', [ExpenseController::class, 'open_expense_form'])->name('add-new-expense');
     Route::post('/save_expense', [ExpenseController::class, 'set_expense'])->name('save-expense');
+    Route::get('/expense_invoice/{id}', [ExpenseController::class, 'invoice'])->name('expense-invoice');
     Route::get('/edit_expense/{id}', [ExpenseController::class, 'edit_expense'])->name('edit-expense');
     Route::post('/edit_expense/{id}', [ExpenseController::class, 'update_expense'])->name('edit-expense');
     Route::get('/delete_expense/{id}', [ExpenseController::class, 'delete_expense'])->name('delete-expense');
@@ -92,7 +94,10 @@ Route::middleware([
     Route::get('/delete_account/{id}', [BankaccController::class, 'delete_account'])->name('delete-account');
     Route::get('/account_details/{id}', [BankaccController::class, 'acc_details'])->name('account-details');
     Route::post('/save_amount', [BankaccController::class, 'add_amount'])->name('save-amount');
-
+    
+    Route::get('/reportSales', [ReportController::class, 'sales'])->name('sales-report');
+    Route::get('/reportPurchase', [ReportController::class, 'purchase'])->name('purchase-report');
+    Route::get('/reportExpense', [ReportController::class, 'expense'])->name('expense-report');
     
 
     Route::get('/language', [SettingsController::class, 'language'])->name('language');

@@ -191,13 +191,5 @@ class PurchaseController extends Controller
         
         return view('admin.purchase.invoice', compact('invoice', 'account'));
     }
-
-    public function purchase_list(){
-        $datas = Purchase::join("vendors", "purchases.vendor_id", "=", "vendors.id")
-                            ->select('purchases.*', 'vendors.name as vendor_name')
-                            ->paginate(10);
-        $account = Bankacc::all();
-
-        return view('admin.purchase.manage', compact('datas', 'account'))->with('i', (request()->input('page', 1) - 1) * 10);
-    }
+    
 }
