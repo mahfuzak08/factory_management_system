@@ -11,10 +11,10 @@
         <div class="main-panel">
             <div class="content-wrapper">
                 <div class="page-header">
-                  <h3 class="page-title">{{__('admin.all_sales')}}</h3>
+                  <h3 class="page-title">{{__('admin.all_purchase')}}</h3>
                   <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{route('sales')}}" class="btn btn-rounded btn-sm btn-success">{{__('admin.back')}}</a></li>
+                        <li class="breadcrumb-item"><a href="{{route('purchase')}}" class="btn btn-rounded btn-sm btn-success">{{__('admin.back')}}</a></li>
                     </ol>
                   </nav>
                 </div>
@@ -22,7 +22,7 @@
                     <div class="col-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                              <form action="{{route('expense-report')}}" method="GET">
+                              <form action="{{route('purchase-report')}}" method="GET">
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-6">
@@ -45,19 +45,27 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label">{{__('admin.expense_name')}}</label>
+                                            <label class="col-sm-3 col-form-label">{{__('admin.vendor')}}</label>
                                             <div class="col-sm-9">
-                                                <select name="expense_type" style="width: 100%">
+                                                <select name="vendor_id" style="width: 100%">
                                                     <option value="all">All</option>
-                                                    {{-- @foreach($expense as $row)
+                                                    @foreach($vendor as $row)
                                                     <option value="{{$row->id}}">{{$row->name}}</option>
-                                                    @endforeach --}}
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-6">
+                                      <div class="form-group row">
+                                          <label class="col-sm-3 col-form-label">{{__('admin.inv_no')}}</label>
+                                          <div class="col-sm-9">
+                                              <input type="text" class="form-control" value="{{@$_GET['inv_id']}}" name="inv_id">
+                                          </div>
+                                      </div>
                                     </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group row">
                                             <button name="get_data" class="btn btn-success">Search</button>
@@ -71,8 +79,9 @@
                                         <tr>
                                             <th> {{__('admin.sl')}} </th>
                                             <th> {{__('admin.inv_no')}} </th>
+                                            <th> {{__('admin.date')}} </th>
                                             <th> {{__('admin.inv_type')}} </th>
-                                            <th> {{__('admin.customer_name')}} </th>
+                                            <th> {{__('admin.vendor_name')}} </th>
                                             <th> {{__('admin.quantity')}} </th>
                                             <th> {{__('admin.receive_amount')}} </th>
                                             <th> {{__('admin.due_amount')}} </th>
@@ -80,22 +89,30 @@
                                           </tr>
                                     </thead>
                                     <tbody>
+                                      @php 
+                                      $page_qty_total = 0;
+                                      $page_rcv_total = 0;
+                                      $page_due_total = 0;
+                                      $page_total = 0;
+                                      if(isset($_GET['page']) && $_GET['page']>0)
+                                        $n = 1 + (($_GET['page'] - 1) * 10);
+                                      else
+                                        $n = 1;
+                                      @endphp
                                       @if(count($datas) > 0)
-                                        @php 
-                                        if(isset($_GET['page']) && $_GET['page']>0)
-                                          $n = 1 + (($_GET['page'] - 1) * 10);
-                                        else
-                                          $n = 1;
-                                        @endphp
                                         @foreach($datas as $row)
                                           <tr>
-                                            <td><a href="{{route('sales-invoice', $row->id)}}">{{$n++}}</a></td>
-                                            <td><a href="{{route('sales-invoice', $row->id)}}">{{$row->order_id}}</a></td>
+                                            <td><a href="{{route('purchase-invoice', $row->id)}}">{{$n++}}</a></td>
+                                            <td><a href="{{route('purchase-invoice', $row->id)}}">{{$row->order_id}}</a></td>
+                                            <td>{{$row->date}}</td>
                                             <td>{{$row->order_type}}</td>
-                                            <td><a href="{{route('purchase-invoice', $row->id)}}">{{$row->customer_name}}</a></td>
+                                            <td><a href="{{route('purchase-invoice', $row->id)}}">{{$row->vendor_name}}</a></td>
                                             <td>
                                               @foreach(json_decode($row->products) as $p)
                                                   {{$p->quantity}}
+                                                  @php
+                                                  $page_qty_total += $p->quantity;
+                                                  @endphp
                                               @endforeach
                                             </td>
                                             <td>
@@ -103,6 +120,9 @@
                                                 @foreach($account as $ac)
                                                   @if($p->pid == $ac->id && $ac->type != 'Due')
                                                     {{$ac->name}}: {{$p->receive_amount}}<br>
+                                                    @php
+                                                    $page_rcv_total += $p->receive_amount;
+                                                    @endphp
                                                   @endif
                                                 @endforeach
                                               @endforeach
@@ -112,19 +132,36 @@
                                                 @foreach($account as $ac)
                                                   @if($p->pid == $ac->id && $ac->type == 'Due')
                                                     {{$p->receive_amount}}<br>
+                                                    @php
+                                                    $page_due_total += $p->receive_amount;
+                                                    @endphp
                                                   @endif
                                                 @endforeach
                                               @endforeach
                                             </td>
-                                            <td>{{$row->total}}</td>
+                                            <td>
+                                              {{$row->total}}
+                                              @php
+                                              $page_total += $row->total;
+                                              @endphp
+                                            </td>
                                           </tr>
                                         @endforeach
                                       @else
                                           <tr>
-                                            <td colspan="7" class="text-center">{{__('admin.no_data_found')}}</td>
+                                            <td colspan="9" class="text-center">{{__('admin.no_data_found')}}</td>
                                           </tr>
                                       @endif
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="5" class="text-right">Total: </td>
+                                            <td>{{$page_qty_total}}</td>
+                                            <td>{{$page_rcv_total}}</td>
+                                            <td>{{$page_due_total}}</td>
+                                            <td>{{$page_total}}</td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                               </div>
                               {{ $datas->onEachSide(3)->links() }}

@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Auth;
 // use App\Models\AccountTranx;
 use App\Models\Bankacc;
 use App\Models\Purchase;
+use App\Models\Vendor;
 use App\Models\Sales;
+use App\Models\Customer;
 use App\Models\Expense;
 use App\Models\Expense_detail;
 // use App\Models\Vendor;
@@ -16,26 +18,74 @@ use App\Models\Expense_detail;
 class ReportController extends Controller
 {
     public function sales(Request $request){
-        if(! empty(request()->input('start_date'))){
-            $sd = request()->input('start_date');
-            $ed = request()->input('end_date');
+        $sd = request()->input('start_date');
+        $ed = request()->input('end_date');
+        $cid = request()->input('customer_id');
+        $inv = request()->input('inv_id');
+        if(! empty($sd) || ! empty($ed) || ! empty($cid) || ! empty($inv)){
+            $datas = Sales::join("customers", "sales.customer_id", "=", "customers.id")
+                                ->select('sales.*', 'customers.name as customer_name')
+                                ->where(function($q) use($sd, $ed, $cid, $inv){
+                                    if($inv != '') {
+                                        $q->where('order_id', $inv);
+                                    }
+                                    else{
+                                        if($sd && $ed)
+                                            $q->where('date', '>=', $sd)->where('date', '<=', $ed);
+
+                                        if($cid != 'all') {
+                                            $q->where('customer_id', $cid);
+                                        }
+                                    }
+                                })
+                                ->paginate(10);
         }else{
             $datas = Sales::join("customers", "sales.customer_id", "=", "customers.id")
                                 ->select('sales.*', 'customers.name as customer_name')
+                                ->where('date', '>=', date('Y-m-d'))
+                                ->where('date', '<=', date('Y-m-d'))
                                 ->paginate(10);
         }
         $account = Bankacc::all();
+        $customer = Customer::all();
 
-        return view('admin.sales.manage', compact('datas', 'account'))->with('i', (request()->input('page', 1) - 1) * 10);
+        return view('admin.report.sales', compact('datas', 'account', 'customer'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
     public function purchase(){
-        $datas = Purchase::join("vendors", "purchases.vendor_id", "=", "vendors.id")
-                            ->select('purchases.*', 'vendors.name as vendor_name')
-                            ->paginate(10);
-        $account = Bankacc::all();
+        $sd = request()->input('start_date');
+        $ed = request()->input('end_date');
+        $vid = request()->input('vendor_id');
+        $inv = request()->input('inv_id');
+        if(! empty($sd) || ! empty($ed) || ! empty($cid) || ! empty($inv)){
+            $datas = Purchase::join("vendors", "purchases.vendor_id", "=", "vendors.id")
+                                ->select('purchases.*', 'vendors.name as vendor_name')
+                                ->where(function($q) use($sd, $ed, $vid, $inv){
+                                    if($inv != '') {
+                                        $q->where('order_id', $inv);
+                                    }
+                                    else{
+                                        if($sd && $ed)
+                                            $q->where('date', '>=', $sd)->where('date', '<=', $ed);
 
-        return view('admin.purchase.manage', compact('datas', 'account'))->with('i', (request()->input('page', 1) - 1) * 10);
+                                        if($vid != 'all') {
+                                            $q->where('vendor_id', $vid);
+                                        }
+                                    }
+                                })
+                                ->paginate(10);
+        }else{
+            $datas = Purchase::join("vendors", "purchases.vendor_id", "=", "vendors.id")
+                            ->select('purchases.*', 'vendors.name as vendor_name')
+                            ->where('date', '>=', date('Y-m-d'))
+                            ->where('date', '<=', date('Y-m-d'))
+                            ->paginate(10);
+        }
+
+        $account = Bankacc::all();
+        $vendor = Vendor::all();
+
+        return view('admin.report.purchase', compact('datas', 'account', 'vendor'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
     
     public function expense(Request $request){
@@ -48,9 +98,10 @@ class ReportController extends Controller
                                 ->join("bankaccs", "expense_details.account_id", "=", "bankaccs.id")
                                 ->select("expense_details.*", "expenses.name as expense_name", "bankaccs.name as acc_name")
                                 ->where(function ($q) use ($sd, $ed, $expenseType) {
-                                    $q->where('trnx_date', '>=', $sd)
-                                        ->where('trnx_date', '<=', $ed);
-                                    
+                                    if(! empty($sd) && ! empty($ed)){
+                                        $q->where('trnx_date', '>=', $sd)
+                                            ->where('trnx_date', '<=', $ed);
+                                    }
                                     if ($expenseType != 'all') {
                                         $q->where('expense_id', $expenseType);
                                     }
@@ -60,6 +111,8 @@ class ReportController extends Controller
             $datas = Expense_detail::join("expenses", "expense_details.expense_id", "=", "expenses.id")
                                 ->join("bankaccs", "expense_details.account_id", "=", "bankaccs.id")
                                 ->select("expense_details.*", "expenses.name as expense_name", "bankaccs.name as acc_name")
+                                ->where('trnx_date', '>=', date('Y-m-d'))
+                                ->where('trnx_date', '<=', date('Y-m-d'))
                                 ->paginate(10);
         }
         $expense = Expense::all();

@@ -56,8 +56,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                    </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group row">
                                             <button name="get_data" class="btn btn-success">Search</button>
@@ -79,6 +79,13 @@
                                           </tr>
                                     </thead>
                                     <tbody>
+                                      @php 
+                                      $page_total = 0;
+                                      if(isset($_GET['page']) && $_GET['page']>0)
+                                        $n = 1 + (($_GET['page'] - 1) * 10);
+                                      else
+                                        $n = 1;
+                                      @endphp
                                       @if(count($datas) > 0)
                                         @php 
                                         if(isset($_GET['page']) && $_GET['page']>0)
@@ -93,7 +100,12 @@
                                             <td>{{$row->id}}</td>
                                             <td>{{$row->expense_name}}</td>
                                             <td>{{$row->acc_name}}</td>
-                                            <td>{{$row->amount}}</td>
+                                            <td>
+                                              {{$row->amount}}
+                                              @php 
+                                              $page_total += $row->amount;
+                                              @endphp
+                                            </td>
                                             <td>{{$row->title}} {{$row->details}}</td>
                                           </tr>
                                         @endforeach
@@ -103,6 +115,13 @@
                                           </tr>
                                       @endif
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="5" class="text-right">Total: </td>
+                                            <td>{{$page_total}}</td>
+                                            <td></td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                               </div>
                               {{ $datas->onEachSide(3)->links() }}
