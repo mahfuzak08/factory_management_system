@@ -2,7 +2,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>{{config('app.name')}}</title>
-<link rel="manifest" href="/manifest.json">
+<!-- PWA  -->
+<meta name="theme-color" content="#6777ef"/>
+<link rel="apple-touch-icon" href="{{ asset('admin/assets/images/rwp.gif') }}">
+<link rel="manifest" href="{{ asset('/manifest.json') }}">
 <!-- plugins:css -->
 {{-- <link rel="stylesheet" href="admin/assets/vendors/mdi/css/materialdesignicons.min.css"> --}}
 {{-- <link rel="stylesheet" href="admin/assets/vendors/css/vendor.bundle.base.css"> --}}
