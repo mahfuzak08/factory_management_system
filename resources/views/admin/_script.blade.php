@@ -15,42 +15,21 @@
 <script src="{{asset('admin/assets/js/dashboard.js')}}"></script>
 <script src="{{asset('admin/assets/js/todolist.js')}}"></script>
 <!-- End custom js for this page -->
-<script>
-    var printButton = document.getElementById("printButton");
-    var printableContent = document.querySelector(".printable-content");
-
-    printButton.addEventListener("click", function() {
-        // Clone the printable content div to avoid modifying the original content
-        var printableContentClone = printableContent.cloneNode(true);
-
-        // Create a new window and append the cloned content to it
-        var printWindow = window.open('', '_blank');
-        printWindow.document.body.appendChild(printableContentClone);
-
-        // Link the print.css file for styling the print layout
-        var cssLink = printWindow.document.createElement("link");
-        cssLink.href = "path/to/print.css"; // Specify the correct path to your print.css file
-        cssLink.rel = "stylesheet";
-        printWindow.document.head.appendChild(cssLink);
-
-        // Print the new window
-        printWindow.print();
-    });
-</script>
 <script src="{{ asset('/sw.js') }}"></script>
 <script>
    if ("serviceWorker" in navigator) {
-      // Register a service worker hosted at the root of the
-      // site using the default scope.
-      navigator.serviceWorker.register("/sw.js").then(
-      (registration) => {
-         console.log("Service worker registration succeeded:", registration);
-      },
-      (error) => {
-         console.error(`Service worker registration failed: ${error}`);
-      },
-    );
-  } else {
-     console.error("Service workers are not supported.");
-  }
+        // Register a service worker hosted at the root of the
+        // site using the default scope.
+        navigator.serviceWorker.register("/sw.js").then(
+            (registration) => {
+                console.log("Service worker registration succeeded");
+                console.log(registration);
+            },
+            (error) => {
+                console.error(`Service worker registration failed: ${error}`);
+            },
+        );
+    } else {
+        console.error("Service workers are not supported.");
+    }
 </script>

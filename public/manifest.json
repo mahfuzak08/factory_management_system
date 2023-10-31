@@ -1,7 +1,7 @@
 {
     "name": "Rayan Washing Plant",
     "short_name": "RWP",
-    "start_url": "/index.php",
+    "start_url": "/",
     "background_color": "#6777ef",
     "description": "Rayan Washing Plant Factory Management System",
     "display": "fullscreen",
