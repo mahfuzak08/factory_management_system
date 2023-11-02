@@ -53,7 +53,8 @@ Route::middleware([
     Route::get('/purchase', [PurchaseController::class, 'index'])->name('purchase');
     Route::post('/save_purchase', [PurchaseController::class, 'set_purchase'])->name('save-purchase');
     Route::get('/purchase_invoice/{id}', [PurchaseController::class, 'invoice'])->name('purchase-invoice');
-    // Route::get('/all_purchase', [PurchaseController::class, 'purchase_list'])->name('all-purchase');
+    Route::get('/purchase_trnx_edit/{id}', [PurchaseController::class, 'purchase_edit'])->name('purchase-trnx-edit');
+    Route::get('/purchase_trnx_delete/{id}', [PurchaseController::class, 'purchase_delete'])->name('purchase-trnx-delete');
 
     Route::get('/vendor', [VendorController::class, 'index'])->name('vendor');
     Route::get('/add_new_vendor', [VendorController::class, 'open_vendor_form'])->name('add-new-vendor');

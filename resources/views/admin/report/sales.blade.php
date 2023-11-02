@@ -80,8 +80,9 @@
                                             <th> {{__('admin.sl')}} </th>
                                             <th> {{__('admin.inv_no')}} </th>
                                             <th> {{__('admin.date')}} </th>
-                                            <th> {{__('admin.inv_type')}} </th>
                                             <th> {{__('admin.customer_name')}} </th>
+                                            {{-- <th> {{__('admin.inv_type')}} </th> --}}
+                                            <th> {{__('admin.product_name')}} </th>
                                             <th> {{__('admin.quantity')}} </th>
                                             <th> {{__('admin.receive_amount')}} </th>
                                             <th> {{__('admin.due_amount')}} </th>
@@ -94,6 +95,7 @@
                                       $page_rcv_total = 0;
                                       $page_due_total = 0;
                                       $page_total = 0;
+                                      $pq = 0;
                                       if(isset($_GET['page']) && $_GET['page']>0)
                                         $n = 1 + (($_GET['page'] - 1) * 10);
                                       else
@@ -105,15 +107,21 @@
                                             <td><a href="{{route('sales-invoice', $row->id)}}">{{$n++}}</a></td>
                                             <td><a href="{{route('sales-invoice', $row->id)}}">{{$row->order_id}}</a></td>
                                             <td>{{$row->date}}</td>
-                                            <td>{{$row->order_type}}</td>
                                             <td><a href="{{route('purchase-invoice', $row->id)}}">{{$row->customer_name}}</a></td>
+                                            {{-- <td>{{$row->order_type}}</td> --}}
                                             <td>
                                               @foreach(json_decode($row->products) as $p)
-                                                  {{$p->quantity}}
+                                                  {{$p->product_name}}
+                                                  <br>
+                                                  {{@$p->product_details}}
                                                   @php
-                                                  $page_qty_total += $p->quantity;
+                                                  $pq += @$p->quantity ? $p->quantity : 0;
+                                                  $page_qty_total += @$p->quantity;
                                                   @endphp
                                               @endforeach
+                                            </td>
+                                            <td>
+                                              {{$pq}}
                                             </td>
                                             <td>
                                               @foreach(json_decode($row->payment) as $p)
@@ -121,6 +129,7 @@
                                                   @if($p->pid == $ac->id && $ac->type != 'Due')
                                                     {{$ac->name}}: {{$p->receive_amount}}<br>
                                                     @php
+                                                    $pq = 0;
                                                     $page_rcv_total += $p->receive_amount;
                                                     @endphp
                                                   @endif

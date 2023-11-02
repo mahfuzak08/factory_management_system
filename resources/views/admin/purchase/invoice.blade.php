@@ -21,7 +21,7 @@
                               <p _ngcontent-tmn-c13="">{{$invoice[0]->mobile}},<br _ngcontent-tmn-c13="">{{$invoice[0]->address}}.</p>
                             </div>
                             <div _ngcontent-tmn-c13="" class="col-lg-3 pr-0">
-                              <p _ngcontent-tmn-c13="" class="mt-5 mb-2 text-right"><b _ngcontent-tmn-c13="">#INV-{{$invoice[0]->id}}</b></p>
+                              <p _ngcontent-tmn-c13="" class="mt-5 mb-2 text-right"><b _ngcontent-tmn-c13="">#INV-{{$invoice[0]->order_id}}</b></p>
                               <p _ngcontent-tmn-c13="" class="text-right">Date : {{$invoice[0]->date}}</p>
                             </div>
                           </div>
@@ -77,7 +77,7 @@
                           <div _ngcontent-tmn-c13="" class="container-fluid w-100">
                             <a _ngcontent-tmn-c13="" class="btn btn-primary float-right mt-4 ml-2" href="javascript:void(0)"><i _ngcontent-tmn-c13="" class="mdi mdi-printer mr-1"></i>Print</a>
                             {{-- <a _ngcontent-tmn-c13="" class="btn btn-success float-right mt-4" href="javascript:void(0)"><i _ngcontent-tmn-c13="" class="mdi mdi-send mr-1"></i>Send Invoice</a> --}}
-                            <a _ngcontent-tmn-c13="" class="btn btn-secondary float-right mt-4" onclick="history.back()">Back</a>
+                            <a href="{{route('purchase')}}" _ngcontent-tmn-c13="" class="btn btn-secondary float-right mt-4">Back</a>
                           </div>
                       </div>
                     </div>

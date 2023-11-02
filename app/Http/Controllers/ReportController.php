@@ -61,6 +61,7 @@ class ReportController extends Controller
             $datas = Purchase::join("vendors", "purchases.vendor_id", "=", "vendors.id")
                                 ->select('purchases.*', 'vendors.name as vendor_name')
                                 ->where(function($q) use($sd, $ed, $vid, $inv){
+                                    $q->where('status', 1);
                                     if($inv != '') {
                                         $q->where('order_id', $inv);
                                     }
@@ -77,6 +78,7 @@ class ReportController extends Controller
         }else{
             $datas = Purchase::join("vendors", "purchases.vendor_id", "=", "vendors.id")
                             ->select('purchases.*', 'vendors.name as vendor_name')
+                            ->where('status', 1)
                             ->where('date', '>=', date('Y-m-d'))
                             ->where('date', '<=', date('Y-m-d'))
                             ->paginate(10);

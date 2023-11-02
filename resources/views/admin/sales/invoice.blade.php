@@ -21,7 +21,7 @@
                               <p _ngcontent-tmn-c13="">{{$invoice[0]->mobile}},<br _ngcontent-tmn-c13="">{{$invoice[0]->address}}.</p>
                             </div>
                             <div _ngcontent-tmn-c13="" class="col-lg-3 pr-0">
-                              <p _ngcontent-tmn-c13="" class="mt-5 mb-2 text-right"><b _ngcontent-tmn-c13="">#INV-{{$invoice[0]->id}}</b></p>
+                              <p _ngcontent-tmn-c13="" class="mt-5 mb-2 text-right"><b _ngcontent-tmn-c13="">#INV-{{$invoice[0]->order_id}}</b></p>
                               <p _ngcontent-tmn-c13="" class="text-right">Date : {{$invoice[0]->date}}</p>
                             </div>
                           </div>

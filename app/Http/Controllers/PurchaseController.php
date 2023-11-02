@@ -64,19 +64,7 @@ class PurchaseController extends Controller
                 $vinfo->fill($input)->save();
         
                 $vendor_id = $vinfo->id;
-                // $cash_acc_id = Bankacc::where('type', 'Cash')->pluck('id');
-                // $trnxdata = [
-                //     'account_id' => $cash_acc_id[0],
-                //     'user_id' => Auth::id(),
-                //     'tranx_date' => date("Y-m-d"),
-                //     'ref_id' => $vendor_id,
-                //     'ref_type' => 'vendor',
-                //     'note' => 'Vendor Opening Due Balance',
-                //     'amount' => 0
-                // ];
-                // $tdata = new AccountTranx();
-                // $tdata->fill($trnxdata)->save();
-
+                
                 flash()->addSuccess('New Vendor Added Successfully.');
                 // If all queries succeed, commit the transaction
                 DB::commit();
@@ -128,58 +116,115 @@ class PurchaseController extends Controller
         $discount = (float) $request->input('discount');
         $total -= $discount;
 
-        $input_order = [
-            "order_id"=> Purchase::max("order_id") || 786,
-            "order_type"=> "purchase",
-            "user_id"=> Auth::id(),
-            "vendor_id"=> $vendor_id,
-            "products"=> json_encode($items),
-            "date"=> $request->input('date'),
-            "discount"=> $discount,
-            "total"=> $total,
-            "payment"=> json_encode($payments),
-            "asof_date_due"=> $asofdue,
-        ];
+        if(! empty($request->input('order_id')) && $request->input('order_id') > 0){
+            $input_order = [
+                "order_type"=> "purchase",
+                "user_id"=> Auth::id(),
+                "vendor_id"=> $vendor_id,
+                "products"=> json_encode($items),
+                "date"=> $request->input('date'),
+                "discount"=> $discount,
+                "total"=> $total,
+                "payment"=> json_encode($payments)
+            ];
 
-        try{
-            DB::beginTransaction();
+            try{
+                DB::beginTransaction();
+    
+                $order = Purchase::findOrFail($request->input('order_id'));
+                $input_order["note"] = json_encode(array("old_date"=>$order->date, "old_vendor_id"=>$order->vendor_id, "old_products"=>$order->products, "old_payment"=>$order->payment, "old_discount"=>$order->discount));
 
-            $order = New Purchase();
-            $order->fill($input_order)->save();
-            $order_id = $order->id; 
+                $order->fill($input_order)->save();
+                $order_id = $request->input('order_id'); 
 
-            $vinfo->balance = $asofdue;
-            $vinfo->save();
+                $vinfo->balance = $asofdue;
+                $vinfo->save();
+    
+                
+                for($i=0; $i<count($ptype); $i++){
+                    if(count($due_acc_id) > 0 && $ptype[$i] == $due_acc_id[0]) continue;
+                    $tdata = AccountTranx::where('ref_tranx_id', $order_id)
+                                        ->where('ref_tranx_type', 'purchase_order')
+                                        ->where('ref_type', 'vendor')
+                                        ->where('account_id', $ptype[$i])
+                                        ->get();
+                    $trnxdata = [
+                        'user_id' => Auth::id(),
+                        'tranx_date' => $request->input('date'),
+                        'ref_id' => $vendor_id,
+                        'amount' => (float) $receive_amount[$i] * -1,
+                        'note' => 'This tranx updated. Old amount was '. $tdata->amount
+                    ];
+                    $tdata->fill($trnxdata)->save();
+                }
 
-            for($i=0; $i<count($ptype); $i++){
-                if(count($due_acc_id) > 0 && $ptype[$i] == $due_acc_id[0]) continue;
-
-                $trnxdata = [
-                    'account_id' => $ptype[$i],
-                    'user_id' => Auth::id(),
-                    'tranx_date' => $request->input('date'),
-                    'ref_id' => $vendor_id,
-                    'ref_type' => 'vendor',
-                    'ref_tranx_id' => $order_id,
-                    'ref_tranx_type' => 'purchase_order',
-                    'note' => '',
-                    'amount' => (float) $receive_amount[$i] * -1
-                ];
-                $tdata = new AccountTranx();
-                $tdata->fill($trnxdata)->save();
+                AccountTranx::where('ref_tranx_id', $order_id)->where('note', '')->delete();
+    
+                flash()->addSuccess('Purchase Order Updated Successfully.');
+                DB::commit();
+            }catch (\Exception $e) {
+                // If any query fails, catch the exception and roll back the transaction
+                dd($e);
+                flash()->addError('Purchase Order Not Updated Successfully.');
+                DB::rollback();
+                return redirect('purchase');
             }
-
-            flash()->addSuccess('Purchase Order Added Successfully.');
-            DB::commit();
-        }catch (\Exception $e) {
-            // If any query fails, catch the exception and roll back the transaction
-            dd($e);
-            flash()->addError('Purchase Order Not Added Successfully.');
-            DB::rollback();
-            return redirect('purchase');
+            return redirect("purchase_invoice/$order_id");
         }
+        else{
+            $moid = Purchase::max("order_id");
+            $input_order = [
+                "order_id"=> $moid > 0 ? $moid+1 : 786,
+                "order_type"=> "purchase",
+                "user_id"=> Auth::id(),
+                "vendor_id"=> $vendor_id,
+                "products"=> json_encode($items),
+                "date"=> $request->input('date'),
+                "discount"=> $discount,
+                "total"=> $total,
+                "payment"=> json_encode($payments),
+                "asof_date_due"=> $asofdue,
+            ];
 
-        return redirect("purchase_invoice/$order_id");
+            try{
+                DB::beginTransaction();
+    
+                $order = New Purchase();
+                $order->fill($input_order)->save();
+                $order_id = $order->id; 
+    
+                $vinfo->balance = $asofdue;
+                $vinfo->save();
+    
+                for($i=0; $i<count($ptype); $i++){
+                    if(count($due_acc_id) > 0 && $ptype[$i] == $due_acc_id[0]) continue;
+    
+                    $trnxdata = [
+                        'account_id' => $ptype[$i],
+                        'user_id' => Auth::id(),
+                        'tranx_date' => $request->input('date'),
+                        'ref_id' => $vendor_id,
+                        'ref_type' => 'vendor',
+                        'ref_tranx_id' => $order_id,
+                        'ref_tranx_type' => 'purchase_order',
+                        'note' => '',
+                        'amount' => (float) $receive_amount[$i] * -1
+                    ];
+                    $tdata = new AccountTranx();
+                    $tdata->fill($trnxdata)->save();
+                }
+    
+                flash()->addSuccess('Purchase Order Added Successfully.');
+                DB::commit();
+            }catch (\Exception $e) {
+                // If any query fails, catch the exception and roll back the transaction
+                dd($e);
+                flash()->addError('Purchase Order Not Added Successfully.');
+                DB::rollback();
+                return redirect('purchase');
+            }
+            return redirect("purchase_invoice/$order_id");
+        }
     }
 
     public function invoice($id){
@@ -190,6 +235,52 @@ class PurchaseController extends Controller
         $account = Bankacc::all();
         
         return view('admin.purchase.invoice', compact('invoice', 'account'));
+    }
+    
+    public function purchase_edit($id){
+        $order = Purchase::join("vendors", "purchases.vendor_id", "=", "vendors.id")
+                            ->select('purchases.*', 'vendors.name as vendor_name', 'vendors.mobile', 'vendors.address')
+                            ->where("purchases.id", $id)
+                            ->get();
+        $account = Bankacc::all();
+        $vendor = Vendor::where('is_delete', 0)->get();
+        
+        return view('admin.purchase.register_edit', compact('order', 'account', 'vendor'));
+    }
+    
+    public function purchase_delete($id){
+        try{
+            DB::beginTransaction();
+            $order = Purchase::findOrFail($id);
+            $order->order_type = "purchase_delete";
+            $order->status = 0;
+            $order->note = "Deleted By ". Auth::user()->name . "( User Id: ". Auth::id() .")";
+            
+            $ptype = json_decode($order->payment);
+
+            $order->save();
+
+            $due_acc_id = Bankacc::where('type', 'Due')->pluck('id');
+            
+            for($i=0; $i<count($ptype); $i++){
+                if(count($due_acc_id) > 0 && $ptype[$i]->pid == $due_acc_id[0]){
+                    $v = Vendor::findOrFail($order->vendor_id); 
+                    $v->balance -= $ptype[$i]->receive_amount;
+                    $v->save();
+                }
+            }
+
+            AccountTranx::where('ref_tranx_id', $id)->delete();
+            flash()->addSuccess('Purchase Order Deleted Successfully.');
+            DB::commit();
+        }catch (\Exception $e) {
+            dd($e);
+            flash()->addError('Purchase Order Unable To Delete');
+            DB::rollback();
+            return redirect('purchase');
+        }
+        
+        return redirect("reportPurchase");
     }
     
 }

@@ -80,12 +80,15 @@
                                             <th> {{__('admin.sl')}} </th>
                                             <th> {{__('admin.inv_no')}} </th>
                                             <th> {{__('admin.date')}} </th>
-                                            <th> {{__('admin.inv_type')}} </th>
                                             <th> {{__('admin.vendor_name')}} </th>
+                                            {{-- <th> {{__('admin.inv_type')}} </th> --}}
+                                            <th> {{__('admin.product_name')}} </th>
                                             <th> {{__('admin.quantity')}} </th>
+                                            <th> {{__('admin.price')}} </th>
                                             <th> {{__('admin.receive_amount')}} </th>
                                             <th> {{__('admin.due_amount')}} </th>
                                             <th> {{__('admin.total')}} </th>
+                                            <th> {{__('admin.action')}} </th>
                                           </tr>
                                     </thead>
                                     <tbody>
@@ -94,6 +97,8 @@
                                       $page_rcv_total = 0;
                                       $page_due_total = 0;
                                       $page_total = 0;
+                                      $pq = 0;
+                                      $price = 0;
                                       if(isset($_GET['page']) && $_GET['page']>0)
                                         $n = 1 + (($_GET['page'] - 1) * 10);
                                       else
@@ -105,22 +110,30 @@
                                             <td><a href="{{route('purchase-invoice', $row->id)}}">{{$n++}}</a></td>
                                             <td><a href="{{route('purchase-invoice', $row->id)}}">{{$row->order_id}}</a></td>
                                             <td>{{$row->date}}</td>
-                                            <td>{{$row->order_type}}</td>
                                             <td><a href="{{route('purchase-invoice', $row->id)}}">{{$row->vendor_name}}</a></td>
+                                            {{-- <td>{{$row->order_type}}</td> --}}
                                             <td>
                                               @foreach(json_decode($row->products) as $p)
-                                                  {{$p->quantity}}
+                                                  {{$p->product_name}}
+                                                  <br>
+                                                  {{@$p->product_details}}
                                                   @php
-                                                  $page_qty_total += $p->quantity;
+                                                  $pq += @$p->quantity ? $p->quantity : 0;
+                                                  $price += @$p->price ? $p->price : 0;
+                                                  $page_qty_total += @$p->quantity;
                                                   @endphp
                                               @endforeach
                                             </td>
+                                            <td>{{$pq}}</td>
+                                            <td>{{$price}}</td>
                                             <td>
                                               @foreach(json_decode($row->payment) as $p)
                                                 @foreach($account as $ac)
                                                   @if($p->pid == $ac->id && $ac->type != 'Due')
                                                     {{$ac->name}}: {{$p->receive_amount}}<br>
                                                     @php
+                                                    $pq = 0;
+                                                    $price = 0;
                                                     $page_rcv_total += $p->receive_amount;
                                                     @endphp
                                                   @endif
@@ -145,11 +158,15 @@
                                               $page_total += $row->total;
                                               @endphp
                                             </td>
+                                            <td>
+                                              <a href="{{route('purchase-trnx-edit', $row->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
+                                              <a href="{{route('purchase-trnx-delete', $row->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a>
+                                            </td>
                                           </tr>
                                         @endforeach
                                       @else
                                           <tr>
-                                            <td colspan="9" class="text-center">{{__('admin.no_data_found')}}</td>
+                                            <td colspan="10" class="text-center">{{__('admin.no_data_found')}}</td>
                                           </tr>
                                       @endif
                                     </tbody>
@@ -157,6 +174,7 @@
                                         <tr>
                                             <td colspan="5" class="text-right">Total: </td>
                                             <td>{{$page_qty_total}}</td>
+                                            <td></td>
                                             <td>{{$page_rcv_total}}</td>
                                             <td>{{$page_due_total}}</td>
                                             <td>{{$page_total}}</td>
