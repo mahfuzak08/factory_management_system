@@ -166,7 +166,7 @@
                                         @endforeach
                                       @else
                                           <tr>
-                                            <td colspan="10" class="text-center">{{__('admin.no_data_found')}}</td>
+                                            <td colspan="11" class="text-center">{{__('admin.no_data_found')}}</td>
                                           </tr>
                                       @endif
                                     </tbody>
