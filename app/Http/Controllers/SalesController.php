@@ -56,26 +56,14 @@ class SalesController extends Controller
             }
             DB::beginTransaction();
             try{
-                $vinfo = new Customer();
+                $cinfo = new Customer();
                 
                 $input = ["name"=>$request->input("customer_new"), "address"=>$request->input('address'), "mobile"=>$request->input('mobile')];
                 
-                $vinfo->fill($input)->save();
+                $cinfo->fill($input)->save();
         
-                $customer_id = $vinfo->id;
-                // $cash_acc_id = Bankacc::where('type', 'Cash')->pluck('id');
-                // $trnxdata = [
-                //     'account_id' => $cash_acc_id[0],
-                //     'user_id' => Auth::id(),
-                //     'tranx_date' => date("Y-m-d"),
-                //     'ref_id' => $customer_id,
-                //     'ref_type' => 'customer',
-                //     'note' => 'Customer Opening Due Balance',
-                //     'amount' => 0
-                // ];
-                // $tdata = new AccountTranx();
-                // $tdata->fill($trnxdata)->save();
-
+                $customer_id = $cinfo->id;
+                
                 flash()->addSuccess('New Customer Added Successfully.');
                 // If all queries succeed, commit the transaction
                 DB::commit();
@@ -86,10 +74,10 @@ class SalesController extends Controller
                 return redirect('sales');
             }
         }else{
-            $vinfo = Customer::findOrFail($customer_id);
-            $asofdue = $vinfo->balance;
+            $cinfo = Customer::findOrFail($customer_id);
+            $asofdue = $cinfo->balance;
         }
-        // dd($customer_id);
+        
         $due_acc_id = Bankacc::where('type', 'Due')->pluck('id');
         
         $pn = $request->input('product_name');
@@ -127,59 +115,120 @@ class SalesController extends Controller
 
         $discount = (float) $request->input('discount');
         $total -= $discount;
-        $moid = Sales::max("order_id");
-        
-        $input_order = [
-            "order_id"=> $moid > 0 ? $moid+1 : 786,
-            "order_type"=> "sales",
-            "user_id"=> Auth::id(),
-            "customer_id"=> $customer_id,
-            "products"=> json_encode($items),
-            "date"=> $request->input('date'),
-            "discount"=> $discount,
-            "total"=> $total,
-            "payment"=> json_encode($payments),
-            "asof_date_due"=> $asofdue,
-        ];
-        
-        try{
-            DB::beginTransaction();
-            
-            $order = New Sales();
-            $order->fill($input_order)->save();
-            $order_id = $order->id; 
-            
-            $vinfo->balance = $asofdue;
-            $vinfo->save();
+        if(! empty($request->input('order_id')) && $request->input('order_id') > 0){
+            $input_order = [
+                "order_type"=> "sales",
+                "user_id"=> Auth::id(),
+                "customer_id"=> $customer_id,
+                "products"=> json_encode($items),
+                "date"=> $request->input('date'),
+                "discount"=> $discount,
+                "total"=> $total,
+                "payment"=> json_encode($payments)
+            ];
 
-            for($i=0; $i<count($ptype); $i++){
-                if(count($due_acc_id) > 0 && $ptype[$i] == $due_acc_id[0]) continue;
+            try{
+                DB::beginTransaction();
+    
+                $order = Sales::findOrFail($request->input('order_id'));
+                $op = json_decode($order->payment);
+                $input_order["note"] = json_encode(array("old_date"=>$order->date, "old_customer_id"=>$order->customer_id, "old_products"=>$order->products, "old_payment"=>$order->payment, "old_discount"=>$order->discount));
 
-                $trnxdata = [
-                    'account_id' => $ptype[$i],
-                    'user_id' => Auth::id(),
-                    'tranx_date' => $request->input('date'),
-                    'ref_id' => $customer_id,
-                    'ref_type' => 'customer',
-                    'ref_tranx_id' => $order_id,
-                    'ref_tranx_type' => 'sales_order',
-                    'note' => '',
-                    'amount' => (float) $receive_amount[$i]
-                ];
-                $tdata = new AccountTranx();
-                $tdata->fill($trnxdata)->save();
+                $order->fill($input_order)->save();
+                $order_id = $request->input('order_id'); 
+                
+                for($pi = 0; $pi < count($op); $pi++){
+                    if(count($due_acc_id) > 0 && $op[$pi]->pid == $due_acc_id[0])
+                        $asofdue -= (float) $op[$pi]->receive_amount;
+                }
+                $cinfo->balance = $asofdue;
+                $cinfo->save();
+    
+                for($i=0; $i<count($ptype); $i++){
+                    if(count($due_acc_id) > 0 && $ptype[$i] == $due_acc_id[0]) continue;
+                    $tdata = AccountTranx::where('ref_tranx_id', $order_id)
+                            ->where('ref_tranx_type', 'sales_order')
+                            ->where('ref_type', 'customer')
+                            ->where('account_id', $ptype[$i])
+                            ->get()->toArray();
+                    $trnxdata = [
+                        'user_id' => Auth::id(),
+                        'tranx_date' => $request->input('date'),
+                        'ref_id' => $customer_id,
+                        'amount' => (float) $receive_amount[$i],
+                        'note' => 'This tranx updated. Old amount was '.$tdata[0]['amount']
+                    ];
+                    AccountTranx::where('id', $tdata[0]['id'])->update($trnxdata);
+                }
+
+                AccountTranx::where('ref_tranx_id', $order_id)->where('note', '')->delete();
+    
+                flash()->addSuccess('Sales Order Updated Successfully.');
+                DB::commit();
+            }catch (\Exception $e) {
+                // If any query fails, catch the exception and roll back the transaction
+                dd($e);
+                flash()->addError('Sales Order Not Updated Successfully.');
+                DB::rollback();
+                return redirect('sales');
             }
-
-            flash()->addSuccess('Sales Order Added Successfully.');
-            DB::commit();
-        }catch (\Exception $e) {
-            // If any query fails, catch the exception and roll back the transaction
-            dd($e);
-            flash()->addError('Sales Order Not Added Successfully.');
-            DB::rollback();
-            return redirect('sales');
+            return redirect("sales_invoice/$order_id");
         }
+        else{
+            $moid = Sales::max("order_id");
+        
+            $input_order = [
+                "order_id"=> $moid > 0 ? $moid+1 : 786,
+                "order_type"=> "sales",
+                "user_id"=> Auth::id(),
+                "customer_id"=> $customer_id,
+                "products"=> json_encode($items),
+                "date"=> $request->input('date'),
+                "discount"=> $discount,
+                "total"=> $total,
+                "payment"=> json_encode($payments),
+                "asof_date_due"=> $asofdue,
+            ];
+            
+            try{
+                DB::beginTransaction();
+                
+                $order = New Sales();
+                $order->fill($input_order)->save();
+                $order_id = $order->id; 
+                
+                $cinfo->balance = $asofdue;
+                $cinfo->save();
 
+                for($i=0; $i<count($ptype); $i++){
+                    if(count($due_acc_id) > 0 && $ptype[$i] == $due_acc_id[0]) continue;
+
+                    $trnxdata = [
+                        'account_id' => $ptype[$i],
+                        'user_id' => Auth::id(),
+                        'tranx_date' => $request->input('date'),
+                        'ref_id' => $customer_id,
+                        'ref_type' => 'customer',
+                        'ref_tranx_id' => $order_id,
+                        'ref_tranx_type' => 'sales_order',
+                        'note' => '',
+                        'amount' => (float) $receive_amount[$i]
+                    ];
+                    $tdata = new AccountTranx();
+                    $tdata->fill($trnxdata)->save();
+                }
+
+                flash()->addSuccess('Sales Order Added Successfully.');
+                DB::commit();
+            }catch (\Exception $e) {
+                // If any query fails, catch the exception and roll back the transaction
+                dd($e);
+                flash()->addError('Sales Order Not Added Successfully.');
+                DB::rollback();
+                return redirect('sales');
+            }
+        }
+        
         return redirect("sales_invoice/$order_id");
     }
 
@@ -191,6 +240,52 @@ class SalesController extends Controller
         $account = Bankacc::all();
         
         return view('admin.sales.invoice', compact('invoice', 'account'));
+    }
+
+    public function sales_edit($id){
+        $order = Sales::join("customers", "sales.customer_id", "=", "customers.id")
+                            ->select('sales.*', 'customers.name as customer_name', 'customers.mobile', 'customers.address')
+                            ->where("sales.id", $id)
+                            ->get();
+        $account = Bankacc::all();
+        $customer = Customer::where('is_delete', 0)->get();
+        
+        return view('admin.sales.register_edit', compact('order', 'account', 'customer'));
+    }
+    
+    public function sales_delete($id){
+        try{
+            DB::beginTransaction();
+            $order = Sales::findOrFail($id);
+            $order->order_type = "sales_delete";
+            $order->status = 0;
+            $order->note = "Deleted By ". Auth::user()->name . "( User Id: ". Auth::id() .")";
+            
+            $ptype = json_decode($order->payment);
+
+            $order->save();
+
+            $due_acc_id = Bankacc::where('type', 'Due')->pluck('id');
+            
+            for($i=0; $i<count($ptype); $i++){
+                if(count($due_acc_id) > 0 && $ptype[$i]->pid == $due_acc_id[0]){
+                    $v = Vendor::findOrFail($order->customer_id); 
+                    $v->balance -= $ptype[$i]->receive_amount;
+                    $v->save();
+                }
+            }
+
+            AccountTranx::where('ref_tranx_id', $id)->delete();
+            flash()->addSuccess('Sales Order Deleted Successfully.');
+            DB::commit();
+        }catch (\Exception $e) {
+            dd($e);
+            flash()->addError('Sales Order Unable To Delete');
+            DB::rollback();
+            return redirect('sales');
+        }
+        
+        return redirect("reportPurchase");
     }
 
 }

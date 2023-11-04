@@ -39,7 +39,8 @@ Route::middleware([
     Route::get('/sales', [SalesController::class, 'index'])->name('sales');
     Route::post('/save_sales', [SalesController::class, 'set_sales'])->name('save-sales');
     Route::get('/sales_invoice/{id}', [SalesController::class, 'invoice'])->name('sales-invoice');
-    // Route::get('/all_sales', [SalesController::class, 'sales_list'])->name('all-sales');
+    Route::get('/sales_trnx_edit/{id}', [SalesController::class, 'sales_edit'])->name('sales-trnx-edit');
+    Route::get('/sales_trnx_delete/{id}', [SalesController::class, 'sales_delete'])->name('sales-trnx-delete');
 
     Route::get('/customer', [CustomerController::class, 'index'])->name('customer');
     Route::get('/add_new_customer', [CustomerController::class, 'open_customer_form'])->name('add-new-customer');

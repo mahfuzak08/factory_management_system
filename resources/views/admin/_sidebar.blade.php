@@ -95,8 +95,8 @@
           <li class="nav-item"> <a class="nav-link" href="{{route('language')}}">{{__('admin.language')}}</a></li>
           @if(Auth::user()->role == 'Super Admin')
           <li class="nav-item"> <a class="nav-link" href="{{route('user-manage')}}">{{__('admin.user_management')}}</a></li>
-          <li class="nav-item"> <a class="nav-link" href="3">{{__('admin.role_management')}}</a></li>
-          <li class="nav-item"> <a class="nav-link" href="pttons.html">{{__('admin.activity')}}</a></li>
+          {{-- <li class="nav-item"> <a class="nav-link" href="rolemanage">{{__('admin.role_management')}}</a></li> --}}
+          {{-- <li class="nav-item"> <a class="nav-link" href="activitiy">{{__('admin.activity')}}</a></li> --}}
           @endif
         </ul>
       </div>

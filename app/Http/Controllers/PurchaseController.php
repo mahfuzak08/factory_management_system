@@ -132,10 +132,16 @@ class PurchaseController extends Controller
                 DB::beginTransaction();
     
                 $order = Purchase::findOrFail($request->input('order_id'));
+                $op = json_decode($order->payment);
                 $input_order["note"] = json_encode(array("old_date"=>$order->date, "old_vendor_id"=>$order->vendor_id, "old_products"=>$order->products, "old_payment"=>$order->payment, "old_discount"=>$order->discount));
 
                 $order->fill($input_order)->save();
                 $order_id = $request->input('order_id'); 
+
+                for($pi = 0; $pi < count($op); $pi++){
+                    if(count($due_acc_id) > 0 && $op[$pi]->pid == $due_acc_id[0])
+                        $asofdue -= (float) $op[$pi]->receive_amount;
+                }
 
                 $vinfo->balance = $asofdue;
                 $vinfo->save();
@@ -147,15 +153,15 @@ class PurchaseController extends Controller
                                         ->where('ref_tranx_type', 'purchase_order')
                                         ->where('ref_type', 'vendor')
                                         ->where('account_id', $ptype[$i])
-                                        ->get();
+                                        ->get()->toArray();
                     $trnxdata = [
                         'user_id' => Auth::id(),
                         'tranx_date' => $request->input('date'),
                         'ref_id' => $vendor_id,
-                        'amount' => (float) $receive_amount[$i] * -1,
-                        'note' => 'This tranx updated. Old amount was '. $tdata->amount
+                        'amount' => (float) $receive_amount[$i],
+                        'note' => 'This tranx updated. Old amount was '.$tdata[0]['amount']
                     ];
-                    $tdata->fill($trnxdata)->save();
+                    AccountTranx::where('id', $tdata[0]['id'])->update($trnxdata);
                 }
 
                 AccountTranx::where('ref_tranx_id', $order_id)->where('note', '')->delete();

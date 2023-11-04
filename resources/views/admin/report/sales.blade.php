@@ -84,9 +84,11 @@
                                             {{-- <th> {{__('admin.inv_type')}} </th> --}}
                                             <th> {{__('admin.product_name')}} </th>
                                             <th> {{__('admin.quantity')}} </th>
+                                            <th> {{__('admin.price')}} </th>
                                             <th> {{__('admin.receive_amount')}} </th>
                                             <th> {{__('admin.due_amount')}} </th>
                                             <th> {{__('admin.total')}} </th>
+                                            <th> {{__('admin.action')}} </th>
                                           </tr>
                                     </thead>
                                     <tbody>
@@ -96,6 +98,7 @@
                                       $page_due_total = 0;
                                       $page_total = 0;
                                       $pq = 0;
+                                      $price = 0;
                                       if(isset($_GET['page']) && $_GET['page']>0)
                                         $n = 1 + (($_GET['page'] - 1) * 10);
                                       else
@@ -107,7 +110,7 @@
                                             <td><a href="{{route('sales-invoice', $row->id)}}">{{$n++}}</a></td>
                                             <td><a href="{{route('sales-invoice', $row->id)}}">{{$row->order_id}}</a></td>
                                             <td>{{$row->date}}</td>
-                                            <td><a href="{{route('purchase-invoice', $row->id)}}">{{$row->customer_name}}</a></td>
+                                            <td><a href="{{route('sales-invoice', $row->id)}}">{{$row->customer_name}}</a></td>
                                             {{-- <td>{{$row->order_type}}</td> --}}
                                             <td>
                                               @foreach(json_decode($row->products) as $p)
@@ -116,13 +119,13 @@
                                                   {{@$p->product_details}}
                                                   @php
                                                   $pq += @$p->quantity ? $p->quantity : 0;
+                                                  $price += @$p->price ? $p->price : 0;
                                                   $page_qty_total += @$p->quantity;
                                                   @endphp
                                               @endforeach
                                             </td>
-                                            <td>
-                                              {{$pq}}
-                                            </td>
+                                            <td>{{$pq}}</td>
+                                            <td>{{$price}}</td>
                                             <td>
                                               @foreach(json_decode($row->payment) as $p)
                                                 @foreach($account as $ac)
@@ -154,11 +157,15 @@
                                               $page_total += $row->total;
                                               @endphp
                                             </td>
+                                            <td>
+                                              <a href="{{route('sales-trnx-edit', $row->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
+                                              <a href="{{route('sales-trnx-delete', $row->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a>
+                                            </td>
                                           </tr>
                                         @endforeach
                                       @else
                                           <tr>
-                                            <td colspan="9" class="text-center">{{__('admin.no_data_found')}}</td>
+                                            <td colspan="11" class="text-center">{{__('admin.no_data_found')}}</td>
                                           </tr>
                                       @endif
                                     </tbody>
