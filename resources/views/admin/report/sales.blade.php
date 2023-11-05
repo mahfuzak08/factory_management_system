@@ -173,6 +173,7 @@
                                     <tfoot>
                                         <tr>
                                             <td colspan="5" class="text-right">Total: </td>
+                                            <td></td>
                                             <td>{{$page_qty_total}}</td>
                                             <td>{{$page_rcv_total}}</td>
                                             <td>{{$page_due_total}}</td>
