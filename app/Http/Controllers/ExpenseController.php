@@ -129,42 +129,74 @@ class ExpenseController extends Controller
             return redirect($request->input('redirect_url'));
         }
 
-        DB::beginTransaction();
         try{
-            $ex_order = new Expense_detail();
-            $ex_input = [
-                "trnx_date"=> $request->input("tranx_date"),
-                "expense_id"=> $request->input("ref_id"),
-                "user_id"=> Auth::id(),
-                "account_id"=> $request->input("account_id"),
-                "amount"=> $request->input("amount"),
-                "title"=> $request->input("title"),
-                "details"=> $request->input("details")
-            ];
+            DB::beginTransaction();
+            if(! empty($request->input("order_id"))){
+                $order = Expense_detail::findOrFail($request->input("order_id"));
+                
+                $ex_input = [
+                    "trnx_date"=> $request->input("tranx_date"),
+                    "user_id"=> Auth::id(),
+                    "account_id"=> $request->input("account_id"),
+                    "amount"=> $request->input("amount"),
+                    "title"=> $request->input("title"),
+                    "details"=> $request->input("details") . "Edited"
+                ];
 
-            $ex_order->fill($ex_input)->save();
+                $order->fill($ex_input)->save();
 
-            $data = new AccountTranx();
-            
-            $input = $request->all();
-            $input['user_id'] = Auth::id();
-            $input['amount'] *= -1;
-            $input['ref_tranx_id'] = $ex_order->id;
-            $input['ref_tranx_type'] = "expense_order";
-            
-            $data->fill($input)->save();
-            
-            flash()->addSuccess('New Data Added Successfully.');
-            // If all queries succeed, commit the transaction
-            DB::commit();
+                AccountTranx::where('ref_tranx_id', $order->id)
+                            ->where('ref_tranx_type', 'ref_tranx_id')
+                            ->delete();
+
+                $data = new AccountTranx();
+    
+                $input = $request->all();
+                $input['user_id'] = Auth::id();
+                $input['amount'] *= -1;
+                $input['ref_tranx_id'] = $order->id;
+                $input['ref_tranx_type'] = "ref_tranx_id";
+                
+                $data->fill($input)->save();
+                
+                flash()->addSuccess('Expense Data Update Successfully.');
+                // If all queries succeed, commit the transaction
+                DB::commit();
+            }else{
+                $ex_order = new Expense_detail();
+                $ex_input = [
+                    "trnx_date"=> $request->input("tranx_date"),
+                    "expense_id"=> $request->input("ref_id"),
+                    "user_id"=> Auth::id(),
+                    "account_id"=> $request->input("account_id"),
+                    "amount"=> $request->input("amount"),
+                    "title"=> $request->input("title"),
+                    "details"=> $request->input("details")
+                ];
+
+                $ex_order->fill($ex_input)->save();
+
+                $data = new AccountTranx();
+                
+                $input = $request->all();
+                $input['user_id'] = Auth::id();
+                $input['amount'] *= -1;
+                $input['ref_tranx_id'] = $ex_order->id;
+                $input['ref_tranx_type'] = "ref_tranx_id";
+                
+                $data->fill($input)->save();
+                
+                flash()->addSuccess('New Data Added Successfully.');
+                // If all queries succeed, commit the transaction
+                DB::commit();
+            }
         }catch (\Exception $e) {
             dd($e);
             // If any query fails, catch the exception and roll back the transaction
-            flash()->addError('Data Not Added Successfully.');
+            flash()->addError('Data Not Added/ Updated Successfully.');
             DB::rollback();
-            return redirect($request->input('redirect_url'));
         }
-        return redirect("expense_invoice/$ex_order->id");
+        return redirect($request->input('redirect_url'));
     }
 
     public function invoice($id){
@@ -174,6 +206,51 @@ class ExpenseController extends Controller
                                 ->where("expense_details.id", $id)
                                 ->get();
         return view('admin.expense.invoice', compact('invoice'));
+    }
+
+    public function expense_edit($id){
+        $order = Expense_detail::join("expenses", "expense_details.expense_id", "=", "expenses.id")
+                            ->select('expense_details.*', 'expenses.name as expense_name')
+                            ->where("expense_details.id", $id)
+                            ->get();
+        $account = Bankacc::all();
+        
+        return view('admin.expense.register_edit', compact('order', 'account'));
+    }
+    
+    public function expense_delete($id){
+        try{
+            DB::beginTransaction();
+            $order = Expense::findOrFail($id);
+            $order->order_type = "expense_delete";
+            $order->status = 0;
+            $order->note = "Deleted By ". Auth::user()->name . "( User Id: ". Auth::id() .")";
+            
+            $ptype = json_decode($order->payment);
+
+            $order->save();
+
+            $due_acc_id = Bankacc::where('type', 'Due')->pluck('id');
+            
+            for($i=0; $i<count($ptype); $i++){
+                if(count($due_acc_id) > 0 && $ptype[$i]->pid == $due_acc_id[0]){
+                    $v = Vendor::findOrFail($order->customer_id); 
+                    $v->balance -= $ptype[$i]->receive_amount;
+                    $v->save();
+                }
+            }
+
+            AccountTranx::where('ref_tranx_id', $id)->delete();
+            flash()->addSuccess('Expense Order Deleted Successfully.');
+            DB::commit();
+        }catch (\Exception $e) {
+            dd($e);
+            flash()->addError('Expense Order Unable To Delete');
+            DB::rollback();
+            return redirect('expense');
+        }
+        
+        return redirect("reportPurchase");
     }
 
 }

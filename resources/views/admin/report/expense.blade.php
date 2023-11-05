@@ -76,6 +76,7 @@
                                             <th> {{__('admin.account_name')}} </th>
                                             <th> {{__('admin.amount')}} </th>
                                             <th> {{__('admin.details')}} </th>
+                                            <th> {{__('admin.action')}} </th>
                                           </tr>
                                     </thead>
                                     <tbody>
@@ -97,8 +98,8 @@
                                           <tr>
                                             <td><a href="{{route('expense-invoice', $row->id)}}">{{$n++}}</a></td>
                                             <td><a href="{{route('expense-invoice', $row->id)}}">{{$row->trnx_date}}</a></td>
-                                            <td>{{$row->id}}</td>
-                                            <td>{{$row->expense_name}}</td>
+                                            <td><a href="{{route('expense-invoice', $row->id)}}">{{$row->id}}</a</td>
+                                            <td><a href="{{route('expense-invoice', $row->id)}}">{{$row->expense_name}}</a></td>
                                             <td>{{$row->acc_name}}</td>
                                             <td>
                                               {{$row->amount}}
@@ -107,11 +108,15 @@
                                               @endphp
                                             </td>
                                             <td>{{$row->title}} {{$row->details}}</td>
+                                            <td>
+                                              <a href="{{route('expense-trnx-edit', $row->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
+                                              <a href="{{route('expense-trnx-delete', $row->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a>
+                                            </td>
                                           </tr>
                                         @endforeach
                                       @else
                                           <tr>
-                                            <td colspan="7" class="text-center">{{__('admin.no_data_found')}}</td>
+                                            <td colspan="8" class="text-center">{{__('admin.no_data_found')}}</td>
                                           </tr>
                                       @endif
                                     </tbody>

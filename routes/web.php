@@ -87,6 +87,8 @@ Route::middleware([
     Route::get('/delete_expense/{id}', [ExpenseController::class, 'delete_expense'])->name('delete-expense');
     Route::get('/expense_details/{id}', [ExpenseController::class, 'expense_details'])->name('expense-details');
     Route::post('/save_expense_amount', [ExpenseController::class, 'add_expense_amount'])->name('save-expense-amount');
+    Route::get('/expense_trnx_edit/{id}', [ExpenseController::class, 'expense_edit'])->name('expense-trnx-edit');
+    Route::get('/expense_trnx_delete/{id}', [ExpenseController::class, 'expense_delete'])->name('expense-trnx-delete');
 
     Route::get('/bank_account', [BankaccController::class, 'index'])->name('bank_account');
     Route::get('/add_new_account', [BankaccController::class, 'open_account_form'])->name('add-new-account');

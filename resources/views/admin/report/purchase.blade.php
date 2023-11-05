@@ -132,8 +132,6 @@
                                                   @if($p->pid == $ac->id && $ac->type != 'Due')
                                                     {{$ac->name}}: {{$p->receive_amount}}<br>
                                                     @php
-                                                    $pq = 0;
-                                                    $price = 0;
                                                     $page_rcv_total += $p->receive_amount;
                                                     @endphp
                                                   @endif
@@ -156,6 +154,8 @@
                                               {{$row->total}}
                                               @php
                                               $page_total += $row->total;
+                                              $pq = 0;
+                                              $price = 0;
                                               @endphp
                                             </td>
                                             <td>
