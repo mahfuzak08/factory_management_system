@@ -120,6 +120,9 @@
                               <br />
                               <hr />
                               <div class="row table-responsive">
+                                @php 
+                                $total = 0;
+                                @endphp
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
@@ -146,6 +149,9 @@
                                             <td>{{$row->note}}</td>
                                             <td class="text-right">{{number_format($row->amount, 2)}}</td>
                                           </tr>
+                                          @php 
+                                          $total += $row->amount;
+                                          @endphp
                                         @endforeach
                                       @else
                                           <tr>
@@ -153,6 +159,12 @@
                                           </tr>
                                       @endif
                                     </tbody>
+                                    <tfoot>
+                                      <tr>
+                                        <td colspan="4">Total</td>
+                                        <td class="text-right">{{number_format($total, 2)}}</td>
+                                      </tr>
+                                    </tfoot>
                                 </table>
                               </div>
                               {{ $datas->onEachSide(3)->links() }}

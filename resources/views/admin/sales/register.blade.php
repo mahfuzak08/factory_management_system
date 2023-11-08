@@ -186,7 +186,7 @@
                                             <td>{{$row->name}}</td>
                                             <td>{{$row->mobile}}</td>
                                             <td>{{$row->address}}</td>
-                                            <td>{{$row->balance}}</td>
+                                            <td>{{number_format($row->balance, 2)}}</td>
                                             <td>
                                               <a href="{{route('customer-details', $row->id)}}" class="btn btn-info btn-rounded btn-sm">{{__('admin.details')}}</a> 
                                               <a href="{{route('edit-customer', $row->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 

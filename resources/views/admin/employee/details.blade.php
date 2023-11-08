@@ -129,6 +129,9 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                      @php
+                                      $total = 0;
+                                      @endphp
                                       @if(count($datas) > 0)
                                         @php 
                                         if(isset($_GET['page']) && $_GET['page']>0)
@@ -144,6 +147,9 @@
                                             <td>{{$row->note}}</td>
                                             <td class="text-right">{{number_format($row->amount, 2)}}</td>
                                           </tr>
+                                          @php
+                                          $total += $row->amount;
+                                          @endphp
                                         @endforeach
                                       @else
                                           <tr>
@@ -151,6 +157,12 @@
                                           </tr>
                                       @endif
                                     </tbody>
+                                    <tfoot>
+                                      <tr>
+                                        <td colspan="4">Total</td>
+                                        <td class="text-right">{{$total}}</td>
+                                      </tr>
+                                    </tfoot>
                                 </table>
                               </div>
                               {{ $datas->onEachSide(3)->links() }}

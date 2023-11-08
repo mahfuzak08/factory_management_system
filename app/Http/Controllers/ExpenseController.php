@@ -92,22 +92,20 @@ class ExpenseController extends Controller
         $banks = Bankacc::where('type', '!=', 'Due')->get();
         if(! empty(request()->input('search'))){
             $str = request()->input('search');
-            $datas = AccountTranx::join('bankaccs', 'account_tranxes.account_id', '=', 'bankaccs.id')
+            $datas = Expense_detail::join('bankaccs', 'expense_details.account_id', '=', 'bankaccs.id')
                             ->where(function ($query) use ($str){
-                                $query->where('tranx_date', 'like', '%'.$str.'%')
+                                $query->where('trnx_date', 'like', '%'.$str.'%')
                                 ->orWhere('amount', 'like', '%'.$str.'%')
                                 ->orWhere('bankaccs.name', 'like', '%'.$str.'%')
-                                ->orWhere('note', 'like', '%'.$str.'%');
+                                ->orWhere('details', 'like', '%'.$str.'%');
                             })
-                            ->where('ref_id', $id)
-                            ->where('ref_type', 'expense')
-                            ->select('account_tranxes.*', 'bankaccs.name as bank_name')
+                            ->where('expense_id', $id)
+                            ->select('expense_details.*', 'bankaccs.name as bank_name')
                             ->latest()->paginate(10);
         }else{
-            $datas = AccountTranx::join('bankaccs', 'account_tranxes.account_id', '=', 'bankaccs.id')
-                    ->where('ref_id', $id)
-                    ->where('ref_type', 'expense')
-                    ->select('account_tranxes.*', 'bankaccs.name as bank_name')
+            $datas = Expense_detail::join('bankaccs', 'expense_details.account_id', '=', 'bankaccs.id')
+                    ->where('expense_id', $id)
+                    ->select('expense_details.*', 'bankaccs.name as bank_name')
                     ->latest()->paginate(10);
         }
         return view('admin.expense.details', compact('expense', 'banks', 'datas'))->with('i', (request()->input('page', 1) - 1) * 10);

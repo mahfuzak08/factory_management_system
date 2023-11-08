@@ -9,23 +9,37 @@
       <div class="container-fluid page-body-wrapper">
         @include('admin._sidebar')
         <div class="main-panel">
-            <div class="content-wrapper">
-                <div class="page-header">
-                  <h3 class="page-title">{{__('admin.employee')}}</h3>
-                  <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                          <form id="dataForm" action="{{route('emp-report')}}" method="GET">
+            <div class="content-wrapper" style="max-height: 100px">
+              <form id="dataForm" action="{{route('emp-report')}}" method="GET">
+                @csrf
+                <div class="page-header row">
+                    <div class="col-4">
+                      <h3 class="page-title">{{__('admin.employee')}}</h3>
+                    </div>
+                    <div class="col-3">
+                      <select name="empid" style="width: 100%">
+                        <option value="all">All</option>
+                        @for($i=0; $i<count($employee); $i++)
+                          <option value="{{$employee[$i]['id']}}">{{$employee[$i]['name']}}</option>
+                        @endfor
+                      </select>
+                    </div>
+                    <div class="col-2"><input type="month" name="month" class="form-control"></div>
+                    <div class="col-3"><button class="btn btn-info" type="submit">{{__('admin.old_attendance')}}</button></div>
+                  </div>
+                </form>
+                  {{-- <nav> --}}
+                    {{-- <ol> --}}
+                        {{-- <li> --}}
+                          {{-- <form id="dataForm" action="{{route('emp-report')}}" method="GET">
                             @csrf
                             <input type="month" name="month" class="form-control">
-                            <br>
                             <button class="btn btn-info" type="submit">{{__('admin.old_attendance')}}</button>
-                            <br>
-                            <button id="printButton" class="btn btn-success hidden">Print</button>
-                          </form>
-                        </li>
-                    </ol>
-                  </nav>
+                          </form> --}}
+                          {{-- <button id="printButton" class="btn btn-success hidden">Print</button> --}}
+                        {{-- </li> --}}
+                    {{-- </ol> --}}
+                  {{-- </nav> --}}
                 </div>
                 <div class="row">
                     <div class="col-12 grid-margin stretch-card">
@@ -46,6 +60,7 @@
                                             @for($i=1; $i<=$totalDays; $i++)
                                                 <th>{{$i}}</th>
                                             @endfor
+                                            <th>Total</th>
                                           </tr>
                                     </thead>
                                     <tbody>
@@ -56,6 +71,9 @@
                                         <tr>
                                             <td>{{$sl++}}</td>
                                             <td>{{$employee[$n]['name']}}</td>
+                                            @php
+                                            $total = 0;
+                                            @endphp
                                             @for($i=1; $i<=$totalDays; $i++)
                                                 @php 
                                                 $flag = false;
@@ -69,11 +87,17 @@
                                                     @endif
                                                 @endfor
                                                 @if($flag)
+                                                    @php
+                                                    $total++;
+                                                    @endphp
                                                     <td>Y</td>
                                                 @else
                                                     <td> </td>
                                                 @endif
                                             @endfor
+                                            <td>
+                                              {{$total}}
+                                            </td>
                                         </tr>
                                       @endfor
                                     </tbody>

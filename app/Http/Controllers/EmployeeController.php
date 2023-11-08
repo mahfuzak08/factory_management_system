@@ -238,7 +238,10 @@ class EmployeeController extends Controller
         list($year, $month, $totalDays) = explode('-', $lastDay);
         $firstDay = $year."-".$month."-01";
         $monthYear = date("F, Y", strtotime($year."-".$month."-01"));
-        $employee = Employee::all()->toArray();
+        if(! empty($request->input('empid')) && $request->input('empid') != 'all')
+            $employee = Employee::where('id', $request->input('empid'))->get()->toArray();
+        else
+            $employee = Employee::all()->toArray();
         $attendance = Attendance::whereBetween('date', [$firstDay, $lastDay])->get()->toArray();
         
         for($i=0; $i<count($employee); $i++){
