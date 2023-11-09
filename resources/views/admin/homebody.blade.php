@@ -31,7 +31,7 @@
           <a href="{{ route('sales') }}">
             <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
             <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.sales')}}</h2>
-            <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.sales')}} 2,{{number_format($data['today_total_sale'], 2)}}</h5>
+            <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.sales')}} {{number_format($data['today_total_sale'], 2)}}</h5>
           </a>
         </div>
       </div>
