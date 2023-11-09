@@ -38,13 +38,13 @@ class ReportController extends Controller
                                         }
                                     }
                                 })
-                                ->paginate(10);
+                                ->paginate(10)->withQueryString();
         }else{
             $datas = Sales::join("customers", "sales.customer_id", "=", "customers.id")
                                 ->select('sales.*', 'customers.name as customer_name')
                                 ->where('date', '>=', date('Y-m-d'))
                                 ->where('date', '<=', date('Y-m-d'))
-                                ->paginate(10);
+                                ->paginate(10)->withQueryString();
         }
         $account = Bankacc::all();
         $customer = Customer::all();
@@ -74,14 +74,14 @@ class ReportController extends Controller
                                         }
                                     }
                                 })
-                                ->paginate(10);
+                                ->paginate(10)->withQueryString();
         }else{
             $datas = Purchase::join("vendors", "purchases.vendor_id", "=", "vendors.id")
                             ->select('purchases.*', 'vendors.name as vendor_name')
                             ->where('status', 1)
                             ->where('date', '>=', date('Y-m-d'))
                             ->where('date', '<=', date('Y-m-d'))
-                            ->paginate(10);
+                            ->paginate(10)->withQueryString();
         }
 
         $account = Bankacc::all();
@@ -108,14 +108,14 @@ class ReportController extends Controller
                                         $q->where('expense_id', $expenseType);
                                     }
                                 })
-                                ->paginate(10);
+                                ->paginate(10)->withQueryString();
         }else{
             $datas = Expense_detail::join("expenses", "expense_details.expense_id", "=", "expenses.id")
                                 ->join("bankaccs", "expense_details.account_id", "=", "bankaccs.id")
                                 ->select("expense_details.*", "expenses.name as expense_name", "bankaccs.name as acc_name")
                                 ->where('trnx_date', '>=', date('Y-m-d'))
                                 ->where('trnx_date', '<=', date('Y-m-d'))
-                                ->paginate(10);
+                                ->paginate(10)->withQueryString();
         }
         $expense = Expense::all();
 

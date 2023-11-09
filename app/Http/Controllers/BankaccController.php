@@ -119,9 +119,9 @@ class BankaccController extends Controller
                                 ->orWhere('note', 'like', '%'.$str.'%');
                             })
                             ->where('account_id', $id)
-                            ->latest()->paginate(10);
+                            ->latest()->paginate(10)->withQueryString();
         }else{
-            $datas = AccountTranx::where('account_id', $id)->latest()->paginate(10);
+            $datas = AccountTranx::where('account_id', $id)->latest()->paginate(10)->withQueryString();
         }
         return view('admin.bank.details', compact('bank', 'balance', 'datas'))->with('i', (request()->input('page', 1) - 1) * 10);
     }

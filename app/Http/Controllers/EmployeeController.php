@@ -23,9 +23,9 @@ class EmployeeController extends Controller
                                 ->orWhere('nid', 'like', '%'.$str.'%')
                                 ->orWhere('address', 'like', '%'.$str.'%');
                             })
-                            ->orderBy('name', 'ASC')->paginate(10);
+                            ->orderBy('name', 'ASC')->paginate(10)->withQueryString();
         }else{
-            $datas = Employee::orderBy('name', 'ASC')->paginate(10);
+            $datas = Employee::orderBy('name', 'ASC')->paginate(10)->withQueryString();
         }
         return view('admin.employee.manage', compact('datas'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
@@ -131,13 +131,13 @@ class EmployeeController extends Controller
                             ->where('ref_id', $id)
                             ->where('ref_type', 'employee')
                             ->select('account_tranxes.*', 'bankaccs.name as bank_name')
-                            ->latest()->paginate(10);
+                            ->latest()->paginate(10)->withQueryString();
         }else{
             $datas = AccountTranx::join('bankaccs', 'account_tranxes.account_id', '=', 'bankaccs.id')
                     ->where('ref_id', $id)
                     ->where('ref_type', 'employee')
                     ->select('account_tranxes.*', 'bankaccs.name as bank_name')
-                    ->latest()->paginate(10);
+                    ->latest()->paginate(10)->withQueryString();
         }
         $total_receive = AccountTranx::where('ref_id', $id)->where('ref_type', 'employee')->sum('amount');
         return view('admin.employee.details', compact('employee', 'banks', 'datas', 'total_receive'))->with('i', (request()->input('page', 1) - 1) * 10);

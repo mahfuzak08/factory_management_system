@@ -22,9 +22,9 @@ class VendorController extends Controller
                                 ->orWhere('address', 'like', '%'.$str.'%');
                             })
                             ->where('is_delete', 0)
-                            ->latest()->paginate(10);
+                            ->latest()->paginate(10)->withQueryString();
         }else{
-            $datas = Vendor::latest()->where('is_delete', 0)->paginate(10);
+            $datas = Vendor::latest()->where('is_delete', 0)->paginate(10)->withQueryString();
         }
         return view('admin.vendor.manage', compact('datas'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
@@ -150,13 +150,13 @@ class VendorController extends Controller
                             ->where('ref_id', $id)
                             ->where('ref_type', 'vendor')
                             ->select('account_tranxes.*', 'bankaccs.name as bank_name')
-                            ->latest()->paginate(10);
+                            ->latest()->paginate(10)->withQueryString();
         }else{
             $datas = AccountTranx::join('bankaccs', 'account_tranxes.account_id', '=', 'bankaccs.id')
                     ->where('ref_id', $id)
                     ->where('ref_type', 'vendor')
                     ->select('account_tranxes.*', 'bankaccs.name as bank_name')
-                    ->latest()->paginate(10);
+                    ->latest()->paginate(10)->withQueryString();
         }
         return view('admin.vendor.details', compact('vendor', 'banks', 'datas'))->with('i', (request()->input('page', 1) - 1) * 10);
     }

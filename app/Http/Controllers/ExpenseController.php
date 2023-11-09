@@ -18,9 +18,9 @@ class ExpenseController extends Controller
             $str = request()->input('search');
             $datas = Expense::where('name', 'like', '%'.$str.'%')
                             ->where('status', 1)
-                            ->latest()->paginate(10);
+                            ->latest()->paginate(10)->withQueryString();
         }else{
-            $datas = Expense::latest()->where('status', 1)->paginate(10);
+            $datas = Expense::latest()->where('status', 1)->paginate(10)->withQueryString();
         }
         return view('admin.expense.manage', compact('datas'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
@@ -101,12 +101,12 @@ class ExpenseController extends Controller
                             })
                             ->where('expense_id', $id)
                             ->select('expense_details.*', 'bankaccs.name as bank_name')
-                            ->latest()->paginate(10);
+                            ->latest()->paginate(10)->withQueryString();
         }else{
             $datas = Expense_detail::join('bankaccs', 'expense_details.account_id', '=', 'bankaccs.id')
                     ->where('expense_id', $id)
                     ->select('expense_details.*', 'bankaccs.name as bank_name')
-                    ->latest()->paginate(10);
+                    ->latest()->paginate(10)->withQueryString();
         }
         return view('admin.expense.details', compact('expense', 'banks', 'datas'))->with('i', (request()->input('page', 1) - 1) * 10);
     }

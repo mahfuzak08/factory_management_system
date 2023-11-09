@@ -26,9 +26,9 @@ class SalesController extends Controller
                                 ->orWhere('address', 'like', '%'.$str.'%');
                             })
                             ->where('is_delete', 0)
-                            ->latest()->paginate(10);
+                            ->latest()->paginate(10)->withQueryString();
         }else{
-            $datas = Customer::latest()->where('is_delete', 0)->paginate(10);
+            $datas = Customer::latest()->where('is_delete', 0)->paginate(10)->withQueryString();
         }
         return view('admin.sales.register', compact('customer', 'account', 'datas'))->with('i', (request()->input('page', 1) - 1) * 10);
     }

@@ -25,9 +25,9 @@ class PurchaseController extends Controller
                                 ->orWhere('address', 'like', '%'.$str.'%');
                             })
                             ->where('is_delete', 0)
-                            ->latest()->paginate(10);
+                            ->latest()->paginate(10)->withQueryString();
         }else{
-            $datas = Vendor::latest()->where('is_delete', 0)->paginate(10);
+            $datas = Vendor::latest()->where('is_delete', 0)->paginate(10)->withQueryString();
         }
         return view('admin.purchase.register', compact('vendor', 'account', 'datas'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
