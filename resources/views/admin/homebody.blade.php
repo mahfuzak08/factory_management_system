@@ -20,7 +20,7 @@
           <a href="{{ route('purchase') }}">
             <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
             <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.purchase')}}</h2>
-            <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.purchase')}} 12,45,678.00</h5>
+            <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.purchase')}} {{number_format($data['today_total_purchase'], 2)}}</h5>
           </a>
         </div>
       </div>
@@ -31,7 +31,7 @@
           <a href="{{ route('sales') }}">
             <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
             <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.sales')}}</h2>
-            <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.sales')}} 2,46,853.00</h5>
+            <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.sales')}} 2,{{number_format($data['today_total_sale'], 2)}}</h5>
           </a>
         </div>
       </div>
@@ -42,7 +42,7 @@
           <a href="{{ route('expense') }}">
             <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
             <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.expense')}}</h2>
-            <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.expense')}} 24,561.00</h5>
+            <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.expense')}} {{number_format($data['today_total_expense'], 2)}}</h5>
           </a>
         </div>
       </div>
@@ -53,7 +53,7 @@
           <a href="{{ route('employee') }}">
             <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
             <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.employee')}}</h2>
-            <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.employee')}} 24</h5>
+            <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.employee')}} {{$data['today_total_attendance']}}</h5>
           </a>
         </div>
       </div>
