@@ -15,7 +15,7 @@ use App\Http\Controllers\SettingsController;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
+| Web Routes for pollifeed
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
