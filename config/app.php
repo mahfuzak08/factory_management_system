@@ -17,6 +17,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
+    'shortname' => env('APP_SHORTNAME', 'L10'),
 
     /*
     |--------------------------------------------------------------------------
@@ -55,7 +56,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost:8000/login'),
+    'url' => env('APP_URL', 'http://localhost:8001/login'),
 
     'asset_url' => env('ASSET_URL'),
 

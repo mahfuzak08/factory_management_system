@@ -21,28 +21,30 @@
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="{{ route('sales') }}">
-        <span class="menu-title">{{ __('admin.sales') }}</span>
-        <i class="mdi mdi-cart-off menu-icon"></i>
+      <a class="nav-link" data-bs-toggle="collapse" href="#ui-sales" aria-expanded="false" aria-controls="ui-sales">
+        <span class="menu-title">{{__('admin.sales')}}</span>
+        <i class="menu-arrow"></i>
+        <i class="mdi mdi-cart menu-icon"></i>
       </a>
+      <div class="collapse" id="ui-sales">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" href="{{route('sales')}}">{{__('admin.sales')}}</a></li>
+          <li class="nav-item"> <a class="nav-link" href="{{route('customer')}}">{{__('admin.customer')}}</a></li>
+        </ul>
+      </div>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="{{ route('customer') }}">
-        <span class="menu-title">{{ __('admin.customer') }}</span>
-        <i class="mdi mdi-account-multiple menu-icon"></i>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{{ route('purchase') }}">
-        <span class="menu-title">{{ __('admin.purchase') }}</span>
+      <a class="nav-link" data-bs-toggle="collapse" href="#ui-purchase" aria-expanded="false" aria-controls="ui-purchase">
+        <span class="menu-title">{{__('admin.purchase')}}</span>
+        <i class="menu-arrow"></i>
         <i class="mdi mdi-cart-plus menu-icon"></i>
       </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{{ route('vendor') }}">
-        <span class="menu-title">{{ __('admin.vendor') }}</span>
-        <i class="mdi mdi-account-multiple-outline menu-icon"></i>
-      </a>
+      <div class="collapse" id="ui-purchase">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" href="{{route('purchase')}}">{{__('admin.purchase')}}</a></li>
+          <li class="nav-item"> <a class="nav-link" href="{{route('vendor')}}">{{__('admin.vendor')}}</a></li>
+        </ul>
+      </div>
     </li>
     <li class="nav-item">
       <a class="nav-link" data-bs-toggle="collapse" href="#ui-employee" aria-expanded="false" aria-controls="ui-employee">
