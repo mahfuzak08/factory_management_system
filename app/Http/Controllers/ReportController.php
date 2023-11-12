@@ -22,10 +22,13 @@ class ReportController extends Controller
         $ed = request()->input('end_date');
         $cid = request()->input('customer_id');
         $inv = request()->input('inv_id');
+        $status = request()->input('status');
         if(! empty($sd) || ! empty($ed) || ! empty($cid) || ! empty($inv)){
             $datas = Sales::join("customers", "sales.customer_id", "=", "customers.id")
                                 ->select('sales.*', 'customers.name as customer_name')
-                                ->where(function($q) use($sd, $ed, $cid, $inv){
+                                ->where(function($q) use($status, $sd, $ed, $cid, $inv){
+                                    if($status != 'all')
+                                        $q->where('status', $status);
                                     if($inv != '') {
                                         $q->where('order_id', $inv);
                                     }
@@ -42,6 +45,7 @@ class ReportController extends Controller
         }else{
             $datas = Sales::join("customers", "sales.customer_id", "=", "customers.id")
                                 ->select('sales.*', 'customers.name as customer_name')
+                                ->where('status', 1)
                                 ->where('date', '>=', date('Y-m-d'))
                                 ->where('date', '<=', date('Y-m-d'))
                                 ->paginate(10)->withQueryString();
@@ -57,11 +61,13 @@ class ReportController extends Controller
         $ed = request()->input('end_date');
         $vid = request()->input('vendor_id');
         $inv = request()->input('inv_id');
+        $status = request()->input('status');
         if(! empty($sd) || ! empty($ed) || ! empty($cid) || ! empty($inv)){
             $datas = Purchase::join("vendors", "purchases.vendor_id", "=", "vendors.id")
                                 ->select('purchases.*', 'vendors.name as vendor_name')
-                                ->where(function($q) use($sd, $ed, $vid, $inv){
-                                    $q->where('status', 1);
+                                ->where(function($q) use($status, $sd, $ed, $vid, $inv){
+                                    if($status != 'all')
+                                        $q->where('status', $status);
                                     if($inv != '') {
                                         $q->where('order_id', $inv);
                                     }

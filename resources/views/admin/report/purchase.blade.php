@@ -66,6 +66,22 @@
                                     </div>
                                 </div>
                                 <div class="row">
+                                    @if(Auth::user()->role == 'Super Admin')
+                                    <div class="col-md-6">
+                                      <div class="form-group row">
+                                          <label class="col-sm-3 col-form-label">{{__('admin.status')}}</label>
+                                          <div class="col-sm-9">
+                                              <select name="status" style="width: 100%">
+                                                  <option value="all" {{@$_GET['status'] == 'all' ? 'selected' : ''}}>All</option>
+                                                  <option value="1" {{@$_GET['status'] == '1' ? 'selected' : ''}}>Active</option>
+                                                  <option value="0" {{@$_GET['status'] == '0' ? 'selected' : ''}}>Deleted</option>
+                                              </select>
+                                          </div>
+                                      </div>
+                                    </div>
+                                    @else
+                                    <input type="hidden" name="status" value="1">
+                                    @endif
                                     <div class="col-md-3">
                                         <div class="form-group row">
                                             <button name="get_data" class="btn btn-success">Search</button>
@@ -89,6 +105,7 @@
                                             <th> {{__('admin.due_amount')}} </th>
                                             <th> {{__('admin.total')}} </th>
                                             <th> {{__('admin.action')}} </th>
+                                            <th class="note"> {{__('admin.note')}} </th>
                                           </tr>
                                     </thead>
                                     <tbody>
@@ -106,7 +123,7 @@
                                       @endphp
                                       @if(count($datas) > 0)
                                         @foreach($datas as $row)
-                                          <tr>
+                                          <tr class="{{$row->status ? '' : 'text-light bg-danger'}}">
                                             <td><a href="{{route('purchase-invoice', $row->id)}}">{{$n++}}</a></td>
                                             <td><a href="{{route('purchase-invoice', $row->id)}}">{{$row->order_id}}</a></td>
                                             <td>{{$row->date}}</td>
@@ -159,14 +176,17 @@
                                               @endphp
                                             </td>
                                             <td>
+                                              @if($row->status == '1')
                                               <a href="{{route('purchase-trnx-edit', $row->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
                                               <a href="{{route('purchase-trnx-delete', $row->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a>
+                                              @endif
                                             </td>
+                                            <td class="note">{{$row->note}}</td>
                                           </tr>
                                         @endforeach
                                       @else
                                           <tr>
-                                            <td colspan="11" class="text-center">{{__('admin.no_data_found')}}</td>
+                                            <td colspan="12" class="text-center">{{__('admin.no_data_found')}}</td>
                                           </tr>
                                       @endif
                                     </tbody>
@@ -178,6 +198,7 @@
                                             <td>{{$page_rcv_total}}</td>
                                             <td>{{$page_due_total}}</td>
                                             <td>{{$page_total}}</td>
+                                            <td></td>
                                         </tr>
                                     </tfoot>
                                 </table>
