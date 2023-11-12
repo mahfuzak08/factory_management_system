@@ -142,12 +142,12 @@
                                               @endforeach
                                             </td>
                                             <td>{{$pq}}</td>
-                                            <td>{{$price}}</td>
+                                            <td>{{number_format($price,2)}}</td>
                                             <td>
                                               @foreach(json_decode($row->payment) as $p)
                                                 @foreach($account as $ac)
                                                   @if($p->pid == $ac->id && $ac->type != 'Due')
-                                                    {{$ac->name}}: {{$p->receive_amount}}<br>
+                                                    {{$ac->name}}: {{number_format($p->receive_amount,2)}}<br>
                                                     @php
                                                     $page_rcv_total += $p->receive_amount;
                                                     @endphp
@@ -159,7 +159,7 @@
                                               @foreach(json_decode($row->payment) as $p)
                                                 @foreach($account as $ac)
                                                   @if($p->pid == $ac->id && $ac->type == 'Due')
-                                                    {{$p->receive_amount}}<br>
+                                                    {{number_format($p->receive_amount,2)}}<br>
                                                     @php
                                                     $page_due_total += $p->receive_amount;
                                                     @endphp
@@ -168,7 +168,7 @@
                                               @endforeach
                                             </td>
                                             <td>
-                                              {{$row->total}}
+                                              {{number_format($row->total,2)}}
                                               @php
                                               $page_total += $row->total;
                                               $pq = 0;
@@ -195,9 +195,9 @@
                                             <td colspan="5" class="text-right">Total: </td>
                                             <td>{{$page_qty_total}}</td>
                                             <td></td>
-                                            <td>{{$page_rcv_total}}</td>
-                                            <td>{{$page_due_total}}</td>
-                                            <td>{{$page_total}}</td>
+                                            <td>{{number_format($page_rcv_total, 2)}}</td>
+                                            <td>{{number_format($page_due_total, 2)}}</td>
+                                            <td>{{number_format($page_total, 2)}}</td>
                                             <td></td>
                                         </tr>
                                     </tfoot>
