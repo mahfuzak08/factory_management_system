@@ -33,6 +33,7 @@ return [
     'id' => 'ID',
     'action' => 'Action',
     'details' => 'Details',
+    'note' => 'Note',
     'add_new' => 'Add New',
     'BDT' => 'BDT',
     'opening_balance' => 'Opening Balance',

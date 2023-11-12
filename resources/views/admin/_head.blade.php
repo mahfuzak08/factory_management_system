@@ -46,6 +46,12 @@
     .collapse.show{
         visibility: visible !important;
     }
+    .note{
+        max-width:200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
     /* print.css */
     @media print {
