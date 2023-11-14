@@ -47,7 +47,7 @@ class PurchaseController extends Controller
             return redirect('purchase');
         }
         $vendor_id = $request->input('vendor_id');
-        $asofdue = 0;
+        $due = 0;
         if($request->input('vendor_id') == null){
             // dd($request->input('vendor_id') == null);
             // exit();
@@ -76,8 +76,16 @@ class PurchaseController extends Controller
             }
         }else{
             $vinfo = Vendor::findOrFail($vendor_id);
-            $asofdue = $vinfo->balance;
         }
+        // $total_purchase = Purchase::where('vendor_id', $vendor_id)->sum('total');
+        // $total_payment = AccountTranx::where('ref_id', $vendor_id)
+        //                     ->where('ref_type', 'vendor')
+        //                     ->where('ref_tranx_id', NULL)
+        //                     ->sum('amount');
+        // $due = $total_purchase - $total_payment;
+        
+        // dd($due);
+
         $due_acc_id = Bankacc::where('type', 'Due')->pluck('id');
         
         $pn = $request->input('product_name');
@@ -110,7 +118,7 @@ class PurchaseController extends Controller
                 "receive_amount"=>(float) $receive_amount[$i]
             ];
             if(count($due_acc_id) > 0 && $ptype[$i] == $due_acc_id[0])
-                $asofdue += (float) $receive_amount[$i];
+                $due += (float) $receive_amount[$i];
         }
 
         $discount = (float) $request->input('discount');
@@ -125,6 +133,7 @@ class PurchaseController extends Controller
                 "date"=> $request->input('date'),
                 "discount"=> $discount,
                 "total"=> $total,
+                "total_due"=> $due,
                 "payment"=> json_encode($payments)
             ];
 
@@ -138,13 +147,13 @@ class PurchaseController extends Controller
                 $order->fill($input_order)->save();
                 $order_id = $request->input('order_id'); 
 
-                for($pi = 0; $pi < count($op); $pi++){
-                    if(count($due_acc_id) > 0 && $op[$pi]->pid == $due_acc_id[0])
-                        $asofdue -= (float) $op[$pi]->receive_amount;
-                }
+                // for($pi = 0; $pi < count($op); $pi++){
+                //     if(count($due_acc_id) > 0 && $op[$pi]->pid == $due_acc_id[0])
+                //         $due -= (float) $op[$pi]->receive_amount;
+                // }
 
-                $vinfo->balance = $asofdue;
-                $vinfo->save();
+                // $vinfo->balance = $asofdue;
+                // $vinfo->save();
     
                 
                 for($i=0; $i<count($ptype); $i++){
@@ -154,14 +163,31 @@ class PurchaseController extends Controller
                                         ->where('ref_type', 'vendor')
                                         ->where('account_id', $ptype[$i])
                                         ->get()->toArray();
-                    $trnxdata = [
-                        'user_id' => Auth::id(),
-                        'tranx_date' => $request->input('date'),
-                        'ref_id' => $vendor_id,
-                        'amount' => (float) $receive_amount[$i],
-                        'note' => 'This tranx updated. Old amount was '.$tdata[0]['amount']
-                    ];
-                    AccountTranx::where('id', $tdata[0]['id'])->update($trnxdata);
+                    if(count($tdata) > 0){
+                        $trnxdata = [
+                            'user_id' => Auth::id(),
+                            'tranx_date' => $request->input('date'),
+                            'ref_id' => $vendor_id,
+                            'amount' => (float) $receive_amount[$i] * -1,
+                            'note' => 'This tranx updated. Old amount was '.$tdata[0]['amount']
+                        ];
+                        AccountTranx::where('id', $tdata[0]['id'])->update($trnxdata);
+                    }
+                    else{
+                        $trnxdata = [
+                            'account_id' => $ptype[$i],
+                            'user_id' => Auth::id(),
+                            'tranx_date' => $request->input('date'),
+                            'ref_id' => $vendor_id,
+                            'ref_type' => 'vendor',
+                            'ref_tranx_id' => $order_id,
+                            'ref_tranx_type' => 'purchase_order',
+                            'note' => 'This tranx updated.',
+                            'amount' => (float) $receive_amount[$i] * -1
+                        ];
+                        $tdata = new AccountTranx();
+                        $tdata->fill($trnxdata)->save();
+                    }
                 }
 
                 AccountTranx::where('ref_tranx_id', $order_id)->where('note', '')->delete();
@@ -189,7 +215,7 @@ class PurchaseController extends Controller
                 "discount"=> $discount,
                 "total"=> $total,
                 "payment"=> json_encode($payments),
-                "asof_date_due"=> $asofdue,
+                "total_due"=> $due,
             ];
 
             try{
@@ -199,7 +225,7 @@ class PurchaseController extends Controller
                 $order->fill($input_order)->save();
                 $order_id = $order->id; 
     
-                $vinfo->balance = $asofdue;
+                // $vinfo->balance = $asofdue;
                 $vinfo->save();
     
                 for($i=0; $i<count($ptype); $i++){
