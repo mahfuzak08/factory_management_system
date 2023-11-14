@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('account_tranxes', function (Blueprint $table) {
-            $table->string('ref_tranx_id')->nullable();
+            $table->string('ref_tranx_id')->default(0);
             $table->string('ref_tranx_type')->nullable();
         });
     }
