@@ -18,7 +18,9 @@ class PurchaseController extends Controller
         $vendor = Vendor::where('is_delete', 0)->get();
         if(! empty(request()->input('search'))){
             $str = request()->input('search');
-            $datas = Vendor::where(function ($query) use ($str){
+            $datas = Vendor::select('vendors.*')
+                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM purchases WHERE vendor_id = vendors.id AND status = 1), 0) + COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = vendors.id AND ref_type = "vendor" AND ref_tranx_id = "0"), 0)) as due'))
+                            ->where(function ($query) use ($str){
                                 $query->where('name', 'like', '%'.$str.'%')
                                 ->orWhere('mobile', 'like', '%'.$str.'%')
                                 ->orWhere('email', 'like', '%'.$str.'%')
@@ -27,7 +29,12 @@ class PurchaseController extends Controller
                             ->where('is_delete', 0)
                             ->latest()->paginate(10)->withQueryString();
         }else{
-            $datas = Vendor::latest()->where('is_delete', 0)->paginate(10)->withQueryString();
+            $datas = Vendor::select('vendors.*')
+                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM purchases WHERE vendor_id = vendors.id AND status = 1), 0) + COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = vendors.id AND ref_type = "vendor" AND ref_tranx_id = "0"), 0)) as due'))
+                            ->latest()
+                            ->where('is_delete', 0)
+                            ->paginate(10)
+                            ->withQueryString();
         }
         return view('admin.purchase.register', compact('vendor', 'account', 'datas'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
@@ -226,7 +233,7 @@ class PurchaseController extends Controller
                 $order_id = $order->id; 
     
                 // $vinfo->balance = $asofdue;
-                $vinfo->save();
+                // $vinfo->save();
     
                 for($i=0; $i<count($ptype); $i++){
                     if(count($due_acc_id) > 0 && $ptype[$i] == $due_acc_id[0]) continue;

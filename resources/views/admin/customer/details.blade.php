@@ -28,42 +28,42 @@
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input1" class="col-sm-3 col-form-label">{{__('admin.name')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input1" value="{{$customer->name}}">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input1" value="{{$customer[0]->name}}">
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input2" class="col-sm-3 col-form-label">{{__('admin.mobile')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="email" class="form-control form-control-border-off" disabled="true" id="input2" value="{{$customer->mobile}}">
+                                        <input type="email" class="form-control form-control-border-off" disabled="true" id="input2" value="{{$customer[0]->mobile}}">
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input3" class="col-sm-3 col-form-label">{{__('admin.address')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input3" value="{{$customer->address}}">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input3" value="{{$customer[0]->address}}">
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input4" class="col-sm-3 col-form-label">{{__('admin.email')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input4" value="{{$customer->email}}">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input4" value="{{$customer[0]->email}}">
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input5" class="col-sm-3 col-form-label">{{__('admin.balance')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input5" value="{{number_format($customer->balance, 2)}}">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input5" value="{{number_format($customer[0]->due, 2)}}">
                                       </div>
                                     </div>
                                   </div>
                                 </div>
                                 <div class="col-md-6 d-none d-md-block" id="addForm">
-                                  @if($customer->balance != 0)
+                                  @if($customer[0]->due != 0)
                                   <form class="forms-sample" method="POST" action="{{ route('save-customer-amount') }}">
                                     @csrf
-                                    <input type="hidden" name="ref_id" value="{{$customer->id}}" />
+                                    <input type="hidden" name="ref_id" value="{{$customer[0]->id}}" />
                                     <input type="hidden" name="ref_type" value="customer" />
-                                    <input type="hidden" name="redirect_url" value="customer_details/{{$customer->id}}" />
+                                    <input type="hidden" name="redirect_url" value="customer_details/{{$customer[0]->id}}" />
                                     <input type="hidden" name="type" value="deposit" />
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input6" class="col-sm-3 col-form-label">{{__('admin.date')}}</label>
@@ -105,7 +105,7 @@
                                   <br />
                                   <hr />
                                   <br />
-                                  <form action="{{route('customer-details', $customer->id)}}" method="GET">
+                                  <form action="{{route('customer-details', $customer[0]->id)}}" method="GET">
                                     @csrf
                                     @php 
                                     $sv = isset($_GET['search']) ? $_GET['search'] : '';

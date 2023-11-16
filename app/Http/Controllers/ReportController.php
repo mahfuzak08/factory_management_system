@@ -23,6 +23,7 @@ class ReportController extends Controller
         $cid = request()->input('customer_id');
         $inv = request()->input('inv_id');
         $status = request()->input('status');
+        $total = array();
         if(! empty($sd) || ! empty($ed) || ! empty($cid) || ! empty($inv)){
             $datas = Sales::join("customers", "sales.customer_id", "=", "customers.id")
                                 ->select('sales.*', 'customers.name as customer_name')
@@ -42,6 +43,27 @@ class ReportController extends Controller
                                     }
                                 })
                                 ->paginate(10)->withQueryString();
+                if ($datas->hasMorePages()) {
+
+                }else{
+                    $total = Sales::where(function($q) use($status, $sd, $ed, $cid, $inv){
+                        if($status != 'all')
+                            $q->where('status', $status);
+                        if($inv != '') {
+                            $q->where('order_id', $inv);
+                        }
+                        else{
+                            if($sd && $ed)
+                                $q->where('date', '>=', $sd)->where('date', '<=', $ed);
+
+                            if($cid != 'all') {
+                                $q->where('customer_id', $cid);
+                            }
+                        }
+                    })
+                    ->selectRaw('sum(total) as total, sum(total_due) as total_due')
+                    ->get();
+                }
         }else{
             $datas = Sales::join("customers", "sales.customer_id", "=", "customers.id")
                                 ->select('sales.*', 'customers.name as customer_name')
@@ -49,11 +71,20 @@ class ReportController extends Controller
                                 ->where('date', '>=', date('Y-m-d'))
                                 ->where('date', '<=', date('Y-m-d'))
                                 ->paginate(10)->withQueryString();
+            if ($datas->hasMorePages()) {
+
+            } else {
+                $total = Sales::where('status', 1)
+                            ->where('date', '>=', date('Y-m-d'))
+                            ->where('date', '<=', date('Y-m-d'))
+                            ->selectRaw('sum(total) as total, sum(total_due) as total_due')
+                            ->get();
+            }
         }
         $account = Bankacc::all();
         $customer = Customer::all();
 
-        return view('admin.report.sales', compact('datas', 'account', 'customer'))->with('i', (request()->input('page', 1) - 1) * 10);
+        return view('admin.report.sales', compact('datas', 'total', 'account', 'customer'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
     public function purchase(){
@@ -62,6 +93,7 @@ class ReportController extends Controller
         $vid = request()->input('vendor_id');
         $inv = request()->input('inv_id');
         $status = request()->input('status');
+        $total = array();
         if(! empty($sd) || ! empty($ed) || ! empty($cid) || ! empty($inv)){
             $datas = Purchase::join("vendors", "purchases.vendor_id", "=", "vendors.id")
                                 ->select('purchases.*', 'vendors.name as vendor_name')
@@ -81,6 +113,27 @@ class ReportController extends Controller
                                     }
                                 })
                                 ->paginate(10)->withQueryString();
+            if ($datas->hasMorePages()) {
+                
+            }else{
+                $total = Purchase::where(function($q) use($status, $sd, $ed, $vid, $inv){
+                    if($status != 'all')
+                        $q->where('status', $status);
+                    if($inv != '') {
+                        $q->where('order_id', $inv);
+                    }
+                    else{
+                        if($sd && $ed)
+                            $q->where('date', '>=', $sd)->where('date', '<=', $ed);
+
+                        if($vid != 'all') {
+                            $q->where('vendor_id', $vid);
+                        }
+                    }
+                })
+                ->selectRaw('sum(total) as total, sum(total_due) as total_due')
+                ->get();
+            }
         }else{
             $datas = Purchase::join("vendors", "purchases.vendor_id", "=", "vendors.id")
                             ->select('purchases.*', 'vendors.name as vendor_name')
@@ -88,12 +141,21 @@ class ReportController extends Controller
                             ->where('date', '>=', date('Y-m-d'))
                             ->where('date', '<=', date('Y-m-d'))
                             ->paginate(10)->withQueryString();
-        }
+            if ($datas->hasMorePages()) {
 
+            } else {
+                $total = Purchase::where('status', 1)
+                            ->where('date', '>=', date('Y-m-d'))
+                            ->where('date', '<=', date('Y-m-d'))
+                            ->selectRaw('sum(total) as total, sum(total_due) as total_due')
+                            ->get();
+            }
+        }
+        
         $account = Bankacc::all();
         $vendor = Vendor::all();
 
-        return view('admin.report.purchase', compact('datas', 'account', 'vendor'))->with('i', (request()->input('page', 1) - 1) * 10);
+        return view('admin.report.purchase', compact('datas', 'total', 'account', 'vendor'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
     
     public function expense(Request $request){

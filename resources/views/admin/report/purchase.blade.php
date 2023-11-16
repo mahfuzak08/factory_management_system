@@ -156,16 +156,10 @@
                                               @endforeach
                                             </td>
                                             <td>
-                                              @foreach(json_decode($row->payment) as $p)
-                                                @foreach($account as $ac)
-                                                  @if($p->pid == $ac->id && $ac->type == 'Due')
-                                                    {{number_format($p->receive_amount,2)}}<br>
-                                                    @php
-                                                    $page_due_total += $p->receive_amount;
-                                                    @endphp
-                                                  @endif
-                                                @endforeach
-                                              @endforeach
+                                              {{number_format($row->total_due,2)}}
+                                              @php
+                                              $page_due_total += $row->total_due;
+                                              @endphp
                                             </td>
                                             <td>
                                               {{number_format($row->total,2)}}
@@ -192,7 +186,7 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="5" class="text-right">Total: </td>
+                                            <td colspan="5" class="text-right">Page Total: </td>
                                             <td>{{$page_qty_total}}</td>
                                             <td></td>
                                             <td>{{number_format($page_rcv_total, 2)}}</td>
@@ -200,6 +194,15 @@
                                             <td>{{number_format($page_total, 2)}}</td>
                                             <td></td>
                                         </tr>
+                                        @if(count($total)>0)
+                                          <tr>
+                                              <td colspan="7" class="text-right">Total: </td>
+                                              <td>{{number_format($total[0]->total - $total[0]->total_due, 2)}}</td>
+                                              <td>{{number_format($total[0]->total_due, 2)}}</td>
+                                              <td>{{number_format($total[0]->total, 2)}}</td>
+                                              <td></td>
+                                          </tr>
+                                        @endif
                                     </tfoot>
                                 </table>
                               </div>

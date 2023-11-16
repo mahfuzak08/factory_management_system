@@ -19,7 +19,9 @@ class SalesController extends Controller
 
         if(! empty(request()->input('search'))){
             $str = request()->input('search');
-            $datas = Customer::where(function ($query) use ($str){
+            $datas = Customer::select('customers.*')
+                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND ref_tranx_id = "0"), 0)) as due'))
+                            ->where(function ($query) use ($str){
                                 $query->where('name', 'like', '%'.$str.'%')
                                 ->orWhere('mobile', 'like', '%'.$str.'%')
                                 ->orWhere('email', 'like', '%'.$str.'%')
@@ -28,7 +30,12 @@ class SalesController extends Controller
                             ->where('is_delete', 0)
                             ->latest()->paginate(10)->withQueryString();
         }else{
-            $datas = Customer::latest()->where('is_delete', 0)->paginate(10)->withQueryString();
+            $datas = Customer::select('customers.*')
+                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND ref_tranx_id = "0"), 0)) as due'))
+                            ->latest()
+                            ->where('is_delete', 0)
+                            ->paginate(10)
+                            ->withQueryString();
         }
         return view('admin.sales.register', compact('customer', 'account', 'datas'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
@@ -48,7 +55,7 @@ class SalesController extends Controller
             return redirect('sales');
         }
         $customer_id = $request->input('customer_id');
-        $asofdue = 0;
+        $due = 0;
         if($request->input('customer_id') == null){
             if($request->input('mobile') == null){
                 flash()->addError('Mobile number is required.');
@@ -75,7 +82,7 @@ class SalesController extends Controller
             }
         }else{
             $cinfo = Customer::findOrFail($customer_id);
-            $asofdue = $cinfo->balance;
+            // $asofdue = $cinfo->balance;
         }
         
         $due_acc_id = Bankacc::where('type', 'Due')->pluck('id');
@@ -110,7 +117,7 @@ class SalesController extends Controller
                 "receive_amount"=>(float) $receive_amount[$i]
             ];
             if(count($due_acc_id) > 0 && $ptype[$i] == $due_acc_id[0])
-                $asofdue += (float) $receive_amount[$i];
+                $due += (float) $receive_amount[$i];
         }
 
         $discount = (float) $request->input('discount');
@@ -124,6 +131,7 @@ class SalesController extends Controller
                 "date"=> $request->input('date'),
                 "discount"=> $discount,
                 "total"=> $total,
+                "total_due"=> $due,
                 "payment"=> json_encode($payments)
             ];
 
@@ -137,12 +145,12 @@ class SalesController extends Controller
                 $order->fill($input_order)->save();
                 $order_id = $request->input('order_id'); 
                 
-                for($pi = 0; $pi < count($op); $pi++){
-                    if(count($due_acc_id) > 0 && $op[$pi]->pid == $due_acc_id[0])
-                        $asofdue -= (float) $op[$pi]->receive_amount;
-                }
-                $cinfo->balance = $asofdue;
-                $cinfo->save();
+                // for($pi = 0; $pi < count($op); $pi++){
+                //     if(count($due_acc_id) > 0 && $op[$pi]->pid == $due_acc_id[0])
+                //         $asofdue -= (float) $op[$pi]->receive_amount;
+                // }
+                // $cinfo->balance = $asofdue;
+                // $cinfo->save();
     
                 for($i=0; $i<count($ptype); $i++){
                     if(count($due_acc_id) > 0 && $ptype[$i] == $due_acc_id[0]) continue;
@@ -151,14 +159,30 @@ class SalesController extends Controller
                             ->where('ref_type', 'customer')
                             ->where('account_id', $ptype[$i])
                             ->get()->toArray();
-                    $trnxdata = [
-                        'user_id' => Auth::id(),
-                        'tranx_date' => $request->input('date'),
-                        'ref_id' => $customer_id,
-                        'amount' => (float) $receive_amount[$i],
-                        'note' => 'This tranx updated. Old amount was '.$tdata[0]['amount']
-                    ];
-                    AccountTranx::where('id', $tdata[0]['id'])->update($trnxdata);
+                    if(count($tdata) > 0){
+                        $trnxdata = [
+                            'user_id' => Auth::id(),
+                            'tranx_date' => $request->input('date'),
+                            'ref_id' => $customer_id,
+                            'amount' => (float) $receive_amount[$i],
+                            'note' => 'This tranx updated. Old amount was '.$tdata[0]['amount']
+                        ];
+                        AccountTranx::where('id', $tdata[0]['id'])->update($trnxdata);
+                    }else{
+                        $trnxdata = [
+                            'account_id' => $ptype[$i],
+                            'user_id' => Auth::id(),
+                            'tranx_date' => $request->input('date'),
+                            'ref_id' => $customer_id,
+                            'ref_type' => 'customer',
+                            'ref_tranx_id' => $order_id,
+                            'ref_tranx_type' => 'sales_order',
+                            'note' => 'This tranx updated.',
+                            'amount' => (float) $receive_amount[$i]
+                        ];
+                        $tdata = new AccountTranx();
+                        $tdata->fill($trnxdata)->save();
+                    }
                 }
 
                 AccountTranx::where('ref_tranx_id', $order_id)->where('note', '')->delete();
@@ -187,7 +211,7 @@ class SalesController extends Controller
                 "discount"=> $discount,
                 "total"=> $total,
                 "payment"=> json_encode($payments),
-                "asof_date_due"=> $asofdue,
+                "total_due"=> $due,
             ];
             
             try{
@@ -197,8 +221,8 @@ class SalesController extends Controller
                 $order->fill($input_order)->save();
                 $order_id = $order->id; 
                 
-                $cinfo->balance = $asofdue;
-                $cinfo->save();
+                // $cinfo->balance = $asofdue;
+                // $cinfo->save();
 
                 for($i=0; $i<count($ptype); $i++){
                     if(count($due_acc_id) > 0 && $ptype[$i] == $due_acc_id[0]) continue;

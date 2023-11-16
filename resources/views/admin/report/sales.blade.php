@@ -200,6 +200,15 @@
                                             <td>{{number_format($page_total, 2)}}</td>
                                             <td></td>
                                         </tr>
+                                        @if(count($total)>0)
+                                          <tr>
+                                              <td colspan="7" class="text-right">Total: </td>
+                                              <td>{{number_format($total[0]->total - $total[0]->total_due, 2)}}</td>
+                                              <td>{{number_format($total[0]->total_due, 2)}}</td>
+                                              <td>{{number_format($total[0]->total, 2)}}</td>
+                                              <td></td>
+                                          </tr>
+                                        @endif
                                     </tfoot>
                                 </table>
                               </div>
