@@ -100,11 +100,13 @@ class ExpenseController extends Controller
                                 ->orWhere('details', 'like', '%'.$str.'%');
                             })
                             ->where('expense_id', $id)
+                            ->where('status', 1)
                             ->select('expense_details.*', 'bankaccs.name as bank_name')
                             ->latest()->paginate(10)->withQueryString();
         }else{
             $datas = Expense_detail::join('bankaccs', 'expense_details.account_id', '=', 'bankaccs.id')
                     ->where('expense_id', $id)
+                    ->where('status', 1)
                     ->select('expense_details.*', 'bankaccs.name as bank_name')
                     ->latest()->paginate(10)->withQueryString();
         }
@@ -138,13 +140,13 @@ class ExpenseController extends Controller
                     "account_id"=> $request->input("account_id"),
                     "amount"=> $request->input("amount"),
                     "title"=> $request->input("title"),
-                    "details"=> $request->input("details") . "Edited"
+                    "details"=> $request->input("details") . "(Edited)"
                 ];
 
                 $order->fill($ex_input)->save();
 
                 AccountTranx::where('ref_tranx_id', $order->id)
-                            ->where('ref_tranx_type', 'ref_tranx_id')
+                            ->where('ref_tranx_type', 'expense_order')
                             ->delete();
 
                 $data = new AccountTranx();
@@ -153,7 +155,8 @@ class ExpenseController extends Controller
                 $input['user_id'] = Auth::id();
                 $input['amount'] *= -1;
                 $input['ref_tranx_id'] = $order->id;
-                $input['ref_tranx_type'] = "ref_tranx_id";
+                $input['ref_tranx_type'] = "expense_order";
+                $input['note'] = "This tranx updated.";
                 
                 $data->fill($input)->save();
                 
@@ -180,7 +183,7 @@ class ExpenseController extends Controller
                 $input['user_id'] = Auth::id();
                 $input['amount'] *= -1;
                 $input['ref_tranx_id'] = $ex_order->id;
-                $input['ref_tranx_type'] = "ref_tranx_id";
+                $input['ref_tranx_type'] = "expense_order";
                 
                 $data->fill($input)->save();
                 
@@ -219,26 +222,16 @@ class ExpenseController extends Controller
     public function expense_delete($id){
         try{
             DB::beginTransaction();
-            $order = Expense::findOrFail($id);
-            $order->order_type = "expense_delete";
+            $order = Expense_detail::findOrFail($id);
             $order->status = 0;
-            $order->note = "Deleted By ". Auth::user()->name . "( User Id: ". Auth::id() .")";
+            $order->details = "Deleted By ". Auth::user()->name . "( User Id: ". Auth::id() .")";
             
-            $ptype = json_decode($order->payment);
-
             $order->save();
 
-            $due_acc_id = Bankacc::where('type', 'Due')->pluck('id');
-            
-            for($i=0; $i<count($ptype); $i++){
-                if(count($due_acc_id) > 0 && $ptype[$i]->pid == $due_acc_id[0]){
-                    $v = Vendor::findOrFail($order->customer_id); 
-                    $v->balance -= $ptype[$i]->receive_amount;
-                    $v->save();
-                }
-            }
-
-            AccountTranx::where('ref_tranx_id', $id)->delete();
+            AccountTranx::where('ref_tranx_id', $id)
+                            ->where('amount', -1*$order->amount)
+                            ->where('ref_tranx_type', 'expense_order')
+                            ->delete();
             flash()->addSuccess('Expense Order Deleted Successfully.');
             DB::commit();
         }catch (\Exception $e) {
@@ -248,7 +241,7 @@ class ExpenseController extends Controller
             return redirect('expense');
         }
         
-        return redirect("reportPurchase");
+        return redirect("expense_details", $id);
     }
 
 }

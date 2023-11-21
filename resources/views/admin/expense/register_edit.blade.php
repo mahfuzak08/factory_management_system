@@ -71,7 +71,8 @@
                                         <input type="text" name="details" value="{{$order[0]->details}}" placeholder="{{__('admin.details')}}" class="form-control" id="input8">
                                       </div>
                                     </div>
-                                    <button type="submit" class="btn btn-primary me-2 float-end">{{ __('admin.save_now') }}</button>
+                                    <button type="submit" class="btn btn-primary me-2 float-end">{{ __('admin.update') }}</button>
+                                    <a href="{{route('expense-details', $order[0]->expense_id)}}" class="btn btn-secondary me-2 float-end">{{ __('admin.cancel') }}</a>
                                   </form>
                                 </div>
                               </div>

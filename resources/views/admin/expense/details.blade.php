@@ -104,6 +104,7 @@
                                             <th>{{__('admin.account_name')}}</th>
                                             <th>{{__('admin.details')}}</th>
                                             <th class="text-right">{{__('admin.enter_your_amount')}}</th>
+                                            <th class="text-right">{{__('admin.action')}}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -124,6 +125,10 @@
                                             <td>{{$row->bank_name}}</td>
                                             <td>{{$row->details}}</td>
                                             <td class="text-right">{{number_format($row->amount, 2)}}</td>
+                                            <td>
+                                              <a href="{{route('expense-trnx-edit', $row->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
+                                              <a href="{{route('expense-trnx-delete', $row->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a>
+                                            </td>
                                           </tr>
                                           @php
                                           $total += $row->amount;
@@ -131,14 +136,15 @@
                                         @endforeach
                                       @else
                                           <tr>
-                                            <td colspan="5" class="text-center">{{__('admin.no_data_found')}}</td>
+                                            <td colspan="6" class="text-center">{{__('admin.no_data_found')}}</td>
                                           </tr>
                                       @endif
                                     </tbody>
                                     <tfoot>
                                       <tr>
                                         <td colspan="4">Total</td>
-                                        <td class="text-right">{{$total}}</td>
+                                        <td class="text-right">{{number_format($total, 2, 2)}}</td>
+                                        <td></td>
                                       </tr>
                                     </tfoot>
                                 </table>

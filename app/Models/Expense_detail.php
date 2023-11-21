@@ -12,7 +12,7 @@ class Expense_detail extends Model
     use HasFactory;
     use LogsActivity;
 
-    protected $fillable = ['trnx_date', 'expense_id', 'user_id', 'account_id', 'amount', 'title', 'details'];
+    protected $fillable = ['trnx_date', 'expense_id', 'user_id', 'account_id', 'amount', 'status', 'title', 'details'];
 
     public function getActivitylogOptions(): LogOptions
     {
