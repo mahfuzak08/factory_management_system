@@ -241,7 +241,7 @@ class ExpenseController extends Controller
             return redirect('expense');
         }
         
-        return redirect("expense_details", $id);
+        return redirect("expense");
     }
 
 }

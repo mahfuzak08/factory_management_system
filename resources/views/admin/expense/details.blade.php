@@ -140,13 +140,15 @@
                                           </tr>
                                       @endif
                                     </tbody>
+                                    @if($total>0)
                                     <tfoot>
                                       <tr>
                                         <td colspan="4">Total</td>
-                                        <td class="text-right">{{number_format($total, 2, 2)}}</td>
+                                        <td class="text-right">{{number_format($total, 2)}}</td>
                                         <td></td>
                                       </tr>
                                     </tfoot>
+                                    @endif
                                 </table>
                               </div>
                               {{ $datas->onEachSide(3)->links() }}
