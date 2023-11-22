@@ -50,6 +50,8 @@ Route::middleware([
     Route::get('/delete_customer/{id}', [CustomerController::class, 'delete_customer'])->name('delete-customer');
     Route::get('/customer_details/{id}', [CustomerController::class, 'see_customer'])->name('customer-details');
     Route::post('/save_customer_amount', [CustomerController::class, 'add_amount'])->name('save-customer-amount');
+    Route::get('/customer_trnx_edit/{id}', [CustomerController::class, 'customer_tnx_edit'])->name('customer-trnx-edit');
+    Route::get('/customer_trnx_delete/{id}', [CustomerController::class, 'customer_tnx_delete'])->name('customer-trnx-delete');
     
     Route::get('/purchase', [PurchaseController::class, 'index'])->name('purchase');
     Route::post('/save_purchase', [PurchaseController::class, 'set_purchase'])->name('save-purchase');
@@ -115,5 +117,9 @@ Route::middleware([
     Route::get('/delete_user/{id}', [SettingsController::class, 'delete_user'])->name('delete-user');
     Route::get('/user_details/{id}', [SettingsController::class, 'see_user'])->name('user-details');
     Route::post('/user_manage', [SettingsController::class, 'user_manage_update'])->name('user-manage');
+
+    Route::get('/role_manage', [SettingsController::class, 'role_manage'])->name('role-manage');
+    Route::get('/add_new_role', [SettingsController::class, 'open_role_form'])->name('add-new-role');
+    Route::post('/save_role', [SettingsController::class, 'set_role'])->name('save-role');
 
 });

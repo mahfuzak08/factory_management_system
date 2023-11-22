@@ -195,30 +195,70 @@ class CustomerController extends Controller
         DB::beginTransaction();
         try{
             $customer = Customer::findOrFail($request->input('ref_id'));
-            if($customer){
-                $customer->balance = $customer->balance - $request->input('amount');
-                $customer->save();
-            }
+            // if($customer){
+            //     $customer->balance = $customer->balance - $request->input('amount');
+            //     $customer->save();
+            // }
     
-            $data = new AccountTranx();
-            
-            $input = $request->all();
-            $input['user_id'] = Auth::id();
-            
-            $data->fill($input)->save();
-            
-            $sms = new SendSms();
-            $sms->toSms($customer->mobile, config('app.name'). ' receive your payment BDT '. $input['amount'] .'. Thank you');
+            if(!empty($request->input('id'))){
+                $data = AccountTranx::where('id', $request->input('id'))
+                                    ->where('ref_id', $request->input('ref_id'))
+                                    ->where('ref_type', $request->input('ref_type'))
+                                    ->get();
+                
+                $input = $request->all();
+                $input['user_id'] = Auth::id();
+                $input['note'] = $input['note'] . ' (Edited)';
+                $data[0]->fill($input)->save();
+            }else{
+                $data = new AccountTranx();
 
-            flash()->addSuccess('New Data Added Successfully.');
+                $input = $request->all();
+                $input['user_id'] = Auth::id();
+                
+                $data->fill($input)->save();
+            }
+            
+
+            if($request->input('sms_flag') == 'yes'){
+                $sms = new SendSms();
+                $sms->toSms($customer->mobile, config('app.name'). ' receive your payment BDT '. $input['amount'] .'. Thank you');
+            }
+
+            if(!empty($request->input('id')))
+                flash()->addSuccess('Data Update Successfully.');
+            else
+                flash()->addSuccess('New Data Added Successfully.');
             // If all queries succeed, commit the transaction
             DB::commit();
         }catch (\Exception $e) {
             dd($e);
             // If any query fails, catch the exception and roll back the transaction
-            flash()->addError('Data Not Added Successfully.');
+            flash()->addError('Data Not Added or Update Successfully.');
             DB::rollback();
         }
         return redirect($request->input('redirect_url'));
+    }
+
+    public function customer_tnx_edit($id){
+        $order = AccountTranx::findOrFail($id);
+        $account = Bankacc::all();
+        return view('admin.customer.register_edit', compact('order', 'account'));
+    }
+    
+    public function customer_tnx_delete($id){
+        try{
+            DB::beginTransaction();
+            AccountTranx::where('id', $id)->delete();
+            flash()->addSuccess('Customer Transection Deleted Successfully.');
+            DB::commit();
+        }catch (\Exception $e) {
+            dd($e);
+            flash()->addError('Customer Transection Unable To Delete');
+            DB::rollback();
+            return redirect('expense');
+        }
+        
+        return redirect("customer");
     }
 }

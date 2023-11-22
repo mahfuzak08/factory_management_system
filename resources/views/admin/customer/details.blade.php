@@ -93,6 +93,15 @@
                                         </select>
                                       </div>
                                     </div>
+                                    <div class="form-group form-group-margin-bottom-off row">
+                                        <label for="input9" class="col-sm-3 col-form-label">{{__('admin.do_you_want_to_send_sms')}}</label>
+                                        <div class="col-sm-9">
+                                          <select class="form-select" name="sms_flag" id="input10">
+                                            <option value="no">{{__('admin.no')}}</option>
+                                            <option value="yes">{{__('admin.yes')}}</option>
+                                          </select>
+                                        </div>
+                                    </div>
                                     <button type="submit" class="btn btn-primary me-2 float-end">{{ __('admin.save_now') }}</button>
                                   </form>
                                   @endif
@@ -131,6 +140,7 @@
                                             <th>{{__('admin.account_name')}}</th>
                                             <th>{{__('admin.details')}}</th>
                                             <th class="text-right">{{__('admin.enter_your_amount')}}</th>
+                                            <th>{{__('admin.action')}}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -148,6 +158,12 @@
                                             <td>{{$row->bank_name}}</td>
                                             <td>{{$row->note}}</td>
                                             <td class="text-right">{{number_format($row->amount, 2)}}</td>
+                                            <td>
+                                              @if($row->ref_tranx_type != 'sales_order')
+                                              <a href="{{route('customer-trnx-edit', $row->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
+                                              <a href="{{route('customer-trnx-delete', $row->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a>
+                                              @endif
+                                            </td>
                                           </tr>
                                           @php 
                                           $total += $row->amount;

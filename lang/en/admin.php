@@ -116,4 +116,7 @@ return [
     'start_date' => 'Start Date',
     'end_date' => 'End Date',
     'title' => 'Title',
+    'do_you_want_to_send_sms' => 'Do you want to send sms',
+    'yes' => 'Yes',
+    'no' => 'No',
 ];
