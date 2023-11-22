@@ -18,7 +18,7 @@
                           <div _ngcontent-tmn-c13="" class="row container-fluid d-flex justify-content-between">
                             <div _ngcontent-tmn-c13="" class="col-lg-3 pr-0">
                               <p _ngcontent-tmn-c13="" class="mt-5 mb-2 text-right"><b _ngcontent-tmn-c13="">#INV-{{$invoice[0]->id}}</b></p>
-                              <p _ngcontent-tmn-c13="" class="text-right">Date : {{$invoice[0]->trnx_date}}</p>
+                              <p _ngcontent-tmn-c13="" class="text-right">Date : {{date('d-m-Y', strtotime($invoice[0]->trnx_date))}}</p>
                             </div>
                           </div>
                           <div _ngcontent-tmn-c13="" class="container-fluid mt-5 d-flex justify-content-center w-100">

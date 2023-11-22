@@ -29,7 +29,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label">{{__('admin.start_date')}}</label>
                                             <div class="col-sm-9">
-                                                <input type="date" value="{{date('Y-m-d')}}" class="form-control" name="start_date">
+                                                <input type="date" value="{{date('d-m-Y')}}" class="form-control" name="start_date">
                                             </div>
                                         </div>
                                     </div>
@@ -37,7 +37,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label">{{__('admin.end_date')}}</label>
                                             <div class="col-sm-9">
-                                                <input type="date" value="{{date('Y-m-d')}}" class="form-control" name="end_date">
+                                                <input type="date" value="{{date('d-m-Y')}}" class="form-control" name="end_date">
                                             </div>
                                         </div>
                                     </div>
@@ -97,7 +97,7 @@
                                         @foreach($datas as $row)
                                           <tr>
                                             <td><a href="{{route('expense-invoice', $row->id)}}">{{$n++}}</a></td>
-                                            <td><a href="{{route('expense-invoice', $row->id)}}">{{$row->trnx_date}}</a></td>
+                                            <td><a href="{{route('expense-invoice', $row->id)}}">{{date('d-m-Y', strtotime($row->trnx_date))}}</a></td>
                                             <td><a href="{{route('expense-invoice', $row->id)}}">{{$row->id}}</a</td>
                                             <td><a href="{{route('expense-invoice', $row->id)}}">{{$row->expense_name}}</a></td>
                                             <td>{{$row->acc_name}}</td>

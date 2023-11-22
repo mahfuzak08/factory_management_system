@@ -41,7 +41,7 @@
                                 </datalist>
                               </td>
                               <td width="30%">
-                                <input type="date" required name="date" class="form-control" placeholder="YYYY-MM-DD" value="{{date('Y-m-d')}}">
+                                <input type="date" required name="date" class="form-control" placeholder="YYYY-MM-DD" value="{{date('d-m-Y')}}">
                               </td>
                             </tr>
                             <tr>

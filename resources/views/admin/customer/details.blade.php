@@ -144,7 +144,7 @@
                                         @foreach($datas as $row)
                                           <tr>
                                             <td>{{$n++}}</td>
-                                            <td>{{$row->tranx_date}}</td>
+                                            <td>{{date('d-m-Y', strtotime($row->tranx_date))}}</td>
                                             <td>{{$row->bank_name}}</td>
                                             <td>{{$row->note}}</td>
                                             <td class="text-right">{{number_format($row->amount, 2)}}</td>

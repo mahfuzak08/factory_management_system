@@ -43,7 +43,7 @@
                                     <tbody>
                                       <form class="forms-sample" method="POST" action="{{ route('save-attendance') }}">
                                         @csrf
-                                        <input type="date" name="attendance-date" value="{{isset($_GET['oldDate'])? $_GET['oldDate'] : date('Y-m-d');}}">
+                                        <input type="date" name="attendance-date" value="{{isset($_GET['oldDate'])? $_GET['oldDate'] : date('d-m-Y');}}">
                                         @if(count($employee) > 0)
                                           @php 
                                             $sl = 0;

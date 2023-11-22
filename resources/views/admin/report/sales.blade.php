@@ -29,7 +29,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label">{{__('admin.start_date')}}</label>
                                             <div class="col-sm-9">
-                                                <input type="date" value="{{@$_GET['start_date'] ? $_GET['start_date'] : date('Y-m-d')}}" class="form-control" name="start_date">
+                                                <input type="date" value="{{@$_GET['start_date'] ? $_GET['start_date'] : date('d-m-Y')}}" class="form-control" name="start_date">
                                             </div>
                                         </div>
                                     </div>
@@ -37,7 +37,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label">{{__('admin.end_date')}}</label>
                                             <div class="col-sm-9">
-                                                <input type="date" value="{{@$_GET['end_date'] ? $_GET['end_date'] : date('Y-m-d')}}" class="form-control" name="end_date">
+                                                <input type="date" value="{{@$_GET['end_date'] ? $_GET['end_date'] : date('d-m-Y')}}" class="form-control" name="end_date">
                                             </div>
                                         </div>
                                     </div>
@@ -126,7 +126,7 @@
                                           <tr class="{{$row->status ? '' : 'text-light bg-danger'}}">
                                             <td><a href="{{route('sales-invoice', $row->id)}}">{{$n++}}</a></td>
                                             <td><a href="{{route('sales-invoice', $row->id)}}">{{$row->order_id}}</a></td>
-                                            <td>{{$row->date}}</td>
+                                            <td>{{date('d-m-Y', strtotime($row->date))}}</td>
                                             <td><a href="{{route('sales-invoice', $row->id)}}">{{$row->customer_name}}</a></td>
                                             {{-- <td>{{$row->order_type}}</td> --}}
                                             <td>

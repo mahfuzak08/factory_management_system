@@ -70,7 +70,7 @@
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input6" class="col-sm-3 col-form-label">{{__('admin.date')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="text" name="tranx_date" class="form-control" id="input6" value="{{date('Y-m-d')}}">
+                                        <input type="date" name="tranx_date" class="form-control" id="input6" value="{{date('Y-m-d')}}">
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">
@@ -160,7 +160,7 @@
                                         @foreach($datas as $row)
                                           <tr>
                                             <td>{{$n++}}</td>
-                                            <td>{{$row->tranx_date}}</td>
+                                            <td>{{date('d-m-Y', strtotime($row->tranx_date))}}</td>
                                             <td>{{$row->ref_id}}</td>
                                             <td>{{$row->ref_type}}</td>
                                             <td>{{$row->note}}</td>
