@@ -123,7 +123,13 @@
                                             <td>{{$n++}}</td>
                                             <td>{{$row->trnx_date}}</td>
                                             <td>{{$row->bank_name}}</td>
-                                            <td>{{$row->details}}</td>
+                                            <td>
+                                              {{$row->title}}
+                                              @if(!empty($row->title) && !empty($row->details))
+                                                <br>
+                                              @endif
+                                              {{$row->details}}
+                                            </td>
                                             <td class="text-right">{{number_format($row->amount, 2)}}</td>
                                             <td>
                                               <a href="{{route('expense-trnx-edit', $row->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
