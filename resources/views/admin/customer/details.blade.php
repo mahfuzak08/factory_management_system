@@ -171,7 +171,7 @@
                                         @endforeach
                                       @else
                                           <tr>
-                                            <td colspan="5" class="text-center">{{__('admin.no_data_found')}}</td>
+                                            <td colspan="6" class="text-center">{{__('admin.no_data_found')}}</td>
                                           </tr>
                                       @endif
                                     </tbody>
@@ -179,6 +179,7 @@
                                       <tr>
                                         <td colspan="4">Total</td>
                                         <td class="text-right">{{number_format($total, 2)}}</td>
+                                        <td></td>
                                       </tr>
                                     </tfoot>
                                 </table>
