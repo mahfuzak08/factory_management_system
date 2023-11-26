@@ -40,6 +40,7 @@
                                             <th> {{__('admin.name')}} </th>
                                             <th> {{__('admin.mobile')}} </th>
                                             <th> {{__('admin.gender')}} </th>
+                                            <th> {{__('admin.designation')}} </th>
                                             <th> {{__('admin.address')}} </th>
                                             <th> {{__('admin.salary')}} </th>
                                             <th> {{__('admin.action')}} </th>
@@ -59,6 +60,7 @@
                                             <td>{{$row->name}}</td>
                                             <td>{{$row->mobile}}</td>
                                             <td>{{$row->gender}}</td>
+                                            <td>{{$row->designation}}</td>
                                             <td>{{$row->address}}</td>
                                             <td>{{$row->salary}}</td>
                                             <td>
@@ -72,7 +74,7 @@
                                         @endforeach
                                       @else
                                           <tr>
-                                            <td colspan="7" class="text-center">{{__('admin.no_data_found')}}</td>
+                                            <td colspan="8" class="text-center">{{__('admin.no_data_found')}}</td>
                                           </tr>
                                       @endif
                                     </tbody>
