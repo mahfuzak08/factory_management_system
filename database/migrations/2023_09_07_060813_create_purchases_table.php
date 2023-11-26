@@ -11,26 +11,29 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('purchases', function (Blueprint $table) {
-            $table->id();
-            $table->string('order_id');
-            $table->string('order_type')->default('purchase');
-            $table->integer('user_id');
-            $table->integer('vendor_id');
-            $table->json('products')->nullable();
-            $table->json('return_items')->nullable();
-            $table->date('date');
-            $table->integer('status')->default(1);
-            $table->string('discount_code')->nullable();
-            $table->float('shipping_cost', 14, 2)->default(0);
-            $table->float('labour_cost', 14, 2)->default(0);
-            $table->float('carrying_cost', 14, 2)->default(0);
-            $table->float('other_cost', 14, 2)->default(0);
-            $table->float('total', 14, 2)->default(0);
-            $table->float('asof_date_due', 14, 2)->default(0);
-            $table->float('note', 14, 2)->default(0);
-            $table->timestamps();
-        });
+        if ( ! Schema::hasTable('purchases')){
+            Schema::create('purchases', function (Blueprint $table) {
+                $table->id();
+                $table->string('order_id');
+                $table->string('order_type')->default('purchase');
+                $table->integer('user_id');
+                $table->integer('vendor_id');
+                $table->json('products')->nullable();
+                $table->json('return_items')->nullable();
+                $table->date('date');
+                $table->integer('status')->default(1);
+                $table->string('discount_code')->nullable();
+                $table->float('shipping_cost', 14, 2)->default(0);
+                $table->float('labour_cost', 14, 2)->default(0);
+                $table->float('carrying_cost', 14, 2)->default(0);
+                $table->float('other_cost', 14, 2)->default(0);
+                $table->float('total', 14, 2)->default(0);
+                $table->float('asof_date_due', 14, 2)->default(0);
+                $table->float('note', 14, 2)->default(0);
+                $table->timestamps();
+            });
+        }
+        
     }
 
     /**

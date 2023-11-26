@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('employees', function (Blueprint $table) {
-            $table->string('designation')->default('Employee')->after('gender');
-        });
+        if(! Schema::hasColumns('employees', ['designation'])) {
+            Schema::table('employees', function (Blueprint $table) {
+                $table->string('designation')->default('Employee')->after('gender');
+            });
+        }
     }
 
     /**

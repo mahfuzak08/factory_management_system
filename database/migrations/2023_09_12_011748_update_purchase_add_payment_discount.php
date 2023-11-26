@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('purchases', function (Blueprint $table) {
-            $table->json('payment')->nullable();
-            $table->float('discount', 14, 2)->nullable();
-            $table->dropColumn('discount_code');
-        });
+        if(! Schema::hasColumns('purchases', ['payment', 'discount'])) {
+            Schema::table('purchases', function (Blueprint $table) {
+                $table->json('payment')->nullable();
+                $table->float('discount', 14, 2)->nullable();
+                $table->dropColumn('discount_code');
+            });
+        }
     }
 
     /**

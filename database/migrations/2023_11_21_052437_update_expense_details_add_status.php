@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('expense_details', function (Blueprint $table) {
-            $table->integer('status')->default(1)->after('amount');
-        });
+        if(! Schema::hasColumns('expense_details', ['status'])) {
+            Schema::table('expense_details', function (Blueprint $table) {
+                $table->integer('status')->default(1)->after('amount');
+            });
+        }
     }
 
     /**

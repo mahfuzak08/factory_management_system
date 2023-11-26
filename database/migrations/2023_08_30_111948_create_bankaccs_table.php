@@ -11,16 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bankaccs', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('type')->defautl('Cash')->comment('Cash/ Due/ Others');
-            $table->string('bank_name')->nullable();
-            $table->string('bank_address')->nullable();
-            $table->string('acc_no')->nullable();
-            $table->string('currency')->defautl('BDT');
-            $table->timestamps();
-        });
+        if ( ! Schema::hasTable('bankaccs')){
+            Schema::create('bankaccs', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->string('type')->defautl('Cash')->comment('Cash/ Due/ Others');
+                $table->string('bank_name')->nullable();
+                $table->string('bank_address')->nullable();
+                $table->string('acc_no')->nullable();
+                $table->string('currency')->defautl('BDT');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

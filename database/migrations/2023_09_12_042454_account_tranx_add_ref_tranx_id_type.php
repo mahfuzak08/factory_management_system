@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('account_tranxes', function (Blueprint $table) {
-            $table->string('ref_tranx_id')->default(0);
-            $table->string('ref_tranx_type')->nullable();
-        });
+        if(! Schema::hasColumns('account_tranxes', ['ref_tranx_id', 'ref_tranx_type'])) {
+            Schema::table('account_tranxes', function (Blueprint $table) {
+                $table->string('ref_tranx_id')->default(0);
+                $table->string('ref_tranx_type')->nullable();
+            });
+        }
     }
 
     /**

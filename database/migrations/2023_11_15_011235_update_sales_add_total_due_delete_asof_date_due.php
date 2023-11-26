@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('sales', function (Blueprint $table) {
-            $table->float('total_due', 14, 2)->default(0)->after('total');
-            $table->dropColumn('asof_date_due');
-        });
+        if(! Schema::hasColumns('sales', ['total_due'])) {
+            Schema::table('sales', function (Blueprint $table) {
+                $table->float('total_due', 14, 2)->default(0)->after('total');
+                $table->dropColumn('asof_date_due');
+            });
+        }
     }
 
     /**

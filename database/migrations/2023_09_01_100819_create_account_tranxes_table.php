@@ -11,17 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('account_tranxes', function (Blueprint $table) {
-            $table->id();
-            $table->integer('account_id');
-            $table->date('tranx_date');
-            $table->integer('ref_id')->default(0);
-            $table->string('ref_type')->nullable();
-            $table->float('amount', 14, 2)->default(0);
-            $table->integer('user_id');
-            $table->string('note')->nullable();
-            $table->timestamps();
-        });
+        if ( ! Schema::hasTable('account_tranxes')){
+            Schema::create('account_tranxes', function (Blueprint $table) {
+                $table->id();
+                $table->integer('account_id');
+                $table->date('tranx_date');
+                $table->integer('ref_id')->default(0);
+                $table->string('ref_type')->nullable();
+                $table->float('amount', 14, 2)->default(0);
+                $table->integer('user_id');
+                $table->string('note')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**

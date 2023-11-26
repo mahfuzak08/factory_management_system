@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->integer('is_delete')->default(0);
-        });
+        if(! Schema::hasColumns('users', ['is_delete'])) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->integer('is_delete')->default(0);
+            });
+        }
     }
 
     /**

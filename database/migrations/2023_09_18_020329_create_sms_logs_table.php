@@ -11,19 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sms_logs', function (Blueprint $table) {
-            $table->id();
-            $table->string('msg');
-            $table->string('api_key');
-            $table->string('type');
-            $table->string('contacts');
-            $table->string('senderid');
-            $table->string('url');
-            $table->string('label')->nullable();
-            $table->string('response')->nullable();
-            $table->string('user_id');
-            $table->timestamps();
-        });
+        if(! Schema::hasTable('sms_logs')) {
+            Schema::create('sms_logs', function (Blueprint $table) {
+                $table->id();
+                $table->string('msg');
+                $table->string('api_key');
+                $table->string('type');
+                $table->string('contacts');
+                $table->string('senderid');
+                $table->string('url');
+                $table->string('label')->nullable();
+                $table->string('response')->nullable();
+                $table->string('user_id');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

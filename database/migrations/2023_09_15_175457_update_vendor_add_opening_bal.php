@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('vendors', function (Blueprint $table) {
-            $table->float('opening_balance', 14, 2)->default(0);
-        });
+        if(! Schema::hasColumns('vendors', ['opening_balance'])) {
+            Schema::table('vendors', function (Blueprint $table) {
+                $table->float('opening_balance', 14, 2)->default(0);
+            });
+        }
     }
 
     /**
