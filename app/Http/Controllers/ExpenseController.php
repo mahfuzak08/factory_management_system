@@ -81,9 +81,26 @@ class ExpenseController extends Controller
     }
 
     public function delete_expense($id){
-        $data = Expense::findOrFail($id);
-        $data->fill(['status'=>0])->update();
-        flash()->addSuccess('Data Delete Successfully.');
+        try{
+            DB::beginTransaction();
+            Expense_detail::where('expense_id', $id)->update(['status'=>0, 'details'=>"Deleted By ". Auth::user()->name . "( User Id: ". Auth::id() .")"]);
+            
+            AccountTranx::where('ref_id', $id)
+                            ->where('ref_type', 'expense')
+                            ->delete();
+            
+            $data = Expense::findOrFail($id);
+            $data->fill(['status'=>0])->update();
+
+            flash()->addSuccess('Expense Group Delete Successfully.');
+
+            DB::commit();
+        }catch (\Exception $e) {
+            dd($e);
+            flash()->addError('Expense Group Unable To Delete');
+            DB::rollback();
+        }
+        
         return redirect('expense');
     }
 
