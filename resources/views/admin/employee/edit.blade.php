@@ -50,12 +50,12 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="exampleInputName5">{{ __('admin.address') }}</label>
-                                        <input type="text" value="{{$employee->address}}" class="form-control" id="exampleInputName5" name="address" placeholder="{{ __('admin.address') }}">
+                                      <label for="exampleInputName6">{{ __('admin.designation') }}</label>
+                                      <input type="text" value="{{$employee->designation}}" class="form-control" id="exampleInputName6" name="designation" placeholder="{{ __('admin.designation') }}">
                                     </div>
                                     <div class="form-group">
-                                        <label for="exampleInputName6">{{ __('admin.designation') }}</label>
-                                        <input type="text" value="{{$employee->designation}}" class="form-control" id="exampleInputName6" name="designation" placeholder="{{ __('admin.designation') }}">
+                                        <label for="exampleInputName5">{{ __('admin.address') }}</label>
+                                        <input type="text" value="{{$employee->address}}" class="form-control" id="exampleInputName5" name="address" placeholder="{{ __('admin.address') }}">
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputName7">{{ __('admin.nid') }}</label>

@@ -38,15 +38,15 @@
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">
-                                      <label for="input3" class="col-sm-3 col-form-label">{{__('admin.address')}}</label>
-                                      <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input3" value="{{$employee->address}}">
-                                      </div>
-                                    </div>
-                                    <div class="form-group form-group-margin-bottom-off row">
                                       <label class="col-sm-3 col-form-label">{{__('admin.designation')}}</label>
                                       <div class="col-sm-9">
                                         <input type="text" class="form-control form-control-border-off" disabled="true" value="{{$employee->designation}}">
+                                      </div>
+                                    </div>
+                                    <div class="form-group form-group-margin-bottom-off row">
+                                      <label for="input3" class="col-sm-3 col-form-label">{{__('admin.address')}}</label>
+                                      <div class="col-sm-9">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input3" value="{{$employee->address}}">
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">

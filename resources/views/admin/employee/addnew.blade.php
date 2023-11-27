@@ -50,7 +50,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="exampleInputName5">{{ __('admin.address') }}</label>
+                                        <label for="exampleInputName5">{{ __('admin.designation') }}</label>
                                         <input type="text" class="form-control" id="exampleInputName5" name="designation" placeholder="{{ __('admin.designation') }}">
                                     </div>
                                     <div class="form-group">
