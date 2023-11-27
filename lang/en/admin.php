@@ -87,6 +87,7 @@ return [
     'discount' => 'Discount',
     'receive_amount' => 'Amount Receive',
     'gender' => 'Gender',
+    'designation' => 'Designation',
     'male' => 'Male',
     'female' => 'Female',
     'salary' => 'Salary',

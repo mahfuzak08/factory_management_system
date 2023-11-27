@@ -87,6 +87,7 @@ return [
     'discount' => 'ছাড়',
     'receive_amount' => 'প্রাপ্তির পরিমাণ',
     'gender' => 'লিঙ্গ',
+    'designation' => 'পদবীর নাম',
     'male' => 'পুরুষ',
     'female' => 'মহিলা',
     'salary' => 'বেতন',
