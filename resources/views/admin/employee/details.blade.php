@@ -64,6 +64,7 @@
                                   </div>
                                 </div>
                                 <div class="col-md-6 d-none d-md-block" id="addForm">
+                                  @if(hasModuleAccess('Employee_Transection_Add'))
                                   <form class="forms-sample" method="POST" action="{{ route('save-employee-amount') }}">
                                     @csrf
                                     <input type="hidden" name="ref_id" value="{{$employee->id}}" />
@@ -100,6 +101,7 @@
                                     </div>
                                     <button type="submit" class="btn btn-primary me-2 float-end">{{ __('admin.save_now') }}</button>
                                   </form>
+                                  @endif
                                 </div>
                                 <div class="col-md-6 d-block d-md-none text-center">
                                   <br />

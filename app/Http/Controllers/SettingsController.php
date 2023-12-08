@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Role;
 
 class SettingsController extends Controller
 {
@@ -43,9 +44,9 @@ class SettingsController extends Controller
                                 ->orWhere('email', 'like', '%'.$str.'%')
                                 ->orWhere('role', 'like', '%'.$str.'%');
                             })
-                            ->latest()->paginate(10);
+                            ->latest()->paginate(10)->withQueryString();
         }else{
-            $datas = User::latest()->paginate(10);
+            $datas = User::latest()->paginate(10)->withQueryString();
         }
         return view('admin.settings.users', compact('datas'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
@@ -57,11 +58,13 @@ class SettingsController extends Controller
     
     public function edit_user($id){
         $user = User::findOrFail($id);
-        return view('admin.settings.user-edit', compact('user'));
+        $role = Role::get(['id', 'name']);
+        return view('admin.settings.user-edit', compact('user', 'role'));
     }
     
     public function open_user_form(){
-        return view('admin.settings.user-addnew');
+        $role = Role::get(['id', 'name']);
+        return view('admin.settings.user-addnew', compact('role'));
     }
     
     public function update_user(Request $request, $id){
@@ -69,7 +72,7 @@ class SettingsController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'mobile' => ['required', 'digits:13'],
             'email' => ['email', 'nullable'],
-            'role' => ['required']
+            'role_id' => ['required']
         ];
         $validator = Validator::make($request->all(), $rules);
 
@@ -96,6 +99,43 @@ class SettingsController extends Controller
             DB::rollback();
         }
         return redirect('user_manage');
+    }
+
+    public function role_manage(){
+        $role = Role::all();
+        return view('admin.settings.role', compact('role'));
+    }
+
+    public function open_role_form(){
+        return view('admin.settings.role-addnew');
+    }
+
+    public function set_role(Request $request){
+        $rules = [
+            'name' => ['required', 'string', 'max:255']
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            foreach ($validator->messages()->toArray() as $key => $value) { 
+                flash()->addError($value[0]);
+            }
+            return redirect('role_manage');
+        }
+        if(! empty($request->input('id'))){
+            $db = Role::findOrFail($request->input('id'));
+        }else{
+            $db = new Role();
+        }
+        $module = implode(',', $request->input('module'));
+        $db->fill(["name"=>$request->input("name"), "module"=>json_encode($module)])->save();
+        flash()->addSuccess('Role Added/ Update Successfully.');
+        return redirect('role_manage');
+    }
+
+    public function edit_role($id){
+        $role = Role::findOrFail($id);
+        return view('admin.settings.role-edit', compact('role'));
     }
 
 }

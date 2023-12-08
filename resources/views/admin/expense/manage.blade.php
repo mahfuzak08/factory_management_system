@@ -12,11 +12,13 @@
             <div class="content-wrapper">
                 <div class="page-header">
                   <h3 class="page-title">{{__('admin.expense')}}</h3>
+                  @if(hasModuleAccess('Expense_Add'))
                   <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{route('add-new-expense')}}" class="btn btn-rounded btn-sm btn-success">{{__('admin.add_new')}}</a></li>
                     </ol>
                   </nav>
+                  @endif
                 </div>
                 <div class="row">
                     <div class="col-12 grid-margin stretch-card">
@@ -55,8 +57,12 @@
                                             <td>{{$row->name}}</td>
                                             <td>
                                               <a href="{{route('expense-details', $row->id)}}" class="btn btn-info btn-rounded btn-sm">{{__('admin.details')}}</a> 
+                                              @if(hasModuleAccess('Expense_Edit'))
                                               <a href="{{route('edit-expense', $row->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
+                                              @endif
+                                              @if(hasModuleAccess('Expense_Delete'))
                                               <a href="{{route('delete-expense', $row->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a> 
+                                              @endif
                                             </td>
                                           </tr>
                                         @endforeach

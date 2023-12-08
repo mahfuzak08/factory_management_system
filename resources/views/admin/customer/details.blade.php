@@ -58,7 +58,7 @@
                                   </div>
                                 </div>
                                 <div class="col-md-6 d-none d-md-block" id="addForm">
-                                  @if($customer[0]->due != 0)
+                                  @if($customer[0]->due != 0 && hasModuleAccess('Customer_Transection_Add'))
                                   <form class="forms-sample" method="POST" action="{{ route('save-customer-amount') }}">
                                     @csrf
                                     <input type="hidden" name="ref_id" value="{{$customer[0]->id}}" />
@@ -160,8 +160,12 @@
                                             <td class="text-right">{{number_format($row->amount, 2)}}</td>
                                             <td>
                                               @if($row->ref_tranx_type != 'sales_order')
-                                              <a href="{{route('customer-trnx-edit', $row->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
-                                              <a href="{{route('customer-trnx-delete', $row->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a>
+                                                @if(hasModuleAccess('Customer_Transection_Edit'))
+                                                  <a href="{{route('customer-trnx-edit', $row->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
+                                                @endif
+                                                @if(hasModuleAccess('Customer_Transection_Delete'))
+                                                  <a href="{{route('customer-trnx-delete', $row->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a>
+                                                @endif
                                               @endif
                                             </td>
                                           </tr>

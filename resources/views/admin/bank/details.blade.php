@@ -64,52 +64,54 @@
                                   </div>
                                 </div>
                                 <div class="col-md-6 d-none d-md-block" id="addForm">
-                                  <form class="forms-sample" method="POST" action="{{ route('save-amount') }}">
-                                    @csrf
-                                    <input type="hidden" name="account_id" value="{{$bank->id}}" />
-                                    <div class="form-group form-group-margin-bottom-off row">
-                                      <label for="input6" class="col-sm-3 col-form-label">{{__('admin.date')}}</label>
-                                      <div class="col-sm-9">
-                                        <input type="date" name="tranx_date" class="form-control" id="input6" value="{{date('Y-m-d')}}">
-                                      </div>
-                                    </div>
-                                    <div class="form-group form-group-margin-bottom-off row">
-                                      <label for="input7" class="col-sm-3 col-form-label">{{__('admin.account_name')}}</label>
-                                      <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="name" value="{{ $bank->name }}" disabled="true" id="input7">
-                                      </div>
-                                    </div>
-                                    <div class="form-group form-group-margin-bottom-off row">
-                                      <label for="input8" class="col-sm-3 col-form-label">{{__('admin.tranx_type')}}</label>
-                                      <div class="col-sm-9">
-                                        <div class="col-sm-6">
-                                          <div class="form-check">
-                                            <label class="form-check-label">
-                                              <input type="radio" class="form-check-input" name="type" id="exampleInputName51" value="deposit" checked="true"> {{__('admin.deposit')}} <i class="input-helper"></i></label>
-                                          </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                          <div class="form-check">
-                                            <label class="form-check-label">
-                                              <input type="radio" class="form-check-input" name="type" id="exampleInputName52" value="withdrawal"> {{__('admin.withdrawal')}} <i class="input-helper"></i></label>
-                                          </div>
+                                  @if(hasModuleAccess('Accounts_Transection_Add'))
+                                    <form class="forms-sample" method="POST" action="{{ route('save-amount') }}">
+                                      @csrf
+                                      <input type="hidden" name="account_id" value="{{$bank->id}}" />
+                                      <div class="form-group form-group-margin-bottom-off row">
+                                        <label for="input6" class="col-sm-3 col-form-label">{{__('admin.date')}}</label>
+                                        <div class="col-sm-9">
+                                          <input type="date" name="tranx_date" class="form-control" id="input6" value="{{date('Y-m-d')}}">
                                         </div>
                                       </div>
-                                    </div>
-                                    <div class="form-group form-group-margin-bottom-off row">
-                                      <label for="input9" class="col-sm-3 col-form-label">{{__('admin.enter_your_amount')}}</label>
-                                      <div class="col-sm-9">
-                                        <input type="number" class="form-control" name="amount" value="" placeholder="{{__('admin.enter_your_amount')}}">
+                                      <div class="form-group form-group-margin-bottom-off row">
+                                        <label for="input7" class="col-sm-3 col-form-label">{{__('admin.account_name')}}</label>
+                                        <div class="col-sm-9">
+                                          <input type="text" class="form-control" name="name" value="{{ $bank->name }}" disabled="true" id="input7">
+                                        </div>
                                       </div>
-                                    </div>
-                                    <div class="form-group form-group-margin-bottom-off row">
-                                      <label for="input9" class="col-sm-3 col-form-label">{{__('admin.details')}}</label>
-                                      <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="note" value="" placeholder="{{__('admin.details')}}">
+                                      <div class="form-group form-group-margin-bottom-off row">
+                                        <label for="input8" class="col-sm-3 col-form-label">{{__('admin.tranx_type')}}</label>
+                                        <div class="col-sm-9">
+                                          <div class="col-sm-6">
+                                            <div class="form-check">
+                                              <label class="form-check-label">
+                                                <input type="radio" class="form-check-input" name="type" id="exampleInputName51" value="deposit" checked="true"> {{__('admin.deposit')}} <i class="input-helper"></i></label>
+                                            </div>
+                                          </div>
+                                          <div class="col-sm-6">
+                                            <div class="form-check">
+                                              <label class="form-check-label">
+                                                <input type="radio" class="form-check-input" name="type" id="exampleInputName52" value="withdrawal"> {{__('admin.withdrawal')}} <i class="input-helper"></i></label>
+                                            </div>
+                                          </div>
+                                        </div>
                                       </div>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary me-2 float-end">{{ __('admin.save_now') }}</button>
-                                  </form>
+                                      <div class="form-group form-group-margin-bottom-off row">
+                                        <label for="input9" class="col-sm-3 col-form-label">{{__('admin.enter_your_amount')}}</label>
+                                        <div class="col-sm-9">
+                                          <input type="number" class="form-control" name="amount" value="" placeholder="{{__('admin.enter_your_amount')}}">
+                                        </div>
+                                      </div>
+                                      <div class="form-group form-group-margin-bottom-off row">
+                                        <label for="input9" class="col-sm-3 col-form-label">{{__('admin.details')}}</label>
+                                        <div class="col-sm-9">
+                                          <input type="text" class="form-control" name="note" value="" placeholder="{{__('admin.details')}}">
+                                        </div>
+                                      </div>
+                                      <button type="submit" class="btn btn-primary me-2 float-end">{{ __('admin.save_now') }}</button>
+                                    </form>
+                                  @endif
                                 </div>
                                 <div class="col-md-6 d-block d-md-none text-center">
                                   <br />

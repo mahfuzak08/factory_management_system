@@ -25,7 +25,9 @@ return [
     'select_your_language' => 'Select Your Language',
     'default_language' => 'Default Language',
     'user_management' => 'User Management',
+    'role' => 'Role',
     'role_management' => 'Role Management',
+    'module_list' => 'Module List',
     'activity' => 'Activity Log',
     'today_total' => 'Today Total',
     'profile' => 'Profile',
@@ -120,4 +122,6 @@ return [
     'do_you_want_to_send_sms' => 'Do you want to send sms',
     'yes' => 'Yes',
     'no' => 'No',
+    'Sorry' => 'SORRY',
+    'not_allowed' => 'You are not allowed to access this page',
 ];

@@ -189,8 +189,12 @@
                                             <td>{{number_format($row->due, 2)}}</td>
                                             <td>
                                               <a href="{{route('customer-details', $row->id)}}" class="btn btn-info btn-rounded btn-sm">{{__('admin.details')}}</a> 
+                                              @if(hasModuleAccess('Customer_Edit'))
                                               <a href="{{route('edit-customer', $row->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
+                                              @endif
+                                              @if(hasModuleAccess('Customer_Delete'))
                                               <a href="{{route('delete-customer', $row->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a> 
+                                              @endif
                                             </td>
                                           </tr>
                                         @endforeach

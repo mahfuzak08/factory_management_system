@@ -22,6 +22,7 @@
                     <div class="col-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
+                              @if(hasModuleAccess('Expense_Transection_Add'))
                               <div class="row">
                                 <div class="col-md-6 d-none d-md-block" id="addForm">
                                   <form class="forms-sample" method="POST" action="{{ route('save-expense-amount') }}">
@@ -95,6 +96,7 @@
                               </div>
                               <br />
                               <hr />
+                              @endif
                               <div class="row table-responsive">
                                 <table class="table table-striped">
                                     <thead>
@@ -132,8 +134,12 @@
                                             </td>
                                             <td class="text-right">{{number_format($row->amount, 2)}}</td>
                                             <td>
+                                              @if(hasModuleAccess('Expense_Transection_Edit'))
                                               <a href="{{route('expense-trnx-edit', $row->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
+                                              @endif
+                                              @if(hasModuleAccess('Expense_Transection_Delete'))
                                               <a href="{{route('expense-trnx-delete', $row->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a>
+                                              @endif
                                             </td>
                                           </tr>
                                           @php

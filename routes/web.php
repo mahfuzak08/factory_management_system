@@ -121,5 +121,7 @@ Route::middleware([
     Route::get('/role_manage', [SettingsController::class, 'role_manage'])->name('role-manage');
     Route::get('/add_new_role', [SettingsController::class, 'open_role_form'])->name('add-new-role');
     Route::post('/save_role', [SettingsController::class, 'set_role'])->name('save-role');
+    Route::get('/edit_role/{id}', [SettingsController::class, 'edit_role'])->name('edit-role');
+    Route::post('/delete_role/{id}', [SettingsController::class, 'delete_role'])->name('delete-role');
 
 });

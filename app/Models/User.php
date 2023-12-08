@@ -31,7 +31,7 @@ class User extends Authenticatable
         'email',
         'mobile',
         'address',
-        'role',
+        'role_id',
         'password',
         'lang',
     ];
@@ -74,5 +74,10 @@ class User extends Authenticatable
     public function logNameToUse(): string
     {
         return 'auth'; // You can customize the log name here
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
     }
 }

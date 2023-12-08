@@ -60,9 +60,11 @@
                                               <td>{{$row['gender']}}</td>
                                             </tr>
                                           @endforeach
+                                          @if(hasModuleAccess('Employee_Attendance'))
                                           <tr>
                                             <td colspan="4"><button type="submit" class="btn btn-successbtn btn-rounded btn-primary btn-sm me-2" name="save">{{isset($_GET['oldDate']) ? __('admin.update') : __('admin.save_now')}}</button>
                                           </tr>
+                                          @endif
                                         @else
                                             <tr>
                                               <td colspan="4" class="text-center">{{__('admin.no_data_found')}}</td>

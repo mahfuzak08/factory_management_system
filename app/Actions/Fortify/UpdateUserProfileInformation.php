@@ -36,7 +36,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 'email' => $input['email'],
                 'mobile' => empty($input['mobile']) ? $user->mobile : $input['mobile'],
                 'address' => empty($input['address']) ? $user->address : $input['address'],
-                'role' => empty($input['role']) ? $user->role : $input['role'],
+                'role_id' => empty($input['role']) ? $user->role_id : $input['role'],
             ])->save();
         }
     }

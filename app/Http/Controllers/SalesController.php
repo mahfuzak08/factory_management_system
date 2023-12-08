@@ -14,6 +14,8 @@ use App\Models\Customer;
 class SalesController extends Controller
 {
     public function index(){
+        if(! hasModuleAccess("Sales"))
+            return view('error403');
         $account = Bankacc::all();
         $customer = Customer::where('is_delete', 0)->get();
 

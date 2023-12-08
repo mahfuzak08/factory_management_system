@@ -41,8 +41,13 @@
                                         <input type="text" class="form-control" id="exampleInputName6" name="email" placeholder="{{ __('admin.email') }}">
                                     </div>
                                     <div class="form-group">
-                                        <label for="exampleInputName7">{{ __('admin.role') }}</label>
-                                        <input type="text" class="form-control" id="exampleInputName7" name="role" placeholder="{{ __('admin.role') }}">
+                                        <label>{{ __('admin.role') }}</label>
+                                        <select name="role" style="width: 100%;">
+                                          <option>Select Role</option>
+                                          @foreach($role as $r)
+                                            <option value={{$r->id}}>{{$r->name}}</option>
+                                          @endforeach
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputName8">{{ __('admin.address') }}</label>

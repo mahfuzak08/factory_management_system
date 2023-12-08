@@ -109,8 +109,12 @@
                                             </td>
                                             <td>{{$row->title}} {{$row->details}}</td>
                                             <td>
+                                              @if(hasModuleAccess('Expense_Transection_Edit'))
                                               <a href="{{route('expense-trnx-edit', $row->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
+                                              @endif
+                                              @if(hasModuleAccess('Expense_Transection_Delete'))
                                               <a href="{{route('expense-trnx-delete', $row->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a>
+                                              @endif
                                             </td>
                                           </tr>
                                         @endforeach

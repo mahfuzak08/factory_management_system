@@ -14,6 +14,8 @@ use App\Models\Vendor;
 class PurchaseController extends Controller
 {
     public function index(){
+        if(! hasModuleAccess("Purchase"))
+            return view('error403');
         $account = Bankacc::all();
         $vendor = Vendor::where('is_delete', 0)->get();
         if(! empty(request()->input('search'))){

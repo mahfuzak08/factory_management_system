@@ -40,7 +40,13 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputName7">{{ __('admin.role') }}</label>
-                                        <input type="text" class="form-control" id="exampleInputName7" name="role" value="{{$user->role}}" placeholder="{{ __('admin.role') }}">
+                                        {{-- <input type="text" class="form-control" id="exampleInputName7" name="role" value="{{$user->role->id}}" placeholder="{{ __('admin.role') }}"> --}}
+                                        <select name="role_id" style="width: 100%;">
+                                          <option>Select Role</option>
+                                          @foreach($role as $r)
+                                            <option value={{$r->id}} {{$user->role->id === $r->id ? 'selected="selected"' : ''}}>{{$r->name}}</option>
+                                          @endforeach
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputName7">{{ __('admin.address') }}</label>

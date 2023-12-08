@@ -12,11 +12,13 @@
             <div class="content-wrapper">
                 <div class="page-header">
                   <h3 class="page-title"> {{__('admin.accounts')}} </h3>
+                  @if(hasModuleAccess('Accounts_Add'))
                   <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                       <li class="breadcrumb-item"><a href="{{route('add-new-account')}}" class="btn btn-rounded btn-sm btn-success">{{__('admin.add_new')}}</a></li>
                     </ol>
                   </nav>
+                  @endif
                 </div>
                 <div class="row">
                     <div class="col-lg-12 grid-margin stretch-card">
@@ -47,9 +49,13 @@
                                     <td> {{$bank->currency}} </td>
                                     <td>
                                       @if($bank->type != 'Due')
-                                      <a href="{{route('account-details', $bank->id)}}" class="btn btn-info btn-rounded btn-sm">{{__('admin.details')}}</a> 
-                                      <a href="{{route('edit-account', $bank->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
-                                      <a href="{{route('delete-account', $bank->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a> 
+                                      <a href="{{route('account-details', $bank->id)}}" class="btn btn-info btn-rounded btn-sm">{{__('admin.details')}}</a>
+                                        @if(hasModuleAccess('Accounts_Edit')) 
+                                          <a href="{{route('edit-account', $bank->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
+                                        @endif
+                                        @if(hasModuleAccess('Accounts_Delete'))
+                                          <a href="{{route('delete-account', $bank->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a> 
+                                        @endif
                                       @endif
                                     </td>
                                   </tr>

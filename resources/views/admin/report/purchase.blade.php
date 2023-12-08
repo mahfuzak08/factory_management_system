@@ -171,8 +171,12 @@
                                             </td>
                                             <td>
                                               @if($row->status == '1')
-                                              <a href="{{route('purchase-trnx-edit', $row->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
-                                              <a href="{{route('purchase-trnx-delete', $row->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a>
+                                                @if(hasModuleAccess('Purchase_Edit'))
+                                                  <a href="{{route('purchase-trnx-edit', $row->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
+                                                @endif
+                                                @if(hasModuleAccess('Purchase_Delete'))
+                                                  <a href="{{route('purchase-trnx-delete', $row->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a>
+                                                @endif
                                               @endif
                                             </td>
                                             <td class="note">{{$row->note}}</td>

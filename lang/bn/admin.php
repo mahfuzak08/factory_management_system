@@ -25,7 +25,9 @@ return [
     'select_your_language' => 'আপনার ভাষা নির্বাচন করুন',
     'user_management' => 'ব্যবহারকারী ব্যবস্থাপনা',
     'default_language' => 'নির্ধারিত ভাষা',
+    'role' => 'ভূমিকা',
     'role_management' => 'ভূমিকা ব্যবস্থাপনা',
+    'module_list' => 'মডিউল তালিকা',
     'activity' => 'কার্য বিবরণ',
     'today_total' => 'আজ মোট',
     'profile' => 'প্রোফাইল',
@@ -120,4 +122,6 @@ return [
     'do_you_want_to_send_sms' => 'আপনি কি এসএমএস পাঠাতে চান?',
     'yes' => 'হ্যাঁ',
     'no' => 'না',
+    'Sorry' => 'দুঃখিত',
+    'not_allowed' => 'আপনার এই পৃষ্ঠায় অ্যাক্সেস করার অনুমতি নেই',
 ];

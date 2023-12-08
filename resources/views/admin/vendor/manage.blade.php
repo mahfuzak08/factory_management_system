@@ -12,11 +12,13 @@
             <div class="content-wrapper">
                 <div class="page-header">
                   <h3 class="page-title">{{__('admin.vendor')}}</h3>
+                  @if(hasModuleAccess('Vendor_Add'))
                   <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{route('add-new-vendor')}}" class="btn btn-rounded btn-sm btn-success">{{__('admin.add_new')}}</a></li>
                     </ol>
                   </nav>
+                  @endif
                 </div>
                 <div class="row">
                     <div class="col-12 grid-margin stretch-card">
@@ -61,8 +63,12 @@
                                             <td>{{number_format($row->due, 2)}}</td>
                                             <td>
                                               <a href="{{route('vendor-details', $row->id)}}" class="btn btn-info btn-rounded btn-sm">{{__('admin.details')}}</a> 
-                                              <a href="{{route('edit-vendor', $row->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
-                                              <a href="{{route('delete-vendor', $row->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a> 
+                                              @if(hasModuleAccess('Vendor_Edit'))
+                                                <a href="{{route('edit-vendor', $row->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
+                                              @endif
+                                              @if(hasModuleAccess('Vendor_Delete'))
+                                                <a href="{{route('delete-vendor', $row->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a> 
+                                              @endif
                                             </td>
                                           </tr>
                                         @endforeach
