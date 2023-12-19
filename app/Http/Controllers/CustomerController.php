@@ -151,6 +151,7 @@ class CustomerController extends Controller
         $customer = Customer::where('id', $id)
                             ->select('customers.*')
                             ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND ref_tranx_id = "0"), 0)) as due'))
+                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer"), 0)) as total_pay'))
                             ->get();
         $banks = Bankacc::where('type', '!=', 'Due')->get();
         if(! empty(request()->input('search'))){
