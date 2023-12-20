@@ -141,7 +141,8 @@ class EmployeeController extends Controller
                     ->latest()->paginate(10)->withQueryString();
         }
         $total_receive = AccountTranx::where('ref_id', $id)->where('ref_type', 'employee')->sum('amount');
-        return view('admin.employee.details', compact('employee', 'banks', 'datas', 'total_receive'))->with('i', (request()->input('page', 1) - 1) * 10);
+        $yearly_attendance = Attendance::where('emp_id', $id)->where('hours', 8)->count();
+        return view('admin.employee.details', compact('employee', 'banks', 'datas', 'total_receive', 'yearly_attendance'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
     public function add_amount(Request $request){
@@ -162,20 +163,33 @@ class EmployeeController extends Controller
 
         DB::beginTransaction();
         try{
-            $data = new AccountTranx();
-            
-            $input = $request->all();
-            $input['amount'] *= -1;
-            $input['user_id'] = Auth::id();
-            
-            $data->fill($input)->save();
+            if(!empty($request->input('id'))){
+                $data = AccountTranx::where('id', $request->input('id'))
+                                    ->where('ref_id', $request->input('ref_id'))
+                                    ->where('ref_type', $request->input('ref_type'))
+                                    ->get();
+
+                $input = $request->all();
+                $input['amount'] *= -1;
+                $input['note'] = $input['note'] . ' (Edited by ' . Auth::user()->name . ' and Old amount was ' . $data[0]->amount*-1;
+                $data[0]->fill($input)->save();
+                flash()->addSuccess('Data Update Successfully.');
+            }else{
+                $data = new AccountTranx();
+                
+                $input = $request->all();
+                $input['amount'] *= -1;
+                $input['user_id'] = Auth::id();
+                $data->fill($input)->save();
+                flash()->addSuccess('New Data Added Successfully.');
+            }
     
-            flash()->addSuccess('New Data Added Successfully.');
             // If all queries succeed, commit the transaction
             DB::commit();
         }catch (\Exception $e) {
+            dd($e);
             // If any query fails, catch the exception and roll back the transaction
-            flash()->addError('Data Not Added Successfully.');
+            flash()->addError('Data Not Added or Update Successfully.');
             DB::rollback();
         }
         return redirect($request->input('redirect_url'));
@@ -255,6 +269,34 @@ class EmployeeController extends Controller
         }
         // dd($employee);
         return view('admin.employee.attendance-report', compact('employee', 'monthYear', 'totalDays', 'inputYearMonth'));
+    }
+
+    public function employee_trnx_edit($id){
+        $order = AccountTranx::join('bankaccs', 'account_tranxes.account_id', '=', 'bankaccs.id')
+                            ->join('employees', 'account_tranxes.ref_id', '=', 'employees.id')
+                            ->where('account_tranxes.id', $id)
+                            ->where('ref_type', 'employee')
+                            ->select('account_tranxes.*', 'employees.name as employee_name', 'bankaccs.name as bank_name')
+                            ->get();
+        $account = Bankacc::all();
+        
+        return view('admin.employee.register_edit', compact('order', 'account'));
+    }
+    
+    public function employee_trnx_delete($id){
+        try{
+            DB::beginTransaction();
+            AccountTranx::where('id', $id)->delete();
+            flash()->addSuccess('Employee Transection Deleted Successfully.');
+            DB::commit();
+        }catch (\Exception $e) {
+            dd($e);
+            flash()->addError('Employee Transection Unable To Delete');
+            DB::rollback();
+            return redirect('employee');
+        }
+        
+        return redirect("employee");
     }
 
 }

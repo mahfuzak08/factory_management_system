@@ -126,4 +126,5 @@ return [
     'not_allowed' => 'You are not allowed to access this page',
     'total_due' => 'Total Due',
     'total_payment' => 'Total Payment',
+    'yearly_attendance' => 'Yearly Attendance',
 ];
