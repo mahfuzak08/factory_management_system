@@ -184,6 +184,14 @@
                                                 </div>
                                                 <div class="form-check submodule">
                                                     <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input" name="module[]" value="Employee_Transection_Edit"> {{__('Employee Transection Edit')}} <i class="input-helper"></i></label>
+                                                </div>
+                                                <div class="form-check submodule">
+                                                    <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input" name="module[]" value="Employee_Transection_Delete"> {{__('Employee Transection Delete')}} <i class="input-helper"></i></label>
+                                                </div>
+                                                <div class="form-check submodule">
+                                                    <label class="form-check-label">
                                                     <input type="checkbox" class="form-check-input" name="module[]" value="Employee_Attendance"> {{__('Employee Attendance')}} <i class="input-helper"></i></label>
                                                 </div>
                                                 <div class="form-check submodule">
