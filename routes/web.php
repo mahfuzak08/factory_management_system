@@ -79,6 +79,8 @@ Route::middleware([
     Route::get('/attendance', [EmployeeController::class, 'attendance'])->name('attendance');
     Route::post('/save_attendance', [EmployeeController::class, 'save_attendance'])->name('save-attendance');
     Route::get('/emp_report', [EmployeeController::class, 'attendance_report'])->name('emp-report');
+    Route::get('/employee_trnx_edit/{id}', [EmployeeController::class, 'employee_trnx_edit'])->name('employee-trnx-edit');
+    Route::get('/employee_trnx_delete/{id}', [EmployeeController::class, 'employee_trnx_delete'])->name('employee-trnx-delete');
 
     Route::get('/expense', [ExpenseController::class, 'index'])->name('expense');
     Route::get('/add_new_expense', [ExpenseController::class, 'open_expense_form'])->name('add-new-expense');
