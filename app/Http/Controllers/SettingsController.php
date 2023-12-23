@@ -149,6 +149,14 @@ class SettingsController extends Controller
      * SMS Management
      */
     public function sms(){
+        if(empty(request()->input('search')) && empty($_GET['page'])){
+            $smsClass = new SendSms();
+            $bal = $smsClass->getBalance();
+            session(['SMSbal'=> $bal]);
+        }
+        else{
+            $bal = session('SMSbal');
+        }
         if(! empty(request()->input('search'))){
             $str = request()->input('search');
             $sms = Sms_log::Where('contacts', 'like', '%'.$str.'%')
@@ -159,8 +167,6 @@ class SettingsController extends Controller
         else{
             $sms = Sms_log::select('id', 'msg', 'contacts', 'response')->latest()->paginate(10)->withQueryString();
         }
-        $smsClass = new SendSms();
-        $bal = $smsClass->getBalance();
         return view('admin.settings.sms', compact('sms', 'bal'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
 }
