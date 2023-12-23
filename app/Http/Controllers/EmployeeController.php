@@ -241,8 +241,7 @@ class EmployeeController extends Controller
     }
 
     private function getLastDayOfMonth($year, $month) {
-        $nextMonthFirstDay = date('Y-m-d', strtotime($year . '-' . ($month + 1) . '-01'));
-        $lastDayOfMonth = date('Y-m-d', strtotime('-1 day', strtotime($nextMonthFirstDay)));
+        $lastDayOfMonth = date('Y-m-d', strtotime($year . '-' . $month . '-' . date('t', strtotime($year . '-' . $month . '-01'))));
         return $lastDayOfMonth;
     }
     
@@ -250,6 +249,7 @@ class EmployeeController extends Controller
         $inputYearMonth = $request->input('month') ? $request->input('month') : date('Y-m');
         list($year, $month) = explode('-', $inputYearMonth);
         $lastDay = $this->getLastDayOfMonth($year, $month);
+        // dd($lastDay);
         list($year, $month, $totalDays) = explode('-', $lastDay);
         $firstDay = $year."-".$month."-01";
         $monthYear = date("F, Y", strtotime($year."-".$month."-01"));
