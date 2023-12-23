@@ -12,7 +12,7 @@ class SendSms extends Notification
     public function toSms($mobile, $body)
     {
         $url = config('services.bangladeshsms.domain');
-        // $encodedMessage = urlencode($body);
+        $url .= 'smsapi';
         $apiKey = config('services.bangladeshsms.api_key');
         $senderId = config('services.bangladeshsms.senderid');
 
@@ -43,6 +43,27 @@ class SendSms extends Notification
             $update = ["response"=>$response];
             $smslog->update($update);
 
+        }catch(\Exception $e) {
+            flash()->addError($e);
+        }
+    }
+    
+    public function getBalance()
+    {
+        $url = config('services.bangladeshsms.domain');
+        $apiKey = config('services.bangladeshsms.api_key');
+        $url = str_replace('smsapi', 'miscapi', $url);
+        $url = $url.'/'.$apiKey.'/getBalance';
+
+        try{            
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            $response = curl_exec($ch);
+            curl_close($ch);
+            $bal = (float) str_replace('Your Balance is:BDT ', '', $response);
+            return $bal + $bal * 0.25;
         }catch(\Exception $e) {
             flash()->addError($e);
         }

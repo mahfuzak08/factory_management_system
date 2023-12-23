@@ -127,4 +127,6 @@ return [
     'total_due' => 'Total Due',
     'total_payment' => 'Total Payment',
     'yearly_attendance' => 'Yearly Attendance',
+    'sms_manage' => 'SMS Management',
+    'status' => 'Status',
 ];

@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Sms_log;
+use App\Notifications\SendSms;
 
 class SettingsController extends Controller
 {
@@ -100,7 +102,11 @@ class SettingsController extends Controller
         }
         return redirect('user_manage');
     }
+    // End User Management
 
+    /**
+     * Role Management
+     */
     public function role_manage(){
         $role = Role::all();
         return view('admin.settings.role', compact('role'));
@@ -137,5 +143,24 @@ class SettingsController extends Controller
         $role = Role::findOrFail($id);
         return view('admin.settings.role-edit', compact('role'));
     }
+    // End Role Management
 
+    /**
+     * SMS Management
+     */
+    public function sms(){
+        if(! empty(request()->input('search'))){
+            $str = request()->input('search');
+            $sms = Sms_log::Where('contacts', 'like', '%'.$str.'%')
+                            ->orWhere('msg', 'like', '%'.$str.'%')
+                            ->select('id', 'msg', 'contacts', 'response')
+                            ->latest()->paginate(10)->withQueryString();
+        }
+        else{
+            $sms = Sms_log::select('id', 'msg', 'contacts', 'response')->latest()->paginate(10)->withQueryString();
+        }
+        $smsClass = new SendSms();
+        $bal = $smsClass->getBalance();
+        return view('admin.settings.sms', compact('sms', 'bal'))->with('i', (request()->input('page', 1) - 1) * 10);
+    }
 }
