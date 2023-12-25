@@ -28,6 +28,17 @@
                     <div class="col-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
+                              <form action="{{route('attendance')}}" method="GET">
+                                @csrf
+                                @php 
+                                $sv = isset($_GET['search']) ? $_GET['search'] : '';
+                                @endphp
+                                <div class="row">
+                                  <input type="text" name="search" class="col-12 col-md-10" value="{{$sv}}" placeholder="{{__('admin.what_you_want_to_find')}}">
+                                  <button type="submit" class="col-12 col-md-2 btn btn-info">{{__('admin.find')}}</button>
+                                </div>
+                              </form>
+                              <br>
                               <div class="row table-responsive">
                                 <table class="table table-striped">
                                     <thead>
@@ -37,7 +48,7 @@
                                             </th>
                                             <th> {{__('admin.name')}} </th>
                                             <th> {{__('admin.mobile')}} </th>
-                                            <th> {{__('admin.gender')}} </th>
+                                            <th> {{__('admin.designation')}} </th>
                                           </tr>
                                     </thead>
                                     <tbody>
@@ -57,7 +68,7 @@
                                               </td>
                                               <td>{{$row['name']}}</td>
                                               <td>{{$row['mobile']}}</td>
-                                              <td>{{$row['gender']}}</td>
+                                              <td>{{$row['designation']}}</td>
                                             </tr>
                                           @endforeach
                                           @if(hasModuleAccess('Employee_Attendance'))

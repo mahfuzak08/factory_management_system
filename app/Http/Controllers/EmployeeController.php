@@ -198,7 +198,16 @@ class EmployeeController extends Controller
 
     public function attendance(Request $request){
         $d = $request->input('oldDate') ? $request->input('oldDate') : date('Y-m-d');
-        $employee = Employee::all()->toArray();
+        if(! empty(request()->input('search'))){
+            $str = request()->input('search');
+            $employee = Employee::Where('name', 'like', '%'.$str.'%')
+                            ->orWhere('mobile', 'like', '%'.$str.'%')
+                            ->orWhere('designation', 'like', '%'.$str.'%')
+                            ->orderBy('name', 'ASC')->get();
+        }else{
+            $employee = Employee::all()->toArray();
+        }
+        
         $attendance = Attendance::where('date', $d)->where('hours', 8)->pluck('emp_id')->toArray();
         for($i=0; $i<count($employee); $i++){
             $employee[$i]['attendance'] = 'no';
