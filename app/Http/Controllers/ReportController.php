@@ -177,6 +177,21 @@ class ReportController extends Controller
                                     }
                                 })
                                 ->paginate(10)->withQueryString();
+
+            if(! $datas->hasMorePages()){
+                $etotal = Expense_detail::where(function ($q) use ($sd, $ed, $expenseType) {
+                                            if(! empty($sd) && ! empty($ed)){
+                                                $q->where('trnx_date', '>=', $sd)
+                                                    ->where('trnx_date', '<=', $ed);
+                                            }
+                                            if ($expenseType != 'all') {
+                                                $q->where('expense_id', $expenseType);
+                                            }
+                                        })->sum('amount');
+            }
+            else{
+                $etotal = 0;
+            }
         }else{
             $datas = Expense_detail::join("expenses", "expense_details.expense_id", "=", "expenses.id")
                                 ->join("bankaccs", "expense_details.account_id", "=", "bankaccs.id")
@@ -184,9 +199,18 @@ class ReportController extends Controller
                                 ->where('trnx_date', '>=', date('Y-m-d'))
                                 ->where('trnx_date', '<=', date('Y-m-d'))
                                 ->paginate(10)->withQueryString();
+
+            if(! $datas->hasMorePages()){
+                $etotal = Expense_detail::where('trnx_date', '>=', date('Y-m-d'))
+                                        ->where('trnx_date', '<=', date('Y-m-d'))
+                                        ->sum('amount');
+            }
+            else{
+                $etotal = 0;
+            }
         }
         $expense = Expense::all();
 
-        return view('admin.report.expense', compact('datas', 'expense'))->with('i', (request()->input('page', 1) - 1) * 10);
+        return view('admin.report.expense', compact('datas', 'expense', 'etotal'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
 }

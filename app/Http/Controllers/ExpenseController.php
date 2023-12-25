@@ -127,7 +127,13 @@ class ExpenseController extends Controller
                     ->select('expense_details.*', 'bankaccs.name as bank_name')
                     ->latest()->paginate(10)->withQueryString();
         }
-        return view('admin.expense.details', compact('expense', 'banks', 'datas'))->with('i', (request()->input('page', 1) - 1) * 10);
+        if(! $datas->hasMorePages()){
+            $etotal = Expense_detail::where('expense_id', $id)->where('status', 1)->sum('amount');
+        }
+        else{
+            $etotal = 0;
+        }
+        return view('admin.expense.details', compact('expense', 'etotal', 'banks', 'datas'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
     public function add_expense_amount(Request $request){

@@ -155,10 +155,17 @@
                                     @if($total>0)
                                     <tfoot>
                                       <tr>
-                                        <td colspan="4">Total</td>
+                                        <td colspan="4">Page Total</td>
                                         <td class="text-right">{{number_format($total, 2)}}</td>
                                         <td></td>
                                       </tr>
+                                      @if($etotal > 0)
+                                      <tr>
+                                        <td colspan="4">Total</td>
+                                        <td class="text-right">{{number_format($etotal, 2)}}</td>
+                                        <td></td>
+                                      </tr>
+                                      @endif
                                     </tfoot>
                                     @endif
                                 </table>

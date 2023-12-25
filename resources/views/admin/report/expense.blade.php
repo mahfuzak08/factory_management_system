@@ -126,10 +126,17 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="5" class="text-right">Total: </td>
-                                            <td>{{$page_total}}</td>
+                                            <td colspan="5" class="text-right">Page Total: </td>
+                                            <td>{{number_format($page_total, 2)}}</td>
                                             <td></td>
                                         </tr>
+                                        @if($etotal > 0)
+                                        <tr>
+                                          <td colspan="5" class="text-right">Total</td>
+                                          <td>{{number_format($etotal, 2)}}</td>
+                                          <td></td>
+                                        </tr>
+                                        @endif
                                     </tfoot>
                                 </table>
                               </div>

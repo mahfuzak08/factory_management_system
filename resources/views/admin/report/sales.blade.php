@@ -196,7 +196,7 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="5" class="text-right">Total: </td>
+                                            <td colspan="5" class="text-right">Page Total: </td>
                                             <td>{{$page_qty_total}}</td>
                                             <td></td>
                                             <td>{{number_format($page_rcv_total, 2)}}</td>
