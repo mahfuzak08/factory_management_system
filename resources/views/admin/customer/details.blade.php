@@ -43,12 +43,12 @@
                                         <input type="text" class="form-control form-control-border-off" disabled="true" id="input3" value="{{$customer[0]->address}}">
                                       </div>
                                     </div>
-                                    <div class="form-group form-group-margin-bottom-off row">
+                                    {{-- <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input4" class="col-sm-3 col-form-label">{{__('admin.email')}}</label>
                                       <div class="col-sm-9">
                                         <input type="text" class="form-control form-control-border-off" disabled="true" id="input4" value="{{$customer[0]->email}}">
                                       </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input5" class="col-sm-3 col-form-label">{{__('admin.total_due')}}</label>
                                       <div class="col-sm-9">
@@ -59,6 +59,12 @@
                                       <label for="input5" class="col-sm-3 col-form-label">{{__('admin.total_payment')}}</label>
                                       <div class="col-sm-9">
                                         <input type="text" class="form-control form-control-border-off" disabled="true" id="input5" value="{{number_format($customer[0]->total_pay, 2)}}">
+                                      </div>
+                                    </div>
+                                    <div class="form-group form-group-margin-bottom-off row">
+                                      <label class="col-sm-3 col-form-label">{{__('admin.quantity')}}</label>
+                                      <div class="col-sm-9">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" value="{{number_format($quantity, 2)}}">
                                       </div>
                                     </div>
                                   </div>

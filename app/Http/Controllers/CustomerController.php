@@ -10,6 +10,7 @@ use App\Notifications\SendSms;
 use App\Models\AccountTranx;
 use App\Models\Bankacc;
 use App\Models\Customer;
+use App\Models\Sales;
 
 class CustomerController extends Controller
 {
@@ -153,6 +154,17 @@ class CustomerController extends Controller
                             ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND ref_tranx_id = "0"), 0)) as due'))
                             ->addSelect(DB::raw('(COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer"), 0)) as total_pay'))
                             ->get();
+        $cs = Sales::where('customer_id', $id)
+                    ->where('order_type', 'sales')
+                    ->get();
+        $quantity = 0;
+        for($i=0; $i<count($cs); $i++){
+            $q = json_decode($cs[$i]->products);
+            for($j=0; $j<count($q); $j++)
+                $quantity += $q[$j]->quantity;
+        }
+        // dd($quantity);
+
         $banks = Bankacc::where('type', '!=', 'Due')->get();
         if(! empty(request()->input('search'))){
             $str = request()->input('search');
@@ -174,7 +186,7 @@ class CustomerController extends Controller
                     ->select('account_tranxes.*', 'bankaccs.name as bank_name')
                     ->latest()->paginate(10)->withQueryString();
         }
-        return view('admin.customer.details', compact('customer', 'banks', 'datas'))->with('i', (request()->input('page', 1) - 1) * 10);
+        return view('admin.customer.details', compact('customer', 'quantity', 'banks', 'datas'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
     public function add_amount(Request $request){
