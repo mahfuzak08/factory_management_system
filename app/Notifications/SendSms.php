@@ -12,7 +12,6 @@ class SendSms extends Notification
     public function toSms($mobile, $body)
     {
         $url = config('services.bangladeshsms.domain');
-        $url .= 'smsapi';
         $apiKey = config('services.bangladeshsms.api_key');
         $senderId = config('services.bangladeshsms.senderid');
 
@@ -41,6 +40,7 @@ class SendSms extends Notification
             curl_close($ch);
             
             $update = ["response"=>$response];
+            // dd($update);
             $smslog->update($update);
 
         }catch(\Exception $e) {
