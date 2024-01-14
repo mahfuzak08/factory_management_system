@@ -221,10 +221,14 @@ class ReportController extends Controller
         $total['salary'] = 0;
         $total['pay'] = 0;
         $total['receive'] = 0;
+        $start_date = "";
+        $end_date = "";
 
         if(! empty(request()->input('start_date'))){
             $sd = request()->input('start_date');
             $ed = empty(request()->input('end_date')) ? date("Y-m-d") : request()->input('end_date');
+            $start_date = $sd;
+            $end_date = $ed;
             
             $total['expense'] = Expense_detail::join("expenses", "expense_details.expense_id", "=", "expenses.id")
                                 ->where('expense_details.trnx_date', '>=', $sd)
@@ -256,6 +260,6 @@ class ReportController extends Controller
                                     ->where('status', 1)
                                     ->sum('total');
         }
-        return view('admin.report.profitnloss', compact('total'));
+        return view('admin.report.profitnloss', compact('total', 'start_date', 'end_date'));
     }
 }
