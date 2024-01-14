@@ -44,6 +44,20 @@
                                 </div>
                               </form>
                               <div class="row table-responsive">
+                                <h3 style="font-size: 24px;">{{config('app.name')}}</h3>
+                                <h4 style="font-size: 20px;">{{__('admin.profit_and_loss')}}</h4>
+                                <h4 style="font-size: 16px;">
+                                  {{@$_GET['start_date']}} - 
+                                  @php
+                                  if($_GET['start_date']){
+                                    if(empty($_GET['end_date']))
+                                      $_GET['end_date'] = date('Y-m-d');
+                                    else
+                                      $_GET['end_date'] = $_GET['end_date'];
+                                  }
+                                  @endphp
+                                  {{@$_GET['end_date']}}
+                                </h4>
                                 @php
                                 $pnl = $total['sales'] - $total['purchase'] - ($total['salary']*-1);
                                 $te = $total['salary'] * -1;
