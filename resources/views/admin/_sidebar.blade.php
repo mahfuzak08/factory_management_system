@@ -96,6 +96,7 @@
           <li class="nav-item"> <a class="nav-link" href="{{route('sales-report')}}">{{__('admin.sales')}}</a></li>
           <li class="nav-item"> <a class="nav-link" href="{{route('purchase-report')}}">{{__('admin.purchase')}}</a></li>
           <li class="nav-item"> <a class="nav-link" href="{{route('expense-report')}}">{{__('admin.expense')}}</a></li>
+          <li class="nav-item"> <a class="nav-link" href="{{route('profit-and-loss')}}">{{__('admin.profit_and_loss')}}</a></li>
         </ul>
       </div>
     </li>

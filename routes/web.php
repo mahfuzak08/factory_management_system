@@ -106,6 +106,7 @@ Route::middleware([
     Route::get('/reportSales', [ReportController::class, 'sales'])->name('sales-report');
     Route::get('/reportPurchase', [ReportController::class, 'purchase'])->name('purchase-report');
     Route::get('/reportExpense', [ReportController::class, 'expense'])->name('expense-report');
+    Route::get('/reportProfitAndLoss', [ReportController::class, 'profit_and_loss'])->name('profit-and-loss');
     
 
     Route::get('/language', [SettingsController::class, 'language'])->name('language');

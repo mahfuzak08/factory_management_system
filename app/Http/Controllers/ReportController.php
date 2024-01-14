@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
-// use App\Models\AccountTranx;
+use App\Models\AccountTranx;
 use App\Models\Bankacc;
 use App\Models\Purchase;
 use App\Models\Vendor;
@@ -212,5 +212,50 @@ class ReportController extends Controller
         $expense = Expense::all();
 
         return view('admin.report.expense', compact('datas', 'expense', 'etotal'))->with('i', (request()->input('page', 1) - 1) * 10);
+    }
+    
+    public function profit_and_loss(Request $request){
+        $total['expense'] = []; 
+        $total['purchase'] = 0; 
+        $total['sales'] = 0;
+        $total['salary'] = 0;
+        $total['pay'] = 0;
+        $total['receive'] = 0;
+
+        if(! empty(request()->input('start_date'))){
+            $sd = request()->input('start_date');
+            $ed = empty(request()->input('end_date')) ? date("Y-m-d") : request()->input('end_date');
+            
+            $total['expense'] = Expense_detail::join("expenses", "expense_details.expense_id", "=", "expenses.id")
+                                ->where('expense_details.trnx_date', '>=', $sd)
+                                ->where('expense_details.trnx_date', '<=', $ed)
+                                ->where('expenses.status', '=', 1)
+                                ->groupBy('expense_details.expense_id', 'expenses.name')
+                                ->select('expense_details.expense_id', 'expenses.name as expense_name', \DB::raw('SUM(expense_details.amount) as total_amount'))
+                                ->get();
+            $total['salary'] = AccountTranx::where('tranx_date', '>=', $sd)
+                                    ->where('tranx_date', '<=', $ed)
+                                    ->where('ref_type', 'employee')
+                                    ->sum('amount');
+            $total['receive'] = AccountTranx::where('tranx_date', '>=', $sd)
+                                    ->where('tranx_date', '<=', $ed)
+                                    ->where('ref_type', 'customer')
+                                    ->sum('amount');
+            $total['pay'] = AccountTranx::where('tranx_date', '>=', $sd)
+                                    ->where('tranx_date', '<=', $ed)
+                                    ->where('ref_type', 'vendor')
+                                    ->sum('amount');
+            $total['sales'] = Sales::where('date', '>=', $sd)
+                                    ->where('date', '<=', $ed)
+                                    ->where('order_type', 'sales')
+                                    ->where('status', 1)
+                                    ->sum('total');
+            $total['purchase'] = Purchase::where('date', '>=', $sd)
+                                    ->where('date', '<=', $ed)
+                                    ->where('order_type', 'purchase')
+                                    ->where('status', 1)
+                                    ->sum('total');
+        }
+        return view('admin.report.profitnloss', compact('total'));
     }
 }
