@@ -117,7 +117,7 @@
                                   <tr style="border: 1px solid #000;">
                                     <td style="padding: 5px 10px;">{{__('admin.accounts_payable')}}</td>
                                     <td style="text-align: right; width: 200px;"></td>
-                                    <td style="text-align: right; width: 200px;padding: 5px 10px;">{{number_format($total['purchase'] - $total['pay'], 2)}}</td>
+                                    <td style="text-align: right; width: 200px;padding: 5px 10px;">{{number_format($total['purchase'] + $total['pay'], 2)}}</td>
                                   </tr>
                                   <tr style="border: 1px solid #000;">
                                     <td style="padding: 5px 10px;">{{__('admin.quantity')}}</td>
