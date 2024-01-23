@@ -132,7 +132,7 @@ return [
     'profit_and_loss' => 'Profit and Loss',
     'Particulars' => 'Particulars',
     'cost_of_goods_sold' => 'Cost of Goods Sold',
-    'balance_sheet_items' => 'Balance Sheet Items',
+    'balance_iheet_items' => 'Balance Sheet Items',
     'accounts_receivable' => 'Accounts Receivable',
     'accounts_payable' => 'Accounts Payable',
     'net_income' => 'Net Income',

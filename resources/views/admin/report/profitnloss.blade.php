@@ -112,7 +112,7 @@
                                   <tr style="border: 1px solid #000;">
                                     <td style="padding: 5px 10px;">{{__('admin.total_payment')}}</td>
                                     <td style="text-align: right; width: 200px;"></td>
-                                    <td style="text-align: right; width: 200px;">{{number_format($total['receive'], 2)}}</td>
+                                    <td style="text-align: right; width: 200px;padding: 5px 10px;">{{number_format($total['receive'], 2)}}</td>
                                   </tr>
                                   <tr style="border: 1px solid #000;">
                                     <td style="padding: 5px 10px;">{{__('admin.accounts_payable')}}</td>
@@ -122,7 +122,7 @@
                                   <tr style="border: 1px solid #000;">
                                     <td style="padding: 5px 10px;">{{__('admin.quantity')}}</td>
                                     <td style="text-align: right; width: 200px;"></td>
-                                    <td style="text-align: right; width: 200px;">{{$quantity}}</td>
+                                    <td style="text-align: right; width: 200px;padding: 5px 10px;">{{number_format($quantity, 2)}}</td>
                                   </tr>
                                 </table>
                               </div>
