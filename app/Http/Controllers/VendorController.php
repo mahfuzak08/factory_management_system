@@ -138,8 +138,20 @@ class VendorController extends Controller
     public function delete_vendor($id){
         $data = Vendor::findOrFail($id);
         $data->is_delete = 1;
-        $data->save();
-        flash()->addSuccess('Data Delete Successfully.');
+        DB::beginTransaction();
+        try{
+            $data->save();
+            
+            AccountTranx::where('ref_id', $id)->where('ref_type', 'vendor')->delete();
+
+            DB::commit();
+            // If all queries succeed, commit the transaction
+            flash()->addSuccess('Data Delete Successfully.');
+        }catch (\Exception $e) {
+            // If any query fails, catch the exception and roll back the transaction
+            flash()->addError('Data Not Delete Successfully.');
+            DB::rollback();
+        }
         return redirect('vendor');
     }
 
