@@ -50,6 +50,7 @@
                                 @php
                                 $pnl = $total['sales'] - $total['purchase'] - ($total['salary']*-1);
                                 $te = $total['salary'] * -1;
+                                $tbal = 0;
                                 @endphp
                                 <table style="border: 1px solid #000; width: 700px;">
                                   <tr style="border: 1px solid #000; background: #999; font-weight:700;">
@@ -112,6 +113,26 @@
                                     <td style="padding: 5px 10px;">{{__('admin.accounts_payable')}}</td>
                                     <td style="text-align: right; width: 200px;"></td>
                                     <td style="text-align: right; width: 200px;padding: 5px 10px;">{{number_format($total['purchase'] - $total['pay'], 2)}}</td>
+                                  </tr>
+                                  @foreach($total['accounts_bal'] as $ba)
+                                    @php
+                                    $tbal += $ba->bal;
+                                    @endphp
+                                    <tr style="border: 1px solid #000;">
+                                      <td style="padding-left: 30px">{{$ba->name}}</td>
+                                      <td style="text-align: right; width: 200px;padding: 5px 10px;">{{number_format($ba->bal, 2)}}</td>
+                                      <td style="text-align: right; width: 200px;"></td>
+                                    </tr>
+                                  @endforeach
+                                  <tr style="border: 1px solid #000;">
+                                    <td style="padding: 5px 10px;">{{__('admin.total_payment')}}</td>
+                                    <td style="text-align: right; width: 200px;"></td>
+                                    <td style="text-align: right; width: 200px;">{{number_format($tbal, 2)}}</td>
+                                  </tr>
+                                  <tr style="border: 1px solid #000;">
+                                    <td style="padding: 5px 10px;">{{__('admin.quantity')}}</td>
+                                    <td style="text-align: right; width: 200px;"></td>
+                                    <td style="text-align: right; width: 200px;">{{$quantity}}</td>
                                   </tr>
                                 </table>
                               </div>

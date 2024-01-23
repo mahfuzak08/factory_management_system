@@ -221,6 +221,7 @@ class ReportController extends Controller
         $total['salary'] = 0;
         $total['pay'] = 0;
         $total['receive'] = 0;
+        $total['accounts_bal'] = [];
         $start_date = "";
         $end_date = "";
 
@@ -254,12 +255,31 @@ class ReportController extends Controller
                                     ->where('order_type', 'sales')
                                     ->where('status', 1)
                                     ->sum('total');
+            $tq = Sales::where('date', '>=', $sd)
+                                    ->where('date', '<=', $ed)
+                                    ->where('order_type', 'sales')
+                                    ->where('status', 1)
+                                    ->select('products')
+                                    ->get();
+            $quantity = 0;
+            for($i=0; $i<count($tq); $i++){
+                $q = json_decode($tq[$i]->products);
+                for($j=0; $j<count($q); $j++)
+                    $quantity += $q[$j]->quantity;
+            }
             $total['purchase'] = Purchase::where('date', '>=', $sd)
                                     ->where('date', '<=', $ed)
                                     ->where('order_type', 'purchase')
                                     ->where('status', 1)
                                     ->sum('total');
+            $total['accounts_bal'] = AccountTranx::join("bankaccs", "account_tranxes.account_id", "=", "bankaccs.id")
+                                    ->where('account_tranxes.tranx_date', '>=', $sd)
+                                    ->where('account_tranxes.tranx_date', '<=', $ed)
+                                    ->groupBy('account_tranxes.account_id', 'bankaccs.name')
+                                    ->select('account_tranxes.account_id', 'bankaccs.name', \DB::raw('SUM(account_tranxes.amount) as bal'))
+                                    ->get();
+
         }
-        return view('admin.report.profitnloss', compact('total', 'start_date', 'end_date'));
+        return view('admin.report.profitnloss', compact('total', 'start_date', 'end_date', 'quantity'));
     }
 }
