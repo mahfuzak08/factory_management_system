@@ -222,6 +222,7 @@ class ReportController extends Controller
         $total['pay'] = 0;
         $total['receive'] = 0;
         $total['accounts_bal'] = [];
+        $quantity = 0;
         $start_date = "";
         $end_date = "";
 
