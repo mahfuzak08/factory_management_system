@@ -272,12 +272,12 @@ class ReportController extends Controller
                                     ->where('order_type', 'purchase')
                                     ->where('status', 1)
                                     ->sum('total');
-            $total['accounts_bal'] = AccountTranx::join("bankaccs", "account_tranxes.account_id", "=", "bankaccs.id")
-                                    ->where('account_tranxes.tranx_date', '>=', $sd)
-                                    ->where('account_tranxes.tranx_date', '<=', $ed)
-                                    ->groupBy('account_tranxes.account_id', 'bankaccs.name')
-                                    ->select('account_tranxes.account_id', 'bankaccs.name', \DB::raw('SUM(account_tranxes.amount) as bal'))
-                                    ->get();
+            // $total['accounts_bal'] = AccountTranx::join("bankaccs", "account_tranxes.account_id", "=", "bankaccs.id")
+            //                         ->where('account_tranxes.tranx_date', '>=', $sd)
+            //                         ->where('account_tranxes.tranx_date', '<=', $ed)
+            //                         ->groupBy('account_tranxes.account_id', 'bankaccs.name')
+            //                         ->select('account_tranxes.account_id', 'bankaccs.name', \DB::raw('SUM(account_tranxes.amount) as bal'))
+            //                         ->get();
 
         }
         return view('admin.report.profitnloss', compact('total', 'start_date', 'end_date', 'quantity'));
