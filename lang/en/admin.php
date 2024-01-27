@@ -126,6 +126,7 @@ return [
     'not_allowed' => 'You are not allowed to access this page',
     'total_due' => 'Total Due',
     'total_payment' => 'Total Payment',
+    'payment' => 'Payment Done',
     'yearly_attendance' => 'Yearly Attendance',
     'sms_manage' => 'SMS Management',
     'status' => 'Status',

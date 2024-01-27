@@ -64,13 +64,18 @@
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label class="col-sm-3 col-form-label">{{__('admin.quantity')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-border-off" disabled="true" value="{{number_format($quantity, 2)}}">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" value="{{number_format($quantity)}}">
                                       </div>
                                     </div>
+                                    @if($customer[0]->due == $customer[0]->total_pay)
+                                    <div class="form-group form-group-margin-bottom-off row">
+                                      <button class="btn btn-danger me-2 float-end">{{__('admin.payment')}}</button>
+                                    </div>
+                                    @endif
                                   </div>
                                 </div>
                                 <div class="col-md-6 d-none d-md-block" id="addForm">
-                                  @if($customer[0]->due != 0 && hasModuleAccess('Customer_Transection_Add'))
+                                  @if(hasModuleAccess('Customer_Transection_Add'))
                                   <form class="forms-sample" method="POST" action="{{ route('save-customer-amount') }}">
                                     @csrf
                                     <input type="hidden" name="ref_id" value="{{$customer[0]->id}}" />

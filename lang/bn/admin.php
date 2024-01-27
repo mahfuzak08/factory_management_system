@@ -126,6 +126,7 @@ return [
     'not_allowed' => 'আপনার এই পৃষ্ঠায় অ্যাক্সেস করার অনুমতি নেই',
     'total_due' => 'মোট বাকি',
     'total_payment' => 'মোট জমা',
+    'payment' => 'পরিশোধ',
     'yearly_attendance' => 'বার্ষিক উপস্থিতি',
     'sms_manage' => 'এসএমএস ব্যবস্থাপনা',
     'status' => 'অবস্থা',
