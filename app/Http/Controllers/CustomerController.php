@@ -18,7 +18,8 @@ class CustomerController extends Controller
         if(! empty(request()->input('search'))){
             $str = request()->input('search');
             $datas = Customer::select('customers.*')
-                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND ref_tranx_id = "0"), 0)) as due'))
+                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM sales WHERE customer_id = customers.id AND status = 1), 0)) as due'))
+                            ->addSelect(DB::raw('COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND ref_tranx_id = "0"), 0)) as receive'))
                             ->where(function ($query) use ($str){
                                 $query->where('name', 'like', '%'.$str.'%')
                                 ->orWhere('mobile', 'like', '%'.$str.'%')
@@ -29,7 +30,8 @@ class CustomerController extends Controller
                             ->latest()->paginate(10)->withQueryString();
         }else{
             $datas = Customer::select('customers.*')
-                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND ref_tranx_id = "0"), 0)) as due'))
+                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM sales WHERE customer_id = customers.id AND status = 1), 0)) as due'))
+                            ->addSelect(DB::raw('COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND ref_tranx_id = "0"), 0)) as receive'))
                             ->latest()
                             ->where('is_delete', 0)
                             ->paginate(10)

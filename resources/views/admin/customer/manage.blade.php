@@ -42,7 +42,9 @@
                                             <th> {{__('admin.name')}} </th>
                                             <th> {{__('admin.mobile')}} </th>
                                             <th> {{__('admin.address')}} </th>
-                                            <th> {{__('admin.balance')}} </th>
+                                            <th> {{__('admin.total_due')}} </th>
+                                            <th> {{__('admin.total_payment')}} </th>
+                                            <th> {{__('admin.total')}} </th>
                                             <th> {{__('admin.action')}} </th>
                                           </tr>
                                     </thead>
@@ -61,6 +63,8 @@
                                             <td>{{$row->mobile}}</td>
                                             <td>{{$row->address}}</td>
                                             <td>{{number_format($row->due, 2)}}</td>
+                                            <td>{{number_format($row->receive, 2)}}</td>
+                                            <td>{{number_format(($row->due + $row->receive), 2)}}</td>
                                             <td>
                                               <a href="{{route('customer-details', $row->id)}}" class="btn btn-info btn-rounded btn-sm">{{__('admin.details')}}</a> 
                                               @if(hasModuleAccess('Customer_Edit'))
@@ -74,7 +78,7 @@
                                         @endforeach
                                       @else
                                           <tr>
-                                            <td colspan="6" class="text-center">{{__('admin.no_data_found')}}</td>
+                                            <td colspan="7" class="text-center">{{__('admin.no_data_found')}}</td>
                                           </tr>
                                       @endif
                                     </tbody>
