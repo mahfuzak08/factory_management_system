@@ -51,12 +51,18 @@
                                     <tbody>
                                       @if(count($datas) > 0)
                                         @php 
+                                        $d = 0;
+                                        $r = 0;
                                         if(isset($_GET['page']) && $_GET['page']>0)
                                           $n = 1 + (($_GET['page'] - 1) * 10);
                                         else
                                           $n = 1;
                                         @endphp
                                         @foreach($datas as $row)
+                                          @php
+                                          $d += $row->due;
+                                          $r += $row->receive;
+                                          @endphp
                                           <tr>
                                             <td>{{$n++}}</td>
                                             <td>{{$row->name}}</td>
@@ -82,6 +88,15 @@
                                           </tr>
                                       @endif
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="4">Total</td>
+                                            <td class="text-right">{{number_format($d, 2)}}</td>
+                                            <td class="text-right">{{number_format($r, 2)}}</td>
+                                            <td class="text-right">{{number_format(($d + $r), 2)}}</td>
+                                            <td></td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                               </div>
                               {{ $datas->onEachSide(3)->links() }}
