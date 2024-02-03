@@ -54,7 +54,7 @@
                                         $d = 0;
                                         $r = 0;
                                         if(isset($_GET['page']) && $_GET['page']>0)
-                                          $n = 1 + (($_GET['page'] - 1) * 10);
+                                          $n = 1 + (($_GET['page'] - 1) * 50);
                                         else
                                           $n = 1;
                                         @endphp
@@ -90,12 +90,21 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="4">Total</td>
+                                            <td colspan="4">Page Total</td>
                                             <td class="text-right">{{number_format($d, 2)}}</td>
                                             <td class="text-right">{{number_format($r, 2)}}</td>
                                             <td class="text-right">{{number_format(($d + $r), 2)}}</td>
                                             <td></td>
                                         </tr>
+                                        @if(!empty($ctotal) && count($ctotal)>0)
+                                        <tr>
+                                            <td colspan="4">Total</td>
+                                            <td class="text-right">{{number_format($ctotal['total_sales'] - $ctotal['total_receive'], 2)}}</td>
+                                            <td class="text-right">{{number_format($ctotal['total_receive'], 2)}}</td>
+                                            <td class="text-right">{{number_format(($ctotal['total_sales']), 2)}}</td>
+                                            <td></td>
+                                        </tr>
+                                        @endif
                                     </tfoot>
                                 </table>
                               </div>

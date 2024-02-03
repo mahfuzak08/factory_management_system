@@ -15,11 +15,12 @@ use App\Models\Sales;
 class CustomerController extends Controller
 {
     public function index(){
+        $ctotal = [];
         if(! empty(request()->input('search'))){
             $str = request()->input('search');
             $datas = Customer::select('customers.*')
-                            ->addSelect(DB::raw('COALESCE((SELECT SUM(total_due) FROM sales WHERE customer_id = customers.id AND status = 1), 0) as due'))
-                            ->addSelect(DB::raw('COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND ref_tranx_id = "0"), 0) as receive'))
+                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer"), 0)) as due'))
+                            ->addSelect(DB::raw('COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer"), 0) as receive'))
                             ->where(function ($query) use ($str){
                                 $query->where('name', 'like', '%'.$str.'%')
                                 ->orWhere('mobile', 'like', '%'.$str.'%')
@@ -28,16 +29,25 @@ class CustomerController extends Controller
                             })
                             ->where('is_delete', 0)
                             ->latest()->paginate(50)->withQueryString();
+
+            
         }else{
             $datas = Customer::select('customers.*')
-                            ->addSelect(DB::raw('COALESCE((SELECT SUM(total_due) FROM sales WHERE customer_id = customers.id AND status = 1), 0) as due'))
-                            ->addSelect(DB::raw('COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND ref_tranx_id = "0"), 0) as receive'))
+                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer"), 0)) as due'))
+                            ->addSelect(DB::raw('COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer"), 0) as receive'))
                             ->latest()
                             ->where('is_delete', 0)
                             ->paginate(50)
                             ->withQueryString();
+
+            if(! $datas->hasMorePages()){
+                $ts = Sales::where('status', 1)->sum('total');
+                $tr = AccountTranx::where('ref_type', 'customer')->sum('amount');
+                $ctotal=array("total_sales" => $ts, "total_receive" => $tr);
+            }
         }
-        return view('admin.customer.manage', compact('datas'))->with('i', (request()->input('page', 1) - 1) * 50);
+        
+        return view('admin.customer.manage', compact('datas', 'ctotal'))->with('i', (request()->input('page', 1) - 1) * 50);
     }
 
     public function open_customer_form(){
