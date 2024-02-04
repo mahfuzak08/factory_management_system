@@ -48,7 +48,7 @@
                                     <td> {{$bank->bank_name}} </td>
                                     <td> {{$bank->currency}} </td>
                                     <td>
-                                      @if($bank->type != 'Due')
+                                      @if($bank->type != 'Due' && $bank->type != 'Discount')
                                       <a href="{{route('account-details', $bank->id)}}" class="btn btn-info btn-rounded btn-sm">{{__('admin.details')}}</a>
                                         @if(hasModuleAccess('Accounts_Edit')) 
                                           <a href="{{route('edit-account', $bank->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 

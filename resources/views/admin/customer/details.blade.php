@@ -67,7 +67,7 @@
                                         <input type="text" class="form-control form-control-border-off" disabled="true" value="{{number_format($quantity)}}">
                                       </div>
                                     </div>
-                                    @if($customer[0]->due == $customer[0]->total_pay)
+                                    @if($customer[0]->due == 0 && $customer[0]->total_pay >= 0)
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <button class="btn btn-danger me-2 float-end">{{__('admin.payment')}}</button>
                                     </div>
@@ -103,7 +103,7 @@
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input9" class="col-sm-3 col-form-label">{{__('admin.account_name')}}</label>
                                       <div class="col-sm-9">
-                                        <select class="form-select" name="account_id" id="input9" aria-label="Default select example">
+                                        <select class="form-select" name="account_id" id="input9">
                                           @foreach($banks as $bank)
                                           <option value="{{$bank->id}}">{{$bank->name}}</option>
                                           @endforeach

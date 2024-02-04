@@ -60,7 +60,7 @@
                               </div>
                           </div>
                           <div _ngcontent-tmn-c13="" class="container-fluid mt-5 w-100">
-                            <p _ngcontent-tmn-c13="" class="text-right mb-2">{{__('admin.subtotal')}}: {{$total}}</p>
+                            {{-- <p _ngcontent-tmn-c13="" class="text-right mb-2">{{__('admin.subtotal')}}: {{$total}}</p> --}}
                             <p _ngcontent-tmn-c13="" class="text-right">{{__('admin.discount')}} : {{ $invoice[0]->discount }}</p>
                             <h4 _ngcontent-tmn-c13="" class="text-right mb-5">{{__('admin.total')}} : {{ $invoice[0]->total }}</h4>
                             <p _ngcontent-tmn-c13="" class="text-right">{{__('admin.receive_amount')}} : 

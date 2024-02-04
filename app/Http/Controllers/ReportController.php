@@ -219,6 +219,7 @@ class ReportController extends Controller
         $total['purchase'] = 0; 
         $total['sales'] = 0;
         $total['salary'] = 0;
+        $total['discount'] = 0;
         $total['pay'] = 0;
         $total['receive'] = 0;
         $total['accounts_bal'] = [];
@@ -242,6 +243,12 @@ class ReportController extends Controller
             $total['salary'] = AccountTranx::where('tranx_date', '>=', $sd)
                                     ->where('tranx_date', '<=', $ed)
                                     ->where('ref_type', 'employee')
+                                    ->sum('amount');
+
+            $discount_acc_id = Bankacc::where('type', 'Discount')->pluck('id');
+            $total['discount'] = AccountTranx::where('tranx_date', '>=', $sd)
+                                    ->where('tranx_date', '<=', $ed)
+                                    ->where('account_id', $discount_acc_id[0])
                                     ->sum('amount');
             $total['receive'] = AccountTranx::where('tranx_date', '>=', $sd)
                                     ->where('tranx_date', '<=', $ed)

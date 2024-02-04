@@ -58,6 +58,7 @@ class SalesController extends Controller
         }
         $customer_id = $request->input('customer_id');
         $due = 0;
+        $discount=0;
         if($request->input('customer_id') == null){
             if($request->input('mobile') == null){
                 flash()->addError('Mobile number is required.');
@@ -88,6 +89,7 @@ class SalesController extends Controller
         }
         
         $due_acc_id = Bankacc::where('type', 'Due')->pluck('id');
+        $discount_acc_id = Bankacc::where('type', 'Discount')->pluck('id');
         
         $pn = $request->input('product_name');
         $pd = $request->input('product_details');
@@ -120,10 +122,10 @@ class SalesController extends Controller
             ];
             if(count($due_acc_id) > 0 && $ptype[$i] == $due_acc_id[0])
                 $due += (float) $receive_amount[$i];
+            if(count($discount_acc_id) > 0 && $ptype[$i] == $discount_acc_id[0])
+                $discount += (float) $receive_amount[$i];
         }
 
-        $discount = (float) $request->input('discount');
-        $total -= $discount;
         if(! empty($request->input('order_id')) && $request->input('order_id') > 0){
             $input_order = [
                 "order_type"=> "sales",

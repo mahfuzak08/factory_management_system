@@ -97,11 +97,11 @@
                                 <td><input type="text" name="subtotal" id="subtotal" class="form-control" placeholder="{{__('admin.subtotal')}}"></td>
                                 <td></td>
                               </tr>
-                              <tr>
+                              {{-- <tr>
                                 <td colspan="5" class="text-right">{{__('admin.discount')}}</td>
                                 <td><input type="text" name="discount" id="discount" class="form-control" placeholder="{{__('admin.discount')}}"></td>
                                 <td></td>
-                              </tr>
+                              </tr> --}}
                               {{-- <tr>
                                 <td colspan="4" class="text-right">Tax</td>
                                 <td><input type="text" name="tax" id="tax" class="form-control" placeholder="{{__('admin.tax')}}"></td>
@@ -251,13 +251,14 @@
         $('.total').each(function(){
           const value = parseFloat($(this).val());
           if (!isNaN(value)) {
-            total += value;
+            total += Number(value);
           }
         });
         
         $('#subtotal').val(total);
-        let d = Number($('#discount').val());
-        $('#total').val(total-d);
+        $('#total').val(Number(total));
+        // let d = Number($('#discount').val());
+        // $('#total').val(total-d);
       });
 
       // add new item row

@@ -50,6 +50,7 @@
                                 @php
                                 $pnl = $total['sales'] - $total['purchase'] - ($total['salary']*-1);
                                 $te = $total['salary'] * -1;
+                                $te += $total['discount'];
                                 // $tbal = 0;
                                 @endphp
                                 <table style="border: 1px solid #000; width: 700px;">
@@ -87,6 +88,11 @@
                                   <tr style="border: 1px solid #000;">
                                     <td style="padding-left: 30px">{{__('admin.salary')}}</td>
                                     <td style="text-align: right; width: 200px;padding: 5px 10px;">{{number_format($total['salary'] * -1, 2)}}</td>
+                                    <td style="text-align: right; width: 200px;"></td>
+                                  </tr>
+                                  <tr style="border: 1px solid #000;">
+                                    <td style="padding-left: 30px">{{__('admin.cash_discount')}}</td>
+                                    <td style="text-align: right; width: 200px;padding: 5px 10px;">{{number_format($total['discount'], 2)}}</td>
                                     <td style="text-align: right; width: 200px;"></td>
                                   </tr>
                                   <tr style="border: 1px solid #000;">

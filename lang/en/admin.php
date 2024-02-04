@@ -86,7 +86,6 @@ return [
     'all_sales' => 'All Sales',
     'customer_name' => 'Customer Name',
     'subtotal' => 'Subtotal',
-    'discount' => 'Discount',
     'receive_amount' => 'Amount Receive',
     'gender' => 'Gender',
     'designation' => 'Designation',
@@ -138,4 +137,6 @@ return [
     'accounts_payable' => 'Accounts Payable',
     'net_income' => 'Net Income',
     'net_loss' => 'Net Loss',
+    'discount' => 'Discount',
+    'cash_discount' => 'Cash Discount',
 ];

@@ -38,6 +38,10 @@
                                           <label class="form-check-label">
                                             <input type="radio" class="form-check-input" name="type" id="exampleInputName52" value="Due"> {{__('admin.due')}} <i class="input-helper"></i></label>
                                         </div>
+                                        <div class="form-check">
+                                          <label class="form-check-label">
+                                            <input type="radio" class="form-check-input" name="type" id="exampleInputName53" value="Discount"> {{__('admin.discount')}} <i class="input-helper"></i></label>
+                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputName2">{{ __('admin.bank_name') }}</label>

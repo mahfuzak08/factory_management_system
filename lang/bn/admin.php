@@ -86,7 +86,6 @@ return [
     'all_sales' => 'সমস্ত বিক্রয়',
     'customer_name' => 'ক্রেতার নাম',
     'subtotal' => 'সর্ব মোট',
-    'discount' => 'ছাড়',
     'receive_amount' => 'প্রাপ্তির পরিমাণ',
     'gender' => 'লিঙ্গ',
     'designation' => 'পদবীর নাম',
@@ -138,4 +137,6 @@ return [
     'accounts_payable' => 'মোট পাওনা',
     'net_income' => 'মোট লাভ',
     'net_loss' => 'মোট ক্ষতি',
+    'discount' => 'বাট্টা',
+    'cash_discount' => 'নগদ বাট্টা',
 ];
