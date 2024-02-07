@@ -49,6 +49,9 @@
                                         <input type="text" class="form-control form-control-border-off" disabled="true" id="input4" value="{{$customer[0]->email}}">
                                       </div>
                                     </div> --}}
+                                    @php
+                                    $customer[0]->due = $customer[0]->due >= 0 ? $customer[0]->due : 0;
+                                    @endphp
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input5" class="col-sm-3 col-form-label">{{__('admin.total_due')}}</label>
                                       <div class="col-sm-9">

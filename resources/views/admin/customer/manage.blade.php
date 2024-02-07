@@ -60,6 +60,7 @@
                                         @endphp
                                         @foreach($datas as $row)
                                           @php
+                                          $row->due = $row->due >= 0 ? $row->due : 0;
                                           $d += $row->due;
                                           $r += $row->receive;
                                           @endphp
