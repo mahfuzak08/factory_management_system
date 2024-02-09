@@ -165,7 +165,7 @@ class SettingsController extends Controller
                             ->latest()->paginate(10)->withQueryString();
         }
         else{
-            $sms = Sms_log::select('id', 'msg', 'contacts', 'response')->latest()->paginate(10)->withQueryString();
+            $sms = Sms_log::select('id', 'created_at', 'msg', 'contacts', 'response')->latest()->paginate(10)->withQueryString();
         }
         return view('admin.settings.sms', compact('sms', 'bal'))->with('i', (request()->input('page', 1) - 1) * 10);
     }

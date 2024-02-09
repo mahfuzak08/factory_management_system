@@ -41,6 +41,7 @@
                                     <thead>
                                         <tr>
                                             <th> {{__('admin.sl')}} </th>
+                                            <th> {{__('admin.date')}} </th>
                                             <th> {{__('admin.mobile')}} </th>
                                             <th> {{__('admin.details')}} </th>
                                             <th> {{__('admin.status')}} </th>
@@ -57,6 +58,7 @@
                                         @foreach($sms as $row)
                                           <tr>
                                             <td>{{$n++}}</td>
+                                            <td>{{$row->created_at}}</td>
                                             <td>{{$row->contacts}}</td>
                                             <td>{{$row->msg}}</td>
                                             <td>
@@ -73,7 +75,7 @@
                                         @endforeach
                                       @else
                                           <tr>
-                                            <td colspan="4" class="text-center">{{__('admin.no_data_found')}}</td>
+                                            <td colspan="5" class="text-center">{{__('admin.no_data_found')}}</td>
                                           </tr>
                                       @endif
                                     </tbody>
