@@ -67,7 +67,9 @@ Route::middleware([
     Route::get('/delete_vendor/{id}', [VendorController::class, 'delete_vendor'])->name('delete-vendor');
     Route::get('/vendor_details/{id}', [VendorController::class, 'see_vendor'])->name('vendor-details');
     Route::post('/save_vendor_amount', [VendorController::class, 'add_amount'])->name('save-vendor-amount');
-    
+    Route::get('/vendor_trnx_edit/{id}', [VendorController::class, 'vendor_tnx_edit'])->name('vendor-trnx-edit');
+    Route::get('/vendor_trnx_delete/{id}', [VendorController::class, 'vendor_tnx_delete'])->name('vendor-trnx-delete');
+
     Route::get('/employee', [EmployeeController::class, 'index'])->name('employee');
     Route::get('/add_new_employee', [EmployeeController::class, 'open_employee_form'])->name('add-new-employee');
     Route::post('/save_employee', [EmployeeController::class, 'set_employee'])->name('save-employee');

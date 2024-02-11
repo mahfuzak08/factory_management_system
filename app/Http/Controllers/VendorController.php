@@ -209,22 +209,58 @@ class VendorController extends Controller
                 $vendor->balance = $vendor->balance - $request->input('amount');
                 $vendor->save();
             }
-    
-            $data = new AccountTranx();
+
+            if(!empty($request->input('id'))){
+                $data = AccountTranx::where('id', $request->input('id'))
+                                    ->where('ref_id', $request->input('ref_id'))
+                                    ->where('ref_type', $request->input('ref_type'))
+                                    ->get();
+                
+                $input = $request->all();
+                $input['user_id'] = Auth::id();
+                $input['amount'] *= -1;
+                $input['note'] = $input['note'] . ' (Edited)';
+                $data[0]->fill($input)->save();
+                flash()->addSuccess('Vendor Transection Update Successfully.');
+            }else{
+                $data = new AccountTranx();
             
-            $input = $request->all();
-            $input['user_id'] = Auth::id();
-            $input['amount'] *= -1;
-            $data->fill($input)->save();
+                $input = $request->all();
+                $input['user_id'] = Auth::id();
+                $input['amount'] *= -1;
+                $data->fill($input)->save();
+                flash()->addSuccess('Vendor Transection Added Successfully.');
+            }
     
-            flash()->addSuccess('New Data Added Successfully.');
             // If all queries succeed, commit the transaction
             DB::commit();
         }catch (\Exception $e) {
             // If any query fails, catch the exception and roll back the transaction
-            flash()->addError('Data Not Added Successfully.');
+            flash()->addError('Vendor Transection Not Added/ Update Successfully.');
             DB::rollback();
         }
         return redirect($request->input('redirect_url'));
+    }
+
+    public function vendor_tnx_edit($id){
+        $order = AccountTranx::findOrFail($id);
+        $account = Bankacc::all();
+        return view('admin.vendor.register_edit', compact('order', 'account'));
+    }
+    
+    public function vendor_tnx_delete($id){
+        try{
+            DB::beginTransaction();
+            AccountTranx::where('id', $id)->delete();
+            flash()->addSuccess('Vendor Transection Deleted Successfully.');
+            DB::commit();
+        }catch (\Exception $e) {
+            dd($e);
+            flash()->addError('Vendor Transection Unable To Delete');
+            DB::rollback();
+            return redirect('vendor');
+        }
+        
+        return redirect("vendor");
     }
 }

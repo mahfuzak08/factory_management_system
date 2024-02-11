@@ -281,7 +281,7 @@ class CustomerController extends Controller
             dd($e);
             flash()->addError('Customer Transection Unable To Delete');
             DB::rollback();
-            return redirect('expense');
+            return redirect('customer');
         }
         
         return redirect("customer");

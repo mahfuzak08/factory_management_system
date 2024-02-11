@@ -49,6 +49,9 @@
                                         <input type="text" class="form-control form-control-border-off" disabled="true" id="input4" value="{{$vendor[0]->email}}">
                                       </div>
                                     </div>
+                                    @php
+                                    $vendor[0]->due = $vendor[0]->due >= 0 ? $vendor[0]->due : 0;
+                                    @endphp
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input5" class="col-sm-3 col-form-label">{{__('admin.balance')}}</label>
                                       <div class="col-sm-9">
@@ -67,6 +70,11 @@
                                         <input type="text" class="form-control form-control-border-off" disabled="true" value="{{number_format($vendor[0]->due + ($vendor[0]->total_pay * -1), 2)}}">
                                       </div>
                                     </div>
+                                    @if($vendor[0]->due == 0 && ($vendor[0]->total_pay)*-1 >= 0)
+                                    <div class="form-group form-group-margin-bottom-off row">
+                                      <button class="btn btn-danger me-2 float-end">{{__('admin.payment')}}</button>
+                                    </div>
+                                    @endif
                                   </div>
                                 </div>
                                 <div class="col-md-6 d-none d-md-block" id="addForm">
@@ -76,7 +84,7 @@
                                     <input type="hidden" name="ref_id" value="{{$vendor[0]->id}}" />
                                     <input type="hidden" name="ref_type" value="vendor" />
                                     <input type="hidden" name="redirect_url" value="vendor_details/{{$vendor[0]->id}}" />
-                                    <input type="hidden" name="type" value="deposit" />
+                                    <input type="hidden" name="type" value="withdraw" />
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input6" class="col-sm-3 col-form-label">{{__('admin.date')}}</label>
                                       <div class="col-sm-9">
@@ -143,6 +151,7 @@
                                             <th>{{__('admin.account_name')}}</th>
                                             <th>{{__('admin.details')}}</th>
                                             <th class="text-right">{{__('admin.enter_your_amount')}}</th>
+                                            <th>{{__('admin.action')}}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -160,6 +169,16 @@
                                             <td>{{$row->bank_name}}</td>
                                             <td>{{$row->note}}</td>
                                             <td class="text-right">{{number_format($row->amount, 2)}}</td>
+                                            <td>
+                                              @if($row->ref_tranx_type != 'purchase_order')
+                                                @if(hasModuleAccess('Vendor_Transection_Edit'))
+                                                  <a href="{{route('vendor-trnx-edit', $row->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
+                                                @endif
+                                                @if(hasModuleAccess('Vendor_Transection_Delete'))
+                                                  <a href="{{route('vendor-trnx-delete', $row->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a>
+                                                @endif
+                                              @endif
+                                            </td>
                                           </tr>
                                           @php 
                                           $total += $row->amount;
@@ -167,7 +186,7 @@
                                         @endforeach
                                       @else
                                           <tr>
-                                            <td colspan="5" class="text-center">{{__('admin.no_data_found')}}</td>
+                                            <td colspan="6" class="text-center">{{__('admin.no_data_found')}}</td>
                                           </tr>
                                       @endif
                                     </tbody>
@@ -175,6 +194,7 @@
                                       <tr>
                                         <td colspan="4">Total</td>
                                         <td class="text-right">{{number_format($total, 2)}}</td>
+                                        <td></td>
                                       </tr>
                                     </tfoot>
                                 </table>

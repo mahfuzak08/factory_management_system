@@ -87,7 +87,7 @@
                                         @endforeach
                                       @else
                                           <tr>
-                                            <td colspan="7" class="text-center">{{__('admin.no_data_found')}}</td>
+                                            <td colspan="8" class="text-center">{{__('admin.no_data_found')}}</td>
                                           </tr>
                                       @endif
                                     </tbody>
