@@ -78,10 +78,17 @@
     @endif
     @if(hasModuleAccess("Accounts"))
     <li class="nav-item">
-      <a class="nav-link" href="{{ route('bank_account') }}">
-        <span class="menu-title">{{ __('admin.accounts') }}</span>
+      <a class="nav-link" data-bs-toggle="collapse" href="#accounts" aria-expanded="false" aria-controls="report">
+        <span class="menu-title">{{__('admin.accounts')}}</span>
+        <i class="menu-arrow"></i>
         <i class="mdi mdi-bank menu-icon"></i>
       </a>
+      <div class="collapse" id="accounts">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" href="{{route('bank_account')}}">{{__('admin.account_details')}}</a></li>
+          <li class="nav-item"> <a class="nav-link" href="">{{__('admin.fund_transfer')}}</a></li>
+        </ul>
+      </div>
     </li>
     @endif
     @if(hasModuleAccess("Report"))

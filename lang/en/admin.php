@@ -139,4 +139,5 @@ return [
     'net_loss' => 'Net Loss',
     'discount' => 'Discount',
     'cash_discount' => 'Cash Discount',
+    'fund_transfer' => 'Fund Transfer',
 ];

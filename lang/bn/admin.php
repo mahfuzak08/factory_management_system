@@ -139,4 +139,5 @@ return [
     'net_loss' => 'মোট ক্ষতি',
     'discount' => 'বাট্টা',
     'cash_discount' => 'নগদ বাট্টা',
+    'fund_transfer' => 'তহবিল স্থানান্তর',
 ];
