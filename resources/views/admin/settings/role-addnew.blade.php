@@ -262,6 +262,22 @@
                                                     <label class="form-check-label">
                                                     <input type="checkbox" class="form-check-input" name="module[]" value="Accounts_Transection_Delete"> {{__('Accounts Transection Delete')}} <i class="input-helper"></i></label>
                                                 </div>
+                                                <div class="form-check submodule">
+                                                    <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input" name="module[]" value="Fund_Transfer"> {{__('Fund Transfer')}} <i class="input-helper"></i></label>
+                                                </div>
+                                                <div class="form-check submodule">
+                                                    <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input" name="module[]" value="Fund_Transfer_Issue"> {{__('Fund Transfer Issue')}} <i class="input-helper"></i></label>
+                                                </div>
+                                                <div class="form-check submodule">
+                                                    <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input" name="module[]" value="Fund_Transfer_Accept"> {{__('Fund Transfer Accept')}} <i class="input-helper"></i></label>
+                                                </div>
+                                                <div class="form-check submodule">
+                                                    <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input" name="module[]" value="Fund_Transfer_Delete"> {{__('Fund Transfer Delete')}} <i class="input-helper"></i></label>
+                                                </div>
                                             <div class="form-check">
                                                 <label class="form-check-label">
                                                 <input type="checkbox" class="form-check-input" name="module[]" value="Report"> {{__('Report')}} <i class="input-helper"></i></label>

@@ -104,6 +104,9 @@ Route::middleware([
     Route::get('/delete_account/{id}', [BankaccController::class, 'delete_account'])->name('delete-account');
     Route::get('/account_details/{id}', [BankaccController::class, 'acc_details'])->name('account-details');
     Route::post('/save_amount', [BankaccController::class, 'add_amount'])->name('save-amount');
+    Route::get('/fund_transfer', [BankaccController::class, 'fund_transfer_form'])->name('fund-transfer');
+    Route::post('/fund_transfering', [BankaccController::class, 'transfering'])->name('fund-transfering');
+    Route::get('/fund_transfering_action/{type}/{id}', [BankaccController::class, 'transfer_action'])->name('fund-transfer-action');
     
     Route::get('/reportSales', [ReportController::class, 'sales'])->name('sales-report');
     Route::get('/reportPurchase', [ReportController::class, 'purchase'])->name('purchase-report');

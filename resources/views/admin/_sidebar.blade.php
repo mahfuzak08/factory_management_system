@@ -86,7 +86,9 @@
       <div class="collapse" id="accounts">
         <ul class="nav flex-column sub-menu">
           <li class="nav-item"> <a class="nav-link" href="{{route('bank_account')}}">{{__('admin.account_details')}}</a></li>
-          <li class="nav-item"> <a class="nav-link" href="">{{__('admin.fund_transfer')}}</a></li>
+          @if(hasModuleAccess("Fund_Transfer"))
+            <li class="nav-item"> <a class="nav-link" href="{{route('fund-transfer')}}">{{__('admin.fund_transfer')}}</a></li>
+          @endif
         </ul>
       </div>
     </li>

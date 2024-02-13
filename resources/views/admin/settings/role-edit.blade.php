@@ -266,6 +266,22 @@
                                                     <label class="form-check-label">
                                                     <input type="checkbox" class="form-check-input" name="module[]" {{in_array('Accounts_Transection_Delete', $modules) ? 'checked' : ''}} value="Accounts_Transection_Delete"> {{__('Accounts Transection Delete')}} <i class="input-helper"></i></label>
                                                 </div>
+                                                <div class="form-check submodule">
+                                                    <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input" name="module[]" {{in_array('Fund_Transfer', $modules) ? 'checked' : ''}} value="Fund_Transfer"> {{__('Fund Transfer')}} <i class="input-helper"></i></label>
+                                                </div>
+                                                <div class="form-check submodule">
+                                                    <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input" name="module[]" {{in_array('Fund_Transfer_Issue', $modules) ? 'checked' : ''}} value="Fund_Transfer_Issue"> {{__('Fund Transfer Issue')}} <i class="input-helper"></i></label>
+                                                </div>
+                                                <div class="form-check submodule">
+                                                    <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input" name="module[]" {{in_array('Fund_Transfer_Accept', $modules) ? 'checked' : ''}} value="Fund_Transfer_Accept"> {{__('Fund Transfer Accept')}} <i class="input-helper"></i></label>
+                                                </div>
+                                                <div class="form-check submodule">
+                                                    <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input" name="module[]" {{in_array('Fund_Transfer_Delete', $modules) ? 'checked' : ''}} value="Fund_Transfer_Delete"> {{__('Fund Transfer Delete')}} <i class="input-helper"></i></label>
+                                                </div>
                                             <div class="form-check">
                                                 <label class="form-check-label">
                                                 <input type="checkbox" class="form-check-input" name="module[]" {{in_array('Report', $modules) ? 'checked' : ''}} value="Report"> {{__('Report')}} <i class="input-helper"></i></label>

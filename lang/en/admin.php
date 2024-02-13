@@ -140,4 +140,9 @@ return [
     'discount' => 'Discount',
     'cash_discount' => 'Cash Discount',
     'fund_transfer' => 'Fund Transfer',
+    'from_acc' => 'From Account',
+    'to_acc' => 'To Account',
+    'send_now' => 'Transferred',
+    'accept' => 'Accept',
+    'reject' => 'Reject',
 ];

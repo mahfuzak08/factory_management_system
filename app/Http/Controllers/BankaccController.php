@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Bankacc;
@@ -153,5 +154,121 @@ class BankaccController extends Controller
         flash()->addSuccess('New Data Added Successfully.');
 
         return redirect('account_details/'.$id);
+    }
+
+    public function fund_transfer_form(){
+        $banks = Bankacc::all();
+        $data = AccountTranx::join('bankaccs', 'account_tranxes.account_id', '=', 'bankaccs.id')
+                            ->where('ref_type', 'fund_transfer')
+                            ->select('account_tranxes.*', 'bankaccs.name as bank_name')
+                            ->latest()->paginate(10)->withQueryString();
+        return view('admin.bank.fund', compact('banks', 'data'));
+    }
+    
+    public function transfering(Request $request){
+        $rules = [
+            'from_acc' => ['required', 'numeric'],
+            'to_acc' => ['required', 'numeric'],
+            'amount' => ['required', 'numeric']
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            foreach ($validator->messages()->toArray() as $key => $value) { 
+                flash()->addError($value[0]);
+            }
+        }else{
+            $available_balance = AccountTranx::where("account_id", $request->input('from_acc'))->sum('amount');
+            if($available_balance>$request->input('amount')){
+                $trnxdata = [
+                    'account_id' => $request->input('from_acc'),
+                    'user_id' => Auth::id(),
+                    'tranx_date' => date("Y-m-d"),
+                    'ref_id' => time(),
+                    'ref_type' => 'fund_transfer',
+                    'amount' => $request->input('amount') * -1,
+                    'note' => 'from',
+                    'ref_tranx_id' => $request->input('to_acc'),
+                    'ref_tranx_type' => 'Pending'
+                ];
+                $tdata = new AccountTranx();
+                $tdata->fill($trnxdata)->save();
+            }else{
+                flash()->addError('Insufficient Balance');
+            }
+        }
+        return redirect('fund_transfer');
+    }
+    
+    public function transfer_action($type, $id){
+        if($type == 'accept'){
+            $data = AccountTranx::findOrFail($id);
+            if($data->ref_tranx_type == 'Pending'){
+                $data->ref_tranx_type = 'Accepted';
+                try{
+                    DB::beginTransaction();
+                    $trnxdata = [
+                        'account_id' => $data->ref_tranx_id,
+                        'user_id' => Auth::id(),
+                        'tranx_date' => date("Y-m-d"),
+                        'ref_id' => $data->ref_id,
+                        'ref_type' => 'fund_transfer',
+                        'amount' => $data->amount * -1,
+                        'note' => 'to',
+                        'ref_tranx_id' => $data->account_id,
+                        'ref_tranx_type' => 'Received'
+                    ];
+                    $tdata = new AccountTranx();
+                    $tdata->fill($trnxdata)->save();
+
+                    $data->save();
+                    flash()->addSuccess('Fund Received Successfully.');
+
+                    DB::commit();
+                }catch (\Exception $e) {
+                    // If any query fails, catch the exception and roll back the transaction
+                    dd($e);
+                    flash()->addError('Fund Received Not Added Successfully.');
+                    DB::rollback();
+                }
+            }
+        }
+        elseif($type == 'reject'){
+            $data = AccountTranx::findOrFail($id);
+            $data->ref_tranx_type = 'Rejected';
+            try{
+                DB::beginTransaction();
+                $trnxdata = [
+                    'account_id' => $data->account_id,
+                    'user_id' => Auth::id(),
+                    'tranx_date' => date("Y-m-d"),
+                    'ref_id' => $data->ref_id,
+                    'ref_type' => 'fund_transfer',
+                    'amount' => $data->amount * -1,
+                    'note' => 'No payment received',
+                    'ref_tranx_id' => $data->ref_tranx_id,
+                    'ref_tranx_type' => 'Rejected'
+                ];
+                $tdata = new AccountTranx();
+                $tdata->fill($trnxdata)->save();
+
+                $data->save();
+                flash()->addSuccess('Fund Rejected Successfully.');
+
+                DB::commit();
+            }catch (\Exception $e) {
+                // If any query fails, catch the exception and roll back the transaction
+                dd($e);
+                flash()->addError('Fund Rejected Not Added Successfully.');
+                DB::rollback();
+            }
+        }
+        elseif($type == 'delete'){
+            $data = AccountTranx::findOrFail($id);
+            $dd = AccountTranx::where('ref_id', $data->ref_id)->where('ref_type', 'fund_transfer');
+            $dd->delete();
+            flash()->addSuccess('Data Delete Successfully.');
+        }
+        return redirect('fund_transfer');
     }
 }
