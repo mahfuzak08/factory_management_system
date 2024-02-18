@@ -149,6 +149,12 @@ class SettingsController extends Controller
      * SMS Management
      */
     public function sms(){
+        if(!empty($_GET['id'])){
+            $resendsms = Sms_log::findOrFail($_GET['id']);
+            $sms = new SendSms();
+            $sms->toSms($resendsms->contacts, $resendsms->msg, $resendsms->id);
+            return redirect('sms');
+        }
         if(empty(request()->input('search')) && empty($_GET['page'])){
             $smsClass = new SendSms();
             $bal = $smsClass->getBalance();

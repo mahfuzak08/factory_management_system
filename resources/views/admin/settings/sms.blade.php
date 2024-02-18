@@ -45,6 +45,7 @@
                                             <th> {{__('admin.mobile')}} </th>
                                             <th> {{__('admin.details')}} </th>
                                             <th> {{__('admin.status')}} </th>
+                                            <th> {{__('admin.action')}} </th>
                                           </tr>
                                     </thead>
                                     <tbody>
@@ -56,6 +57,9 @@
                                           $n = 1;
                                         @endphp
                                         @foreach($sms as $row)
+                                          @php 
+                                          $resendbtn = true;
+                                          @endphp
                                           <tr>
                                             <td>{{$n++}}</td>
                                             <td>{{$row->created_at}}</td>
@@ -63,13 +67,20 @@
                                             <td>{{$row->msg}}</td>
                                             <td>
                                               @php
-                                              if(strpos($row->response, 'SMS SUBMITTED') !== false)
+                                              if(strpos($row->response, 'SMS SUBMITTED') !== false){
                                                 echo 'Send';
+                                                $resendbtn = false;
+                                              }
                                               elseif($row->response == 1007)
                                                 echo 'Balance Insufficient';
                                               else 
                                                 echo $row->response;
                                               @endphp
+                                            </td>
+                                            <td>
+                                              @if($resendbtn)
+                                                <a href="{{ URL::route('sms', ['id' => $row->id]) }}">Resend</a>
+                                              @endif
                                             </td>
                                           </tr>
                                         @endforeach

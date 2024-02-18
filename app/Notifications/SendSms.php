@@ -9,7 +9,7 @@ use App\Models\Sms_log;
 
 class SendSms extends Notification
 {
-    public function toSms($mobile, $body)
+    public function toSms($mobile, $body, $old=false)
     {
         $url = config('services.bangladeshsms.domain');
         $apiKey = config('services.bangladeshsms.api_key');
@@ -27,8 +27,13 @@ class SendSms extends Notification
         ];
 
         try{
-            $smslog = new Sms_log();
-            $smslog->fill($data)->save();
+            $smslog;
+            if($old === false){
+                $smslog = new Sms_log();
+                $smslog->fill($data)->save();
+            }
+            else
+                $smslog = Sms_log::findOrFail($old);
             
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
