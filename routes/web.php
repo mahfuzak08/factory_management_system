@@ -133,6 +133,9 @@ Route::middleware([
     Route::post('/delete_role/{id}', [SettingsController::class, 'delete_role'])->name('delete-role');
     
     Route::get('/sms', [SettingsController::class, 'sms'])->name('sms');
+    Route::get('/fiscal_year', [SettingsController::class, 'fiscal_year'])->name('fy');
+    Route::get('/add_fiscal_year', [SettingsController::class, 'open_fy_form'])->name('new-fy');
+    Route::post('/save_fiscal_year', [SettingsController::class, 'set_fy'])->name('save-fy');
     // Route::get('/add_new_role', [SettingsController::class, 'open_role_form'])->name('add-new-role');
     // Route::post('/save_role', [SettingsController::class, 'set_role'])->name('save-role');
     // Route::get('/edit_role/{id}', [SettingsController::class, 'edit_role'])->name('edit-role');

@@ -50,12 +50,13 @@
                                       </div>
                                     </div> --}}
                                     @php
-                                    $customer[0]->due = $customer[0]->due >= 0 ? $customer[0]->due : 0;
+                                    $customer[0]->total_due = $customer[0]->total_due >= 0 ? $customer[0]->total_due : 0;
+                                    $customer[0]->cy_due = $customer[0]->cy_due >= 0 ? $customer[0]->cy_due : 0;
                                     @endphp
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input5" class="col-sm-3 col-form-label">{{__('admin.total_due')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input5" value="{{number_format($customer[0]->due, 2)}}">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input5" value="{{number_format($customer[0]->total_due, 2)}}">
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">
@@ -65,12 +66,24 @@
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">
+                                      <label for="input5" class="col-sm-3 col-form-label">{{__('admin.current_due')}}</label>
+                                      <div class="col-sm-9">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input5" value="{{number_format($customer[0]->cy_due, 2)}}">
+                                      </div>
+                                    </div>
+                                    <div class="form-group form-group-margin-bottom-off row">
+                                      <label for="input5" class="col-sm-3 col-form-label">{{__('admin.current_payment')}}</label>
+                                      <div class="col-sm-9">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input5" value="{{number_format($customer[0]->cy_pay, 2)}}">
+                                      </div>
+                                    </div>
+                                    <div class="form-group form-group-margin-bottom-off row">
                                       <label class="col-sm-3 col-form-label">{{__('admin.quantity')}}</label>
                                       <div class="col-sm-9">
                                         <input type="text" class="form-control form-control-border-off" disabled="true" value="{{number_format($quantity)}}">
                                       </div>
                                     </div>
-                                    @if($customer[0]->due == 0 && $customer[0]->total_pay >= 0)
+                                    @if($customer[0]->cy_due == 0 && $customer[0]->cy_pay >= 0)
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <button class="btn btn-danger me-2 float-end">{{__('admin.payment')}}</button>
                                     </div>
@@ -125,6 +138,15 @@
                                     <button type="submit" class="btn btn-primary me-2 float-end">{{ __('admin.save_now') }}</button>
                                   </form>
                                   @endif
+                                  <div class="col-md-6">
+                                    @if(hasModuleAccess('Customer_Edit'))
+                                      <br><br><br><br>
+                                      <a href="{{route('edit-customer', $customer[0]->id)}}" class="btn btn-warning">{{__('admin.edit')}}</a> 
+                                    @endif
+                                    @if(hasModuleAccess('Customer_Delete'))
+                                      <a href="{{route('delete-customer', $customer[0]->id)}}" class="btn btn-danger" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a> 
+                                    @endif
+                                  </div>
                                 </div>
                                 <div class="col-md-6 d-block d-md-none text-center">
                                   <br />

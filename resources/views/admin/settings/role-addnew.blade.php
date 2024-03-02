@@ -156,6 +156,18 @@
                                                     <label class="form-check-label">
                                                     <input type="checkbox" class="form-check-input" name="module[]" value="Role_Settings"> {{__('Role Settings')}} <i class="input-helper"></i></label>
                                                 </div>
+                                                <div class="form-check submodule">
+                                                    <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input" name="module[]" value="Fiscal_Year"> {{__('Fiscal Year')}} <i class="input-helper"></i></label>
+                                                </div>
+                                                <div class="form-check submodule">
+                                                    <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input" name="module[]" value="Fiscal_Year_Add"> {{__('Fiscal Year Add')}} <i class="input-helper"></i></label>
+                                                </div>
+                                                <div class="form-check submodule">
+                                                    <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input" name="module[]" value="Fiscal_Year_Delete"> {{__('Fiscal Year Delete')}} <i class="input-helper"></i></label>
+                                                </div>
                                         </div>
                                         <div class="form-group col-md-6">
                                             <div class="form-check">

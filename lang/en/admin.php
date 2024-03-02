@@ -123,6 +123,8 @@ return [
     'no' => 'No',
     'Sorry' => 'SORRY',
     'not_allowed' => 'You are not allowed to access this page',
+    'current_due' => 'Current Year Due',
+    'current_payment' => 'Current Year Payment',
     'total_due' => 'Total Due',
     'total_payment' => 'Total Payment',
     'payment' => 'Payment Done',
@@ -145,4 +147,6 @@ return [
     'send_now' => 'Transferred',
     'accept' => 'Accept',
     'reject' => 'Reject',
+    'fy' => 'Fiscal Year',
+    'active' => 'Active',
 ];

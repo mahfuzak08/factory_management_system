@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Sms_log;
+use App\Models\Fiscal_year;
 use App\Notifications\SendSms;
 
 class SettingsController extends Controller
@@ -174,5 +175,56 @@ class SettingsController extends Controller
             $sms = Sms_log::select('id', 'created_at', 'msg', 'contacts', 'response')->latest()->paginate(10)->withQueryString();
         }
         return view('admin.settings.sms', compact('sms', 'bal'))->with('i', (request()->input('page', 1) - 1) * 10);
+    }
+    
+    /**
+     * Fiscal Year Management
+     */
+    public function fiscal_year(){
+        if(!empty($_GET['type'])){
+            if($_GET['type'] == 'active'){
+                Fiscal_year::where('is_active', 'yes')->update(['is_active'=>'no']);
+                Fiscal_year::where('id', $_GET['id'])->update(['is_active'=>'yes']);
+            }
+            if($_GET['type'] == 'delete'){
+                Fiscal_year::where('id', $_GET['id'])->delete();
+            }
+            return redirect('fiscal_year');
+        }
+        $fys = Fiscal_year::all();
+        
+        return view('admin.settings.fiscal-year', compact('fys'));
+    }
+    public function open_fy_form(){
+        return view('admin.settings.fy-addnew');
+    }
+    public function set_fy(Request $request){
+        $rules = [
+            'name' => ['string', 'max:40'],
+            'start_date' => ['required', 'date'],
+            'end_date' => ['required', 'date']
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            foreach ($validator->messages()->toArray() as $key => $value) { 
+                flash()->addError($value[0]);
+            }
+            return redirect('fiscal_year');
+        }
+        
+        if(! empty($request->input('id'))){
+            $db = Fiscal_year::findOrFail($request->input('id'));
+            flash()->addSuccess('Fiscal Year Update Successfully.');
+        }else{
+            $db = new Fiscal_year();
+            $input = $request->all();
+            $input['is_active'] = 'no';
+            $input['user_id'] = Auth::id();
+            $db->fill($input)->save();
+            flash()->addSuccess('Fiscal Year Added Successfully.');
+        }
+        
+        return redirect('fiscal_year');
     }
 }

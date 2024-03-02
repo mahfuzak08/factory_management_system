@@ -57,7 +57,7 @@
                                         @foreach($datas as $row)
                                           <tr>
                                             <td>{{$n++}}</td>
-                                            <td>{{$row->name}}</td>
+                                            <td><a href="{{route('vendor-details', $row->id)}}">{{$row->name}}</a></td>
                                             <td>{{$row->mobile}}</td>
                                             <td>{{$row->address}}</td>
                                             <td>{{number_format($row->due, 2)}}</td>

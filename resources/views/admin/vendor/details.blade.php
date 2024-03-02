@@ -50,12 +50,13 @@
                                       </div>
                                     </div>
                                     @php
-                                    $vendor[0]->due = $vendor[0]->due >= 0 ? $vendor[0]->due : 0;
+                                    $vendor[0]->total_due = $vendor[0]->total_due >= 0 ? $vendor[0]->total_due : 0;
+                                    $vendor[0]->cy_due = $vendor[0]->cy_due >= 0 ? $vendor[0]->cy_due : 0;
                                     @endphp
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input5" class="col-sm-3 col-form-label">{{__('admin.balance')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input5" value="{{number_format($vendor[0]->due, 2)}}">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input5" value="{{number_format($vendor[0]->total_due, 2)}}">
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">
@@ -67,10 +68,28 @@
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label class="col-sm-3 col-form-label">{{__('admin.total')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-border-off" disabled="true" value="{{number_format($vendor[0]->due + ($vendor[0]->total_pay * -1), 2)}}">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" value="{{number_format($vendor[0]->total_due + ($vendor[0]->total_pay * -1), 2)}}">
                                       </div>
                                     </div>
-                                    @if($vendor[0]->due == 0 && ($vendor[0]->total_pay)*-1 >= 0)
+                                    <div class="form-group form-group-margin-bottom-off row">
+                                      <label for="input5" class="col-sm-3 col-form-label">{{__('admin.current_due')}}</label>
+                                      <div class="col-sm-9">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input5" value="{{number_format($vendor[0]->cy_due, 2)}}">
+                                      </div>
+                                    </div>
+                                    <div class="form-group form-group-margin-bottom-off row">
+                                      <label class="col-sm-3 col-form-label">{{__('admin.current_payment')}}</label>
+                                      <div class="col-sm-9">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" value="{{number_format($vendor[0]->cy_pay * -1, 2)}}">
+                                      </div>
+                                    </div>
+                                    <div class="form-group form-group-margin-bottom-off row">
+                                      <label class="col-sm-3 col-form-label">{{__('admin.total')}}</label>
+                                      <div class="col-sm-9">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" value="{{number_format($vendor[0]->cy_due + ($vendor[0]->cy_pay * -1), 2)}}">
+                                      </div>
+                                    </div>
+                                    @if($vendor[0]->cy_due == 0 && ($vendor[0]->cy_pay)*-1 >= 0)
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <button class="btn btn-danger me-2 float-end">{{__('admin.payment')}}</button>
                                     </div>
