@@ -297,7 +297,7 @@ class SalesController extends Controller
             
             for($i=0; $i<count($ptype); $i++){
                 if(count($due_acc_id) > 0 && $ptype[$i]->pid == $due_acc_id[0]){
-                    $v = Vendor::findOrFail($order->customer_id); 
+                    $v = Customer::findOrFail($order->customer_id); 
                     $v->balance -= $ptype[$i]->receive_amount;
                     $v->save();
                 }
