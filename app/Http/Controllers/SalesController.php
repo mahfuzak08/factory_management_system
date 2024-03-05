@@ -313,7 +313,7 @@ class SalesController extends Controller
             return redirect('sales');
         }
         
-        return redirect("reportPurchase");
+        return redirect("reportSales");
     }
 
 }
