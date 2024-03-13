@@ -62,7 +62,7 @@
                                           @endphp
                                           <tr>
                                             <td>{{$n++}}</td>
-                                            <td>{{$row->created_at}}</td>
+                                            <td>{{date('d-m-Y H:i:s', strtotime($row->created_at))}}</td>
                                             <td>{{$row->contacts}}</td>
                                             <td>{{$row->msg}}</td>
                                             <td>

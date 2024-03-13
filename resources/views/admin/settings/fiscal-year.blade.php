@@ -49,8 +49,8 @@
                                           <tr>
                                             <td>{{$n++}}</td>
                                             <td>{{$row->name}}</td>
-                                            <td>{{$row->start_date}}</td>
-                                            <td>{{$row->end_date}}</td>
+                                            <td>{{date('d-m-Y', strtotime($row->start_date))}}</td>
+                                            <td>{{date('d-m-Y', strtotime($row->end_date))}}</td>
                                             <td>{{$row->is_active == 'yes' ? 'Active' : 'Closed'}}</td>
                                             <td>
                                               @if(hasModuleAccess('Fiscal_Year_Delete'))
