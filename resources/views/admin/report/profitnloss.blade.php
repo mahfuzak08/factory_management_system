@@ -46,7 +46,7 @@
                               <div class="row table-responsive">
                                 <h3 style="font-size: 24px;">{{config('app.name')}}</h3>
                                 <h4 style="font-size: 20px;">{{__('admin.profit_and_loss')}}</h4>
-                                <h4 style="font-size: 16px;">{{$start_date}} - {{$end_date}}</h4>
+                                <h4 style="font-size: 16px;">{{date('d-m-Y', strtotime($start_date))}} - {{date('d-m-Y', strtotime($end_date))}}</h4>
                                 @php
                                 $pnl = $total['sales'] - $total['purchase'] - ($total['salary']*-1);
                                 $te = $total['salary'] * -1;
