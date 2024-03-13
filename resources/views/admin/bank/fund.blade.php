@@ -27,6 +27,10 @@
                                     <form class="forms-sample" method="POST" action="{{ route('fund-transfering') }}">
                                         @csrf
                                         <div class="form-group">
+                                            <label for="exampleInputName4">{{ __('admin.date') }}</label>
+                                            <input type="date" class="form-control" id="exampleInputName4" name="date">
+                                        </div>
+                                        <div class="form-group">
                                             <label for="exampleInputName1">{{ __('admin.from_acc') }}</label>
                                             <select name="from_acc" required id="from_acc" style="width: 100%;">
                                               @foreach($banks as $ac)

@@ -167,6 +167,7 @@ class BankaccController extends Controller
     
     public function transfering(Request $request){
         $rules = [
+            'date' => ['required', 'date'],
             'from_acc' => ['required', 'numeric'],
             'to_acc' => ['required', 'numeric'],
             'amount' => ['required', 'numeric']
@@ -183,7 +184,7 @@ class BankaccController extends Controller
                 $trnxdata = [
                     'account_id' => $request->input('from_acc'),
                     'user_id' => Auth::id(),
-                    'tranx_date' => date("Y-m-d"),
+                    'tranx_date' => $request->input('date'),
                     'ref_id' => time(),
                     'ref_type' => 'fund_transfer',
                     'amount' => $request->input('amount') * -1,
