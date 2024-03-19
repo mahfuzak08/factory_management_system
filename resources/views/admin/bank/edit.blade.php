@@ -25,7 +25,7 @@
                                 {{-- @if(count($errors) > 0) 
                                 {{print_r($errors)}}
                                 @endif --}}
-                                <form class="forms-sample" method="POST" action="{{ route('edit-account', $bank->id) }}">
+                                <form class="forms-sample" method="POST" action="{{ route('update-account', $bank->id) }}">
                                     @csrf
                                     <div class="form-group">
                                         <label for="exampleInputName1">{{ __('admin.account_name') }}</label>

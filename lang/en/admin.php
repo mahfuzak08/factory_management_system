@@ -149,4 +149,10 @@ return [
     'reject' => 'Reject',
     'fy' => 'Fiscal Year',
     'active' => 'Active',
+    'inventory' => 'Inventory',
+    'category' => 'Category',
+    'add_product' => 'Add Product',
+    'all_products' => 'All Products',
+    'barcode' => 'Barcode',
+    'reorder' => 'Re-order',
 ];

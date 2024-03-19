@@ -67,6 +67,9 @@
                                         <input type="text" class="form-control form-control-border-off" disabled="true" id="input3" value="{{abs($total_receive)}}">
                                       </div>
                                     </div>
+                                    @if(hasModuleAccess('Employee_Edit'))
+                                      <a href="{{route('edit-employee', $employee->id)}}" class="btn btn-warning btn-sm">{{__('admin.edit')}}</a> 
+                                    @endif
                                   </div>
                                 </div>
                                 <div class="col-md-6 d-none d-md-block" id="addForm">

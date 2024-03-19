@@ -21,7 +21,7 @@
                     <div class="col-12 col-md-8 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <form class="forms-sample" method="POST" action="{{ route('language') }}">
+                                <form class="forms-sample" method="POST" action="{{ route('update-language') }}">
                                     @csrf
                                     <div class="form-group">
                                         <label for="exampleInputName5">{{ __('admin.default_language') }}</label>

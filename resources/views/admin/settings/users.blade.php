@@ -26,7 +26,7 @@
                     <div class="col-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                              <form action="{{route('user-manage')}}" method="GET">
+                              <form action="{{route('update-user-manage')}}" method="GET">
                                 @csrf
                                 @php 
                                 $sv = isset($_GET['search']) ? $_GET['search'] : '';

@@ -22,7 +22,7 @@
                     <div class="col-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <form class="forms-sample" method="POST" action="{{ route('edit-vendor', $vendor->id) }}">
+                                <form class="forms-sample" method="POST" action="{{ route('update-vendor', $vendor->id) }}">
                                     @csrf
                                     <div class="form-group">
                                         <label for="exampleInputName1">{{ __('admin.name') }}</label>

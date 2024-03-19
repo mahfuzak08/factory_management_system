@@ -126,7 +126,7 @@ class CustomerController extends Controller
             foreach ($validator->messages()->toArray() as $key => $value) { 
                 flash()->addError($value[0]);
             }
-            return redirect('add_new_customer');
+            return redirect('customer');
         }
         
         DB::beginTransaction();

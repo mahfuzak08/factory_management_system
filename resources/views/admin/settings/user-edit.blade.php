@@ -22,7 +22,7 @@
                     <div class="col-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <form class="forms-sample" method="POST" action="{{ route('edit-user', $user->id) }}">
+                                <form class="forms-sample" method="POST" action="{{ route('update-user', $user->id) }}">
                                     @csrf
                                     <input type="hidden" name="user_id" value="{{$user->id}}">
                                     <input type="hidden" name="redirect_url" value="edit-user/{{$user->id}}">

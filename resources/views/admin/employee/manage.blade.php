@@ -59,7 +59,7 @@
                                         @foreach($datas as $row)
                                           <tr>
                                             <td>{{$n++}}</td>
-                                            <td>{{$row->name}}</td>
+                                            <td><a href="{{route('employee-details', $row->id)}}">{{$row->name}}</a></td>
                                             <td>{{$row->mobile}}</td>
                                             <td>{{$row->gender}}</td>
                                             <td>{{$row->designation}}</td>
