@@ -151,6 +151,8 @@ return [
     'active' => 'সক্রিয়',
     'inventory' => 'মালপত্র',
     'category' => 'শ্রেণী',
+    'category_name' => 'শ্রেণীর নাম',
+    'parent_category' => 'মূল শ্রেণী',
     'add_product' => 'পণ্য যোগ করুন',
     'all_products' => 'সব পণ্য',
     'barcode' => 'বারকোড',

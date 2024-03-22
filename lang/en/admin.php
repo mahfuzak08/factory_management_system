@@ -151,6 +151,8 @@ return [
     'active' => 'Active',
     'inventory' => 'Inventory',
     'category' => 'Category',
+    'category_name' => 'Category Name',
+    'parent_category' => 'Parent Category',
     'add_product' => 'Add Product',
     'all_products' => 'All Products',
     'barcode' => 'Barcode',

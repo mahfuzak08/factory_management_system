@@ -15,7 +15,7 @@
                   @if(hasModuleAccess('Accounts_Add'))
                   <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                      <li class="breadcrumb-item"><a href="{{route('add-new-account')}}" class="btn btn-rounded btn-sm btn-success">{{__('admin.add_new')}}</a></li>
+                      <li class="breadcrumb-item"><a href="{{route('add-category')}}" class="btn btn-rounded btn-sm btn-success">{{__('admin.add_new')}}</a></li>
                     </ol>
                   </nav>
                   @endif
@@ -28,41 +28,38 @@
                             <thead>
                               <tr>
                                 <th> {{__('admin.sl')}} </th>
-                                <th> {{__('admin.account_name')}} </th>
-                                <th> {{__('admin.account_type')}} </th>
-                                <th> {{__('admin.bank_name')}} </th>
-                                <th> {{__('admin.currency')}} </th>
+                                <th> {{__('admin.name')}} </th>
+                                <th> {{__('admin.parent_category')}} </th>
                                 <th> {{__('admin.action')}} </th>
                               </tr>
                             </thead>
                             <tbody>
-                              @if(count($banks) > 0)
+                              @if(count($categories) > 0)
                                 @php
                                 $i = 1;
                                 @endphp
-                                @foreach ($banks as $bank)
+                                @foreach ($categories as $row)
                                   <tr>
                                     <td>{{$i++}}</td>
-                                    <td> {{$bank->name}} </td>
-                                    <td> {{$bank->type}} </td>
-                                    <td> {{$bank->bank_name}} </td>
-                                    <td> {{$bank->currency}} </td>
+                                    <td> {{$row->name}} </td>
                                     <td>
-                                      @if($bank->type != 'Due' && $bank->type != 'Discount')
-                                      <a href="{{route('account-details', $bank->id)}}" class="btn btn-info btn-rounded btn-sm">{{__('admin.details')}}</a>
-                                        @if(hasModuleAccess('Accounts_Edit')) 
-                                          <a href="{{route('edit-account', $bank->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
-                                        @endif
-                                        @if(hasModuleAccess('Accounts_Delete'))
-                                          <a href="{{route('delete-account', $bank->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a> 
-                                        @endif
-                                      @endif
+                                      @php
+                                      if($row->parent>0){
+                                        foreach($categories as $sc){
+                                          if($sc->id == $row->parent)
+                                            echo $sc->name;
+                                        }
+                                      } 
+                                      @endphp
+                                    </td>
+                                    <td>
+                                      <a href="{{ URL::route('add-category', ['id' => $row->id]) }}" class="btn btn-info btn-rounded btn-sm">{{__('admin.edit')}}</a>
                                     </td>
                                   </tr>
                                 @endforeach
                               @else
                                 <tr>
-                                  <td colspan="6">{{__('admin.no_data_found')}}</td>
+                                  <td colspan="4">{{__('admin.no_data_found')}}</td>
                                 </tr>
                               @endif
                               

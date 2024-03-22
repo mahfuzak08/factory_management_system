@@ -39,11 +39,9 @@ Route::middleware([
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
     
     Route::get('/category', [InventoryController::class, 'category'])->name('category');
-    // Route::post('/save_sales', [InventoryController::class, 'set_sales'])->name('save-sales');
-    // Route::get('/sales_invoice/{id}', [InventoryController::class, 'invoice'])->name('sales-invoice');
-    // Route::get('/sales_trnx_edit/{id}', [InventoryController::class, 'sales_edit'])->name('sales-trnx-edit');
-    // Route::get('/sales_trnx_delete/{id}', [InventoryController::class, 'sales_delete'])->name('sales-trnx-delete');
-
+    Route::get('/add_category', [InventoryController::class, 'add_category'])->name('add-category');
+    Route::post('/save_category', [InventoryController::class, 'save_category'])->name('save-category');
+    
     Route::get('/sales', [SalesController::class, 'index'])->name('sales');
     Route::post('/save_sales', [SalesController::class, 'set_sales'])->name('save-sales');
     Route::get('/sales_invoice/{id}', [SalesController::class, 'invoice'])->name('sales-invoice');
