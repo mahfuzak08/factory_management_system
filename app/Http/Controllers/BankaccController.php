@@ -195,6 +195,7 @@ class BankaccController extends Controller
                 ];
                 $tdata = new AccountTranx();
                 $tdata->fill($trnxdata)->save();
+                flash()->addError('Balance transfering...');
             }else{
                 flash()->addError('Insufficient Balance');
             }
