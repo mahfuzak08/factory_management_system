@@ -180,7 +180,8 @@ class BankaccController extends Controller
             }
         }else{
             $available_balance = AccountTranx::where("account_id", $request->input('from_acc'))->sum('amount');
-            if($available_balance>$request->input('amount')){
+            // dd($available_balance . " == " .$request->input('amount'));
+            if($available_balance>=$request->input('amount')){
                 $trnxdata = [
                     'account_id' => $request->input('from_acc'),
                     'user_id' => Auth::id(),
