@@ -182,6 +182,7 @@ class BankaccController extends Controller
             $available_balance = AccountTranx::where("account_id", $request->input('from_acc'))->sum('amount');
             // dd($available_balance . " == " .$request->input('amount'));
             if($available_balance>=$request->input('amount')){
+                DB::beginTransaction();
                 $trnxdata = [
                     'account_id' => $request->input('from_acc'),
                     'user_id' => Auth::id(),
@@ -195,7 +196,8 @@ class BankaccController extends Controller
                 ];
                 $tdata = new AccountTranx();
                 $tdata->fill($trnxdata)->save();
-                flash()->addError('Balance transfering...');
+                flash()->addSuccess('Balance transfering...');
+                DB::commit();
             }else{
                 flash()->addError('Insufficient Balance');
             }
