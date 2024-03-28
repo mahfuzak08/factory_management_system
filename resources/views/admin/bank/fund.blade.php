@@ -88,8 +88,10 @@
                                             $n = 1;
                                           @endphp
                                           @foreach($data as $row)
-                                            @if(array_search($row->ref_id, $ref_id) == FALSE)
+                                            @if(array_search($row->ref_id, $ref_id) == false)
+                                              @php 
                                               $ref_id[] = $row->ref_id;
+                                              @endphp
                                               <tr>
                                                 <td>{{$n++}}</td>
                                                 <td>{{date('d-m-Y', strtotime($row->tranx_date))}}</td>
