@@ -88,7 +88,7 @@
                                             $n = 1;
                                           @endphp
                                           @foreach($data as $row)
-                                            @if(array_search($row->ref_id, $ref_id) > -1)
+                                            @if(array_search($row->ref_id, $ref_id) == FALSE)
                                               $ref_id[] = $row->ref_id;
                                               <tr>
                                                 <td>{{$n++}}</td>
