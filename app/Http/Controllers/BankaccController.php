@@ -159,12 +159,12 @@ class BankaccController extends Controller
     public function fund_transfer_form(){
         $banks = Bankacc::all();
         $data = AccountTranx::join('bankaccs', 'account_tranxes.account_id', '=', 'bankaccs.id')
-                            ->where('ref_type', 'fund_transfer')
-                            ->select('account_tranxes.*', 'bankaccs.name as bank_name')
-                            ->groupBy('account_tranxes.ref_id', 'account_tranxes.account_id', 'account_tranxes.tranx_date', 'account_tranxes.ref_type', 'account_tranxes.ref_tranx_id', 'account_tranxes.ref_tranx_type', 'account_tranxes.amount', 'account_tranxes.user_id', 'account_tranxes.note')
-                            ->latest()
-                            ->paginate(10)
-                            ->withQueryString();
+                ->where('ref_type', 'fund_transfer')
+                ->select('account_tranxes.*', 'bankaccs.name as bank_name')
+                ->groupBy('account_tranxes.ref_id', 'account_tranxes.account_id', 'account_tranxes.tranx_date', 'account_tranxes.ref_type', 'account_tranxes.ref_tranx_id', 'account_tranxes.ref_tranx_type', 'account_tranxes.amount', 'account_tranxes.user_id', 'account_tranxes.note', 'account_tranxes.id') // Include 'account_tranxes.id' here
+                ->latest()
+                ->paginate(10)
+                ->withQueryString();    
                         
         return view('admin.bank.fund', compact('banks', 'data'));
     }
