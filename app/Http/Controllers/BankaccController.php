@@ -160,9 +160,11 @@ class BankaccController extends Controller
         $banks = Bankacc::all();
         $data = AccountTranx::join('bankaccs', 'account_tranxes.account_id', '=', 'bankaccs.id')
                             ->where('ref_type', 'fund_transfer')
-                            ->select('account_tranxes.*', 'bankaccs.name as bank_name')
+                            ->select('account_tranxes.*', 'account_tranxes.ref_id', 'bankaccs.name as bank_name')
                             ->groupBy('account_tranxes.ref_id')
-                            ->latest()->paginate(10)->withQueryString();
+                            ->latest()
+                            ->paginate(10)
+                            ->withQueryString();
         return view('admin.bank.fund', compact('banks', 'data'));
     }
     
