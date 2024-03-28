@@ -30,8 +30,8 @@
       <div class="collapse" id="ui-inventory">
         <ul class="nav flex-column sub-menu">
           <li class="nav-item"> <a class="nav-link" href="{{ route('category') }}">{{__('admin.category')}}</a></li>
-          <li class="nav-item"> <a class="nav-link" href="">{{__('admin.add_product')}}</a></li>
-          <li class="nav-item"> <a class="nav-link" href="">{{__('admin.all_products')}}</a></li>
+          <li class="nav-item"> <a class="nav-link" href="{{ route('add-item') }}">{{__('admin.add_product')}}</a></li>
+          <li class="nav-item"> <a class="nav-link" href="{{ route('products') }}">{{__('admin.all_products')}}</a></li>
           <li class="nav-item"> <a class="nav-link" href="">{{__('admin.barcode')}}</a></li>
           <li class="nav-item"> <a class="nav-link" href="">{{__('admin.reorder')}}</a></li>
         </ul>

@@ -11,11 +11,11 @@
         <div class="main-panel">
             <div class="content-wrapper">
                 <div class="page-header">
-                  <h3 class="page-title"> {{__('admin.category')}} </h3>
+                  <h3 class="page-title"> {{__('admin.products')}} </h3>
                   @if(hasModuleAccess('Accounts_Add'))
                   <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                      <li class="breadcrumb-item"><a href="{{route('add-category')}}" class="btn btn-rounded btn-sm btn-success">{{__('admin.add_new')}}</a></li>
+                      <li class="breadcrumb-item"><a href="{{route('add-item')}}" class="btn btn-rounded btn-sm btn-success">{{__('admin.add_new')}}</a></li>
                     </ol>
                   </nav>
                   @endif
@@ -29,31 +29,20 @@
                               <tr>
                                 <th> {{__('admin.sl')}} </th>
                                 <th> {{__('admin.name')}} </th>
-                                <th> {{__('admin.parent_category')}} </th>
                                 <th> {{__('admin.action')}} </th>
                               </tr>
                             </thead>
                             <tbody>
-                              @if(count($categories) > 0)
+                              @if(count($products) > 0)
                                 @php
                                 $i = 1;
                                 @endphp
-                                @foreach ($categories as $row)
+                                @foreach ($products as $row)
                                   <tr>
                                     <td>{{$i++}}</td>
                                     <td> {{$row->name}} </td>
                                     <td>
-                                      @php
-                                      if($row->parent>0){
-                                        foreach($categories as $sc){
-                                          if($sc->id == $row->parent)
-                                            echo $sc->name;
-                                        }
-                                      } 
-                                      @endphp
-                                    </td>
-                                    <td>
-                                      <a href="{{ URL::route('add-category', ['id' => $row->id]) }}" class="btn btn-info btn-rounded btn-sm">{{__('admin.edit')}}</a>
+                                      <a href="{{ URL::route('add-item', ['id' => $row->id]) }}" class="btn btn-info btn-rounded btn-sm">{{__('admin.edit')}}</a>
                                     </td>
                                   </tr>
                                 @endforeach
