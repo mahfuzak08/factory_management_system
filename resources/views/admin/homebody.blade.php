@@ -17,11 +17,7 @@
     <div class="col-md-6 stretch-card grid-margin">
       <div class="card bg-gradient-info card-img-holder text-white">
         <div class="card-body">
-          @if(Auth::user()->role->name == 'Observer')
-            <a href="{{ route('purchase-report') }}">
-          @else
-            <a href="{{ route('purchase') }}">
-          @endif
+          <a href="{{ route('purchase') }}">
             <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
             <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.purchase')}}</h2>
             <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.purchase')}} {{number_format($data['today_total_purchase'], 2)}}</h5>
@@ -32,11 +28,7 @@
     <div class="col-md-6 stretch-card grid-margin">
       <div class="card bg-gradient-danger card-img-holder text-white">
         <div class="card-body">
-          @if(Auth::user()->role->name == 'Observer')
-            <a href="{{ route('sales-report') }}">
-          @else
-            <a href="{{ route('sales') }}">
-          @endif
+          <a href="{{ route('sales') }}">
             <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
             <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.sales')}}</h2>
             <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.sales')}} {{number_format($data['today_total_sale'], 2)}}</h5>

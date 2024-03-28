@@ -183,17 +183,17 @@
                                         @foreach($datas as $row)
                                           <tr>
                                             <td>{{$n++}}</td>
-                                            <td>{{$row->name}}</td>
+                                            <td><a href="{{route('vendor-details', $row->id)}}" class="{{$row->due == 0 ? 'text-warning' : ''}}">{{$row->name}}</a></td>
                                             <td>{{$row->mobile}}</td>
                                             <td>{{$row->address}}</td>
-                                            <td>{{$row->due}}</td>
+                                            <td>{{number_format($row->due, 2)}}</td>
                                             <td>
                                               <a href="{{route('vendor-details', $row->id)}}" class="btn btn-info btn-rounded btn-sm">{{__('admin.details')}}</a> 
                                               @if(hasModuleAccess('Vendor_Edit'))
-                                              <a href="{{route('edit-vendor', $row->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
+                                                <a href="{{route('edit-vendor', $row->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
                                               @endif
                                               @if(hasModuleAccess('Vendor_Delete'))
-                                              <a href="{{route('delete-vendor', $row->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a> 
+                                                <a href="{{route('delete-vendor', $row->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a> 
                                               @endif
                                             </td>
                                           </tr>
