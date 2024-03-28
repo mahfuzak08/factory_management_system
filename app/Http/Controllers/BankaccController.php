@@ -161,7 +161,7 @@ class BankaccController extends Controller
         $data = AccountTranx::join('bankaccs', 'account_tranxes.account_id', '=', 'bankaccs.id')
                 ->where('ref_type', 'fund_transfer')
                 ->select('account_tranxes.*', 'bankaccs.name as bank_name')
-                ->groupBy('account_tranxes.ref_id', 'account_tranxes.account_id', 'account_tranxes.tranx_date', 'account_tranxes.ref_type', 'account_tranxes.ref_tranx_id', 'account_tranxes.ref_tranx_type', 'account_tranxes.amount', 'account_tranxes.user_id', 'account_tranxes.note', 'account_tranxes.id', 'account_tranxes.created_at', 'account_tranxes.updated_at') // Include 'account_tranxes.id' here
+                ->groupBy('account_tranxes.ref_id', 'account_tranxes.account_id', 'account_tranxes.tranx_date', 'account_tranxes.ref_type', 'account_tranxes.ref_tranx_id', 'account_tranxes.ref_tranx_type', 'account_tranxes.amount', 'account_tranxes.user_id', 'account_tranxes.note', 'account_tranxes.id', 'account_tranxes.created_at', 'account_tranxes.updated_at', 'bankaccs.name') // Include 'account_tranxes.id' here
                 ->latest()
                 ->paginate(10)
                 ->withQueryString();    
