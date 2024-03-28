@@ -132,7 +132,11 @@
                               </tr>
                               <tr>
                                 <td colspan="5" class="text-right">
+                                  @if(hasModuleAccess("Sales_Add"))
                                   <button type="submit" class="btn btn-rounded btn-primary btn-sm">{{ __('admin.save_now') }}</button>
+                                  @else
+                                  <a class="btn btn-rounded btn-secondary btn-sm">{{ __('admin.save_now') }}</a>
+                                  @endif
                                 </td>
                                 <td>
                                   <a onclick="history.back()" class="btn btn-sm btn-rounded btn-secondary">{{ __('admin.cancel') }}</a>

@@ -54,6 +54,10 @@
                                                 </div>
                                                 <div class="form-check submodule">
                                                     <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input" name="module[]" value="Sales_Add"> {{__('Sales Add')}} <i class="input-helper"></i></label>
+                                                </div>
+                                                <div class="form-check submodule">
+                                                    <label class="form-check-label">
                                                     <input type="checkbox" class="form-check-input" name="module[]" value="Sales_Edit"> {{__('Sales Edit')}} <i class="input-helper"></i></label>
                                                 </div>
                                                 <div class="form-check submodule">
@@ -99,6 +103,10 @@
                                                 <div class="form-check submodule">
                                                     <label class="form-check-label">
                                                     <input type="checkbox" class="form-check-input" name="module[]" value="All_Purchase"> {{__('All Purchase')}} <i class="input-helper"></i></label>
+                                                </div>
+                                                <div class="form-check submodule">
+                                                    <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input" name="module[]" value="Purchase_Add"> {{__('Purchase Add')}} <i class="input-helper"></i></label>
                                                 </div>
                                                 <div class="form-check submodule">
                                                     <label class="form-check-label">
