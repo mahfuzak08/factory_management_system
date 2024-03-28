@@ -132,7 +132,11 @@
                               </tr>
                               <tr>
                                 <td colspan="5" class="text-right">
+                                  @if(hasModuleAccess("Sales_Add"))
                                   <button type="submit" class="btn btn-rounded btn-primary btn-sm">{{ __('admin.save_now') }}</button>
+                                  @else
+                                  <a class="btn btn-rounded btn-secondary btn-sm">{{ __('admin.save_now') }}</a>
+                                  @endif
                                 </td>
                                 <td>
                                   <a onclick="history.back()" class="btn btn-sm btn-rounded btn-secondary">{{ __('admin.cancel') }}</a>
@@ -168,25 +172,38 @@
                                             <th> {{__('admin.name')}} </th>
                                             <th> {{__('admin.mobile')}} </th>
                                             <th> {{__('admin.address')}} </th>
-                                            <th> {{__('admin.balance')}} </th>
+                                            <th> {{__('admin.total_due')}} </th>
+                                            <th> {{__('admin.total_payment')}} </th>
+                                            <th> {{__('admin.total')}} </th>
                                             <th> {{__('admin.action')}} </th>
                                           </tr>
                                     </thead>
                                     <tbody>
+                                      @php 
+                                        $d = 0;
+                                        $r = 0;
+                                      @endphp
                                       @if(count($datas) > 0)
                                         @php 
                                         if(isset($_GET['page']) && $_GET['page']>0)
-                                          $n = 1 + (($_GET['page'] - 1) * 10);
+                                          $n = 1 + (($_GET['page'] - 1) * 50);
                                         else
                                           $n = 1;
                                         @endphp
                                         @foreach($datas as $row)
+                                          @php
+                                          $row->due = $row->due >= 0 ? $row->due : 0;
+                                          $d += $row->due;
+                                          $r += $row->receive;
+                                          @endphp
                                           <tr>
                                             <td>{{$n++}}</td>
-                                            <td>{{$row->name}}</td>
+                                            <td><a href="{{route('customer-details', $row->id)}}" class="{{$row->due == 0 ? 'text-warning' : ''}}">{{$row->name}}</a></td>
                                             <td>{{$row->mobile}}</td>
                                             <td>{{$row->address}}</td>
                                             <td>{{number_format($row->due, 2)}}</td>
+                                            <td>{{number_format($row->receive, 2)}}</td>
+                                            <td>{{number_format(($row->due + $row->receive), 2)}}</td>
                                             <td>
                                               <a href="{{route('customer-details', $row->id)}}" class="btn btn-info btn-rounded btn-sm">{{__('admin.details')}}</a> 
                                               @if(hasModuleAccess('Customer_Edit'))
@@ -200,10 +217,28 @@
                                         @endforeach
                                       @else
                                           <tr>
-                                            <td colspan="6" class="text-center">{{__('admin.no_data_found')}}</td>
+                                            <td colspan="8" class="text-center">{{__('admin.no_data_found')}}</td>
                                           </tr>
                                       @endif
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="4">Page Total</td>
+                                            <td class="text-right">{{number_format($d, 2)}}</td>
+                                            <td class="text-right">{{number_format($r, 2)}}</td>
+                                            <td class="text-right">{{number_format(($d + $r), 2)}}</td>
+                                            <td></td>
+                                        </tr>
+                                        @if(!empty($ctotal) && count($ctotal)>0)
+                                        <tr>
+                                            <td colspan="4">Total</td>
+                                            <td class="text-right">{{number_format($ctotal['total_sales'] - $ctotal['total_receive'], 2)}}</td>
+                                            <td class="text-right">{{number_format($ctotal['total_receive'], 2)}}</td>
+                                            <td class="text-right">{{number_format(($ctotal['total_sales']), 2)}}</td>
+                                            <td></td>
+                                        </tr>
+                                        @endif
+                                    </tfoot>
                                 </table>
                               </div>
                               {{ $datas->onEachSide(3)->links() }}
