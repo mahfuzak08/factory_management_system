@@ -81,34 +81,38 @@
                                       <tbody>
                                         @if(count($data) > 0)
                                           @php 
+                                          $ref_id = array();
                                           if(isset($_GET['page']) && $_GET['page']>0)
                                             $n = 1 + (($_GET['page'] - 1) * 10);
                                           else
                                             $n = 1;
                                           @endphp
                                           @foreach($data as $row)
-                                            <tr>
-                                              <td>{{$n++}}</td>
-                                              <td>{{date('d-m-Y', strtotime($row->tranx_date))}}</td>
-                                              <td>{{$row->bank_name}}</td>
-                                              <td>{{$row->note}}</td>
-                                              <td>{{$row->ref_tranx_type}}</td>
-                                              <td class="text-right">{{number_format($row->amount, 2)}}</td>
-                                              <td>
-                                                  @if($row->ref_tranx_type == 'Pending')
-                                                    @if(hasModuleAccess('Fund_Transfer_Accept'))
-                                                      <a href="{{route('fund-transfer-action',['type' => 'accept', 'id' => $row->id])}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.accept')}}</a> 
-                                                      <a href="{{route('fund-transfer-action', ['type' => 'reject', 'id' => $row->id])}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.reject')}}</a> 
+                                            @if(array_search($row->ref_id, $ref_id) > -1)
+                                              $ref_id[] = $row->ref_id;
+                                              <tr>
+                                                <td>{{$n++}}</td>
+                                                <td>{{date('d-m-Y', strtotime($row->tranx_date))}}</td>
+                                                <td>{{$row->bank_name}}</td>
+                                                <td>{{$row->note}}</td>
+                                                <td>{{$row->ref_tranx_type}}</td>
+                                                <td class="text-right">{{number_format($row->amount, 2)}}</td>
+                                                <td>
+                                                    @if($row->ref_tranx_type == 'Pending')
+                                                      @if(hasModuleAccess('Fund_Transfer_Accept'))
+                                                        <a href="{{route('fund-transfer-action',['type' => 'accept', 'id' => $row->id])}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.accept')}}</a> 
+                                                        <a href="{{route('fund-transfer-action', ['type' => 'reject', 'id' => $row->id])}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.reject')}}</a> 
+                                                      @endif
                                                     @endif
-                                                  @endif
-                                                  @if(hasModuleAccess('Fund_Transfer_Delete'))
-                                                    <a href="{{route('fund-transfer-action', ['type' => 'delete', 'id' =>$row->id])}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a>
-                                                  @endif
-                                              </td>
-                                            </tr>
-                                            @php 
-                                            $total += $row->amount;
-                                            @endphp
+                                                    @if(hasModuleAccess('Fund_Transfer_Delete'))
+                                                      <a href="{{route('fund-transfer-action', ['type' => 'delete', 'id' =>$row->id])}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a>
+                                                    @endif
+                                                </td>
+                                              </tr>
+                                              @php 
+                                              $total += $row->amount;
+                                              @endphp
+                                            @endif
                                           @endforeach
                                         @else
                                             <tr>
