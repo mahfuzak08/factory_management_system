@@ -20,24 +20,6 @@
         <i class="mdi mdi-home menu-icon"></i>
       </a>
     </li>
-    @if(hasModuleAccess("Inventory"))
-    <li class="nav-item">
-      <a class="nav-link" data-bs-toggle="collapse" href="#ui-inventory" aria-expanded="false" aria-controls="ui-inventory">
-        <span class="menu-title">{{__('admin.inventory')}}</span>
-        <i class="menu-arrow"></i>
-        <i class="mdi mdi-codepen menu-icon"></i>
-      </a>
-      <div class="collapse" id="ui-inventory">
-        <ul class="nav flex-column sub-menu">
-          <li class="nav-item"> <a class="nav-link" href="{{ route('category') }}">{{__('admin.category')}}</a></li>
-          <li class="nav-item"> <a class="nav-link" href="{{ route('add-item') }}">{{__('admin.add_product')}}</a></li>
-          <li class="nav-item"> <a class="nav-link" href="{{ route('products') }}">{{__('admin.all_products')}}</a></li>
-          <li class="nav-item"> <a class="nav-link" href="">{{__('admin.barcode')}}</a></li>
-          <li class="nav-item"> <a class="nav-link" href="">{{__('admin.reorder')}}</a></li>
-        </ul>
-      </div>
-    </li>
-    @endif
     @if(hasModuleAccess("Sales"))
     <li class="nav-item">
       <a class="nav-link" href="{{ route('sales') }}">

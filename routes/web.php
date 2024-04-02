@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PurchaseController;
@@ -37,14 +36,6 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
-    
-    Route::get('/category', [InventoryController::class, 'category'])->name('category');
-    Route::get('/add_category', [InventoryController::class, 'add_category'])->name('add-category');
-    Route::post('/save_category', [InventoryController::class, 'save_category'])->name('save-category');
-    
-    Route::get('/add_item', [InventoryController::class, 'add_item'])->name('add-item');
-    Route::post('/save_item', [InventoryController::class, 'save_item'])->name('save-item');
-    Route::get('/products', [InventoryController::class, 'products'])->name('products');
     
     Route::get('/sales', [SalesController::class, 'index'])->name('sales');
     Route::post('/save_sales', [SalesController::class, 'set_sales'])->name('save-sales');
