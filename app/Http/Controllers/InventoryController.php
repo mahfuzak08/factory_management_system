@@ -6,13 +6,38 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Brand;
+use App\Models\Bankacc;
 use App\Models\Category;
-use App\Models\Products;
-use App\Models\Variants;
+use App\Models\Product;
+use App\Models\Product_tranx;
+use App\Models\Purchase;
+use App\Models\Tags;
+use App\Models\Variant;
+use App\Models\Vendor;
 
 
 class InventoryController extends Controller
 {
+    public function autocomplete_product_search(Request $request)
+    {
+        $query = $request->input('query');
+
+        $products = Product::select('products.*', 'categories.name as category_name', 'variants.id as variant_id', 'variants.sell_price as price', 'variants.size', 'variants.color')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->join('variants', 'products.id', '=', 'variants.product_id')
+            ->where('products.name', 'LIKE', "%$query%")
+            ->orWhere('products.barcode', 'LIKE', "%$query%")
+            ->orWhere('products.brand_name', 'LIKE', "%$query%")
+            ->orWhere('products.description', 'LIKE', "%$query%")
+            ->orWhere('products.tags', 'LIKE', "%$query%")
+            ->orWhere('categories.name', 'LIKE', "%$query%")
+            ->orWhere('variants.size', 'LIKE', "%$query%")
+            ->get();
+
+        return response()->json($products);
+    }
+
     public function category(){
         $categories = Category::all();
         return view('admin.inventory.category.manage', compact('categories'));
@@ -53,18 +78,21 @@ class InventoryController extends Controller
     }
     
     public function products(){
-        $products = Products::all();
+        $products = Product::all();
         return view('admin.inventory.product.manage', compact('products'));
     }
     
     public function add_item(){
-        $products = Products::all();
+        $brands = Brand::all();
         $categories = Category::all();
+        $products = Product::all();
+        $tags = Tags::all();
+        $vendors = Vendor::all();
         if(! empty(request()->input('id'))){
-            $product = Products::findOrFail(request()->input('id'));
+            $product = Product::findOrFail(request()->input('id'));
             return view('admin.inventory.product.edit', compact('products', 'product'));
         }
-        return view('admin.inventory.product.addnew', compact('products', 'categories'));
+        return view('admin.inventory.product.addnew', compact('products', 'categories', 'vendors', 'brands', 'tags'));
     }
 
     public function save_item(Request $request){
@@ -98,31 +126,121 @@ class InventoryController extends Controller
             DB::beginTransaction();
             $input['user_id'] = Auth::id();
             if(!empty($request->input('id'))){
-                $data = Products::findOrFail(request()->input('id'));
+                $data = Product::findOrFail(request()->input('id'));
             }else{
-                $data = new Products();
+                $data = new Product();
             }
             
             $data->fill($input)->save();
+            $product_id = $data->id;
+            if(empty($input['barcode'])){
+                $ui['barcode'] = $product_id;
+                $data->fill($ui)->save();
+            }
             $pt = array();
             foreach($input['qtys'] as $k=>$v){
                 $vi = array(
-                    'product_id' => $data->id,
+                    'product_id' => $product_id,
                     'color' => @$input['colors'][$k],
                     'size' => @$input['sizes'][$k],
                     'sell_price' => @$input['saleprices'][$k],
                     'buy_price' => @$input['buyprices'][$k],
                 );
-                $vdata = new Variants();
+                $vdata = new Variant();
                 $vdata->fill($vi)->save();
-                $pt[] = array($v, $vdata->id);
+                $pt[] = array($v, $vdata->id, @$input['buyprices'][$k]);
+            }
+            
+            $items = array();
+            $total = 0;
+            $moid = Purchase::max("order_id");
+            $order_id = $moid > 0 ? $moid+1 : 786;
+
+            foreach($pt as $v){
+                $pti = array(
+                    'product_id' => $product_id,
+                    'variant_id' => $v[1],
+                    'order_id' => $order_id,
+                    'order_type' => 'purchase',
+                    'date' => $input['date'],
+                    'inout' => 'in',
+                    'qty' => $v[0],
+                    'batch_no' => $input['batchno'],
+                    'expiry_date' => $input['expirydate'],
+                    'actual_buy_price' => $v[2],
+                );
+                $pdata = new Product_tranx();
+                $pdata->fill($pti)->save();
+
+                $items[] = [
+                    "pid"=>$product_id,
+                    "product_name"=>$input['name'], 
+                    "product_details"=>$input['description'], 
+                    "quantity"=>(float) $v[0],
+                    "price"=>(float) $v[2],
+                    "total"=>(float) $v[0] * (float) $v[2] 
+                ];
+                $total += (float) $v[0] * (float) $v[2];
             }
 
-            if(!empty($input['slno'])){
-                $slnos = explode(";", $input['slno']);
-                
+            if(!empty($input['brand_name'])){
+                $bn = Brand::where("brand_name", $input['brand_name'])->pluck('id');
+                if(count($bn) == 0){
+                    $nb = new Brand();
+                    $nb->fill(array("brand_name"=>$input['brand_name']))->save();
+                }
+            }
+            
+            if(!empty($input['tags'])){
+                $tag_list = explode(";", $input['tags']);
+                foreach($tag_list as $t){
+                    $ht = Tags::where("tag_name", $t)->pluck('id');
+                    if(count($ht) == 0){
+                        $nt = new Tags();
+                        $nt->fill(array("tag_name"=>$t))->save();
+                    }
+                }
             }
 
+            ////////////////////////////////////////////////////////////
+            $due_acc_id = Bankacc::where('type', 'Due')->pluck('id');
+            $payments[] = [
+                "pid"=>$due_acc_id[0],
+                "receive_amount"=>(float) $total
+            ];
+            $due = (float) $total;
+
+            $vendor_id = $input['vendor_id'];
+            if($vendor_id == 0){
+                $untitle_vendor_id = Vendor::where('name', 'Untitled Vendor')->pluck('id');
+                if(count($untitle_vendor_id) == 0){
+                    $vinfo = new Vendor();
+                    $input = ["name"=>'Untitled Vendor', "address"=>'System Genarated', "mobile"=>'8800000000000'];
+                    $vinfo->fill($input)->save();
+                    $vendor_id = $vinfo->id;
+                }
+                else $vendor_id = $untitle_vendor_id[0];
+            }
+
+            $input_order = [
+                "order_id"=> $order_id,
+                "order_type"=> "purchase",
+                "user_id"=> Auth::id(),
+                "vendor_id"=> $vendor_id,
+                "products"=> json_encode($items),
+                "date"=> $input['date'],
+                "discount"=> 0,
+                "total"=> $total,
+                "payment"=> json_encode($payments),
+                "total_due"=> $due,
+                "note"=> "system_genarated",
+            ];
+
+            $order = New Purchase();
+            $order->fill($input_order)->save();
+            
+            
+            ////////////////////////////////////////////////////////////////
             flash()->addSuccess('Products Added/ Update Successfully.');
             
             DB::commit();
@@ -133,6 +251,6 @@ class InventoryController extends Controller
             DB::rollback();
         }
         
-        return redirect('category');
+        return redirect('products');
     }
 }

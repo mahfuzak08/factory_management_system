@@ -164,5 +164,8 @@ return [
     'Product_Measurement' => 'Product Measurement',
     'batchno' => 'Batch No',
     'slno' => 'Serial No',
+    'Product_has_Serial_No' => 'Product has serial no',
     'expirydate' => 'Expiry Date',
+    'brand' => 'Brand',
+    'tag' => 'Tag',
 ];

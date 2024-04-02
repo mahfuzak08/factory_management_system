@@ -45,6 +45,7 @@ Route::middleware([
     Route::get('/add_item', [InventoryController::class, 'add_item'])->name('add-item');
     Route::post('/save_item', [InventoryController::class, 'save_item'])->name('save-item');
     Route::get('/products', [InventoryController::class, 'products'])->name('products');
+    Route::get('autocomplete_product_search', [InventoryController::class, 'autocomplete_product_search'])->name('autocomplete_product_search');
     
     Route::get('/sales', [SalesController::class, 'index'])->name('sales');
     Route::post('/save_sales', [SalesController::class, 'set_sales'])->name('save-sales');

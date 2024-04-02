@@ -10,6 +10,7 @@ use App\Models\AccountTranx;
 use App\Models\Bankacc;
 use App\Models\Sales;
 use App\Models\Customer;
+use App\Models\Product_tranx;
 
 class SalesController extends Controller
 {
@@ -19,27 +20,31 @@ class SalesController extends Controller
         $account = Bankacc::all();
         $customer = Customer::where('is_delete', 0)->get();
 
-        if(! empty(request()->input('search'))){
-            $str = request()->input('search');
-            $datas = Customer::select('customers.*')
-                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND ref_tranx_id = "0"), 0)) as due'))
-                            ->where(function ($query) use ($str){
-                                $query->where('name', 'like', '%'.$str.'%')
-                                ->orWhere('mobile', 'like', '%'.$str.'%')
-                                ->orWhere('email', 'like', '%'.$str.'%')
-                                ->orWhere('address', 'like', '%'.$str.'%');
-                            })
-                            ->where('is_delete', 0)
-                            ->latest()->paginate(10)->withQueryString();
+        if(hasModuleAccess("Inventory")){
+            return view('admin.sales.register_with_inventory', compact('customer', 'account'));
         }else{
-            $datas = Customer::select('customers.*')
-                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND ref_tranx_id = "0"), 0)) as due'))
-                            ->latest()
-                            ->where('is_delete', 0)
-                            ->paginate(10)
-                            ->withQueryString();
+            if(! empty(request()->input('search'))){
+                $str = request()->input('search');
+                $datas = Customer::select('customers.*')
+                                ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND ref_tranx_id = "0"), 0)) as due'))
+                                ->where(function ($query) use ($str){
+                                    $query->where('name', 'like', '%'.$str.'%')
+                                    ->orWhere('mobile', 'like', '%'.$str.'%')
+                                    ->orWhere('email', 'like', '%'.$str.'%')
+                                    ->orWhere('address', 'like', '%'.$str.'%');
+                                })
+                                ->where('is_delete', 0)
+                                ->latest()->paginate(10)->withQueryString();
+            }else{
+                $datas = Customer::select('customers.*')
+                                ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND ref_tranx_id = "0"), 0)) as due'))
+                                ->latest()
+                                ->where('is_delete', 0)
+                                ->paginate(10)
+                                ->withQueryString();
+            }
+            return view('admin.sales.register', compact('customer', 'account', 'datas'))->with('i', (request()->input('page', 1) - 1) * 10);
         }
-        return view('admin.sales.register', compact('customer', 'account', 'datas'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
     public function set_sales(Request $request){
@@ -244,6 +249,24 @@ class SalesController extends Controller
                     ];
                     $tdata = new AccountTranx();
                     $tdata->fill($trnxdata)->save();
+                }
+
+                if(hasModuleAccess("Inventory")){
+                    $ptdata = array();
+                    for($i=0; $i<count($pn); $i++){
+                        $pidvid = explode("@", $pid[$i]);
+                        $ptdata[] = array(
+                            "product_id"=>$pidvid[0],
+                            "variant_id"=>$pidvid[1],
+                            "order_id"=>$order_id, 
+                            "order_type"=>'sales', 
+                            "date"=>$request->input('date'),
+                            "inout"=>'out',
+                            "qty"=>(float) $qty[$i], 
+                            "actual_sell_price"=>(float) $price[$i], 
+                        );
+                    }
+                    Product_tranx::insert($ptdata);
                 }
 
                 flash()->addSuccess('Sales Order Added Successfully.');

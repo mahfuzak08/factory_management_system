@@ -22,6 +22,7 @@
 <!-- End layout styles -->
 {{-- <link rel="shortcut icon" href="admin/assets/images/favicon.ico" /> --}}
 <link rel="shortcut icon" href="{{asset('admin/assets/images/favicon.ico')}}" />
+<link rel="stylesheet" href="{{asset('admin/assets/css/jquery-ui.css')}}">
 <style>
     .form-group-margin-bottom-off{
         margin-bottom: unset;
