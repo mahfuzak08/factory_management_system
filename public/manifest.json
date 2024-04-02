@@ -1,9 +1,9 @@
 {
-    "name": "Rayan Washing Plant",
-    "short_name": "RWP",
+    "name": "M/S POLLI AGRO",
+    "short_name": "PA",
     "start_url": "/",
     "background_color": "#6777ef",
-    "description": "Rayan Washing Plant Factory Management System",
+    "description": "M/S Polli Agro Shop Management System",
     "display": "fullscreen",
     "theme_color": "#6777ef",
     "icons": [

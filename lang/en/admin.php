@@ -9,7 +9,7 @@ return [
     |
     */
 
-    'company' => 'Rayan Washing Plant',
+    'company' => 'M/S Polli Agro',
     'comingsoon'=>'Coming Soon',
     'dashboard' => 'Dashboard',
     'logout' => 'Log Out',
