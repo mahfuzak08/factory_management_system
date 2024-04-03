@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\AccountTranx;
 use App\Models\Bankacc;
 use App\Models\Purchase;
+use App\Models\Product_tranx;
 use App\Models\Vendor;
 
 class PurchaseController extends Controller
@@ -18,27 +19,31 @@ class PurchaseController extends Controller
             return view('error403');
         $account = Bankacc::all();
         $vendor = Vendor::where('is_delete', 0)->get();
-        if(! empty(request()->input('search'))){
-            $str = request()->input('search');
-            $datas = Vendor::select('vendors.*')
-                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM purchases WHERE vendor_id = vendors.id AND status = 1), 0) + COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = vendors.id AND ref_type = "vendor" AND ref_tranx_id = "0"), 0)) as due'))
-                            ->where(function ($query) use ($str){
-                                $query->where('name', 'like', '%'.$str.'%')
-                                ->orWhere('mobile', 'like', '%'.$str.'%')
-                                ->orWhere('email', 'like', '%'.$str.'%')
-                                ->orWhere('address', 'like', '%'.$str.'%');
-                            })
-                            ->where('is_delete', 0)
-                            ->latest()->paginate(10)->withQueryString();
+        if(hasModuleAccess("Inventory")){
+            return view('admin.purchase.register_with_inventory', compact('vendor', 'account'));
         }else{
-            $datas = Vendor::select('vendors.*')
-                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM purchases WHERE vendor_id = vendors.id AND status = 1), 0) + COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = vendors.id AND ref_type = "vendor" AND ref_tranx_id = "0"), 0)) as due'))
-                            ->latest()
-                            ->where('is_delete', 0)
-                            ->paginate(10)
-                            ->withQueryString();
+            if(! empty(request()->input('search'))){
+                $str = request()->input('search');
+                $datas = Vendor::select('vendors.*')
+                                ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM purchases WHERE vendor_id = vendors.id AND status = 1), 0) + COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = vendors.id AND ref_type = "vendor" AND ref_tranx_id = "0"), 0)) as due'))
+                                ->where(function ($query) use ($str){
+                                    $query->where('name', 'like', '%'.$str.'%')
+                                    ->orWhere('mobile', 'like', '%'.$str.'%')
+                                    ->orWhere('email', 'like', '%'.$str.'%')
+                                    ->orWhere('address', 'like', '%'.$str.'%');
+                                })
+                                ->where('is_delete', 0)
+                                ->latest()->paginate(10)->withQueryString();
+            }else{
+                $datas = Vendor::select('vendors.*')
+                                ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM purchases WHERE vendor_id = vendors.id AND status = 1), 0) + COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = vendors.id AND ref_type = "vendor" AND ref_tranx_id = "0"), 0)) as due'))
+                                ->latest()
+                                ->where('is_delete', 0)
+                                ->paginate(10)
+                                ->withQueryString();
+            }
+            return view('admin.purchase.register', compact('vendor', 'account', 'datas'))->with('i', (request()->input('page', 1) - 1) * 10);
         }
-        return view('admin.purchase.register', compact('vendor', 'account', 'datas'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
     
     public function set_purchase(Request $request){
@@ -253,6 +258,24 @@ class PurchaseController extends Controller
                     ];
                     $tdata = new AccountTranx();
                     $tdata->fill($trnxdata)->save();
+                }
+
+                if(hasModuleAccess("Inventory")){
+                    $ptdata = array();
+                    for($i=0; $i<count($pn); $i++){
+                        $pidvid = explode("@", $pid[$i]);
+                        $ptdata[] = array(
+                            "product_id"=>$pidvid[0],
+                            "variant_id"=>$pidvid[1],
+                            "order_id"=>$order_id, 
+                            "order_type"=>'purchase', 
+                            "date"=>$request->input('date'),
+                            "inout"=>'in',
+                            "qty"=>(float) $qty[$i], 
+                            "actual_buy_price"=>(float) $price[$i], 
+                        );
+                    }
+                    Product_tranx::insert($ptdata);
                 }
     
                 flash()->addSuccess('Purchase Order Added Successfully.');

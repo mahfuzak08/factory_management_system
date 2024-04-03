@@ -23,7 +23,7 @@ class InventoryController extends Controller
     {
         $query = $request->input('query');
 
-        $products = Product::select('products.*', 'categories.name as category_name', 'variants.id as variant_id', 'variants.sell_price as price', 'variants.size', 'variants.color')
+        $products = Product::select('products.*', 'categories.name as category_name', 'variants.id as variant_id', 'variants.buy_price as buy_price', 'variants.sell_price as price', 'variants.size', 'variants.color')
             ->join('categories', 'products.category_id', '=', 'categories.id')
             ->join('variants', 'products.id', '=', 'variants.product_id')
             ->where('products.name', 'LIKE', "%$query%")

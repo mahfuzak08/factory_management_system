@@ -11,10 +11,10 @@
         <div class="main-panel">
             <div class="content-wrapper">
                 <div class="page-header">
-                  <h3 class="page-title">{{ __('admin.sales_register') }}</h3>
+                  <h3 class="page-title">{{ __('admin.purchase_register') }}</h3>
                   <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{route('sales-report')}}" class="btn btn-rounded btn-sm btn-success">{{__('admin.all_sales')}}</a></li>
+                        <li class="breadcrumb-item"><a href="{{route('purchase-report')}}" class="btn btn-rounded btn-sm btn-success">{{__('admin.all_purchase')}}</a></li>
                     </ol>
                   </nav>
                 </div>
@@ -23,15 +23,15 @@
                     <div class="card">
                       <div class="card-body">
                         <table class="table" style="min-width: 500px">
-                          <tr>
-                            <td colspan="2" width="100%">
-                              <div class="ui-widget">
-                                <input type="text" id="product-search" style="width: 100%" placeholder="{{__('Scan or Type Product Info')}}" autofocus=true>
-                              </div>                            
-                            </td>
-                          </tr>
+                            <tr>
+                              <td colspan="2" width="100%">
+                                <div class="ui-widget">
+                                  <input type="text" id="product-search" style="width: 100%" placeholder="{{__('Scan or Type Product Info')}}" autofocus=true>
+                                </div>                            
+                              </td>
+                            </tr>
                         </table>
-                        <form action="{{route('save-sales')}}" method="POST" class="forms-sample table-responsive">
+                        <form action="{{route('save-purchase')}}" method="POST" class="forms-sample table-responsive">
                           @csrf
                           <style>
                             .table td{
@@ -41,10 +41,10 @@
                           <table class="table" style="min-width:500px">
                             <tr>
                               <td width="70%">
-                                <input type="text" required name="customer_new" list="customer" id="customer_id" class="form-control" placeholder="{{__('admin.customer_name')}}">
-                                <input type="hidden" name="customer_id" id="customer_id_hidden">
-                                <datalist id="customer">
-                                  @foreach($customer as $v)
+                                <input type="text" required name="vendor_new" list="vendor" id="vendor_id" class="form-control" placeholder="{{__('admin.vendor_name')}}">
+                                <input type="hidden" name="vendor_id" id="vendor_id_hidden">
+                                <datalist id="vendor">
+                                  @foreach($vendor as $v)
                                     <option value="{{$v->name}}" data-id="{{$v->id}}" data-mobile="{{$v->mobile}}" data-address="{{$v->address}}">
                                   @endforeach
                                 </datalist>
@@ -62,7 +62,6 @@
                               </td>
                             </tr>
                           </table>
-                          
                           <table class="table">
                             <thead>
                               <tr>
@@ -82,8 +81,8 @@
                                 <td colspan="5" class="text-right">{{__('admin.subtotal')}}</td>
                                 <td><input type="text" name="subtotal" id="subtotal" class="form-control" placeholder="{{__('admin.subtotal')}}"></td>
                                 <td></td>
-                              </tr> --}}
-                              {{-- <tr>
+                              </tr>
+                              <tr>
                                 <td colspan="5" class="text-right">{{__('admin.discount')}}</td>
                                 <td><input type="text" name="discount" id="discount" class="form-control" placeholder="{{__('admin.discount')}}"></td>
                                 <td></td>
@@ -118,7 +117,7 @@
                               </tr>
                               <tr>
                                 <td colspan="5" class="text-right">
-                                  @if(hasModuleAccess("Sales_Add"))
+                                  @if(hasModuleAccess("Purchase_Add"))
                                   <button type="submit" class="btn btn-rounded btn-primary btn-sm">{{ __('admin.save_now') }}</button>
                                   @else
                                   <a class="btn btn-rounded btn-secondary btn-sm">{{ __('admin.save_now') }}</a>
@@ -142,44 +141,44 @@
       </div>
     </div>
     <table class="hidden">
-      <tr id="rowsample" class="item hidden sales">
-        <td class="sl">1</td>
-        <td>
-          <input type="text" disabled class="product_name form-control">
-          <input type="hidden" name="product_name[]" class="product_name">
-        </td>
-        <td>
-          <input type="text" disabled class="product_details form-control">
-          <input type="hidden" name="product_details[]" class="product_details">
-        </td>
-        <td>
-          <input type="text" name="quantity[]" onblur="adjust_price()" class="qmp quantity form-control" placeholder="{{__('admin.quantity')}}">
-        </td>
-        <td>
-          <input type="text" name="price[]" onblur="adjust_price()" class="qmp price form-control" placeholder="{{__('admin.price')}}">
-        </td>
-        <td>
-          <input type="text" name="total[]" disabled class="total form-control" placeholder="{{__('admin.total')}}">
-        </td>
-        <td>
-          <input type="hidden" name="product_id[]" class="product_id">
-          <button type="button" class="remove_row btn btn-inverse-danger btn-icon">
-            <i class="mdi mdi-delete"></i>
-          </button>
-        </td>
-      </tr>
+        <tr id="rowsample" class="item hidden purchase">
+          <td class="sl">1</td>
+          <td>
+            <input type="text" disabled class="product_name form-control">
+            <input type="hidden" name="product_name[]" class="product_name">
+          </td>
+          <td>
+            <input type="text" disabled class="product_details form-control">
+            <input type="hidden" name="product_details[]" class="product_details">
+          </td>
+          <td>
+            <input type="text" name="quantity[]" onblur="adjust_price()" class="qmp quantity form-control" placeholder="{{__('admin.quantity')}}">
+          </td>
+          <td>
+            <input type="text" name="price[]" onblur="adjust_price()" class="qmp price form-control" placeholder="{{__('admin.price')}}">
+          </td>
+          <td>
+            <input type="text" name="total[]" disabled class="total form-control" placeholder="{{__('admin.total')}}">
+          </td>
+          <td>
+            <input type="hidden" name="product_id[]" class="product_id">
+            <button type="button" class="remove_row btn btn-inverse-danger btn-icon">
+              <i class="mdi mdi-delete"></i>
+            </button>
+          </td>
+        </tr>
     </table>
     @include('admin._script')
     <script>
-      // customer selection
-      const input = document.getElementById('customer_id');
-      const datalist = document.getElementById('customer');
+      // vendor selection
+      const input = document.getElementById('vendor_id');
+      const datalist = document.getElementById('vendor');
 
       input.addEventListener('input', (event) => {
-        let selectedLabel = event.target.value;
-        let option = [...datalist.options].find((opt) => opt.value === selectedLabel);
+        const selectedLabel = event.target.value;
+        const option = [...datalist.options].find((opt) => opt.value === selectedLabel);
         if (option) {
-          $('#customer_id_hidden').val(option.getAttribute('data-id'));
+          $('#vendor_id_hidden').val(option.getAttribute('data-id'));
           $('#mobile').val(option.getAttribute('data-mobile'));
           $('#address').val(option.getAttribute('data-address'));
         }
