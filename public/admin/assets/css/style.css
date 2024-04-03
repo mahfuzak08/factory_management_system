@@ -14383,7 +14383,10 @@ dl {
     .sidebar-icon-only .sidebar .sidebar-actions {
       display: none; }
   .sidebar-icon-only .main-panel {
-    width: calc(100% - 70px); } }
+    width: calc(100% - 70px); } 
+  .sidebar-icon-only .logo-mini-title {
+    display: none;
+  }
 
 .rtl {
   direction: rtl;
