@@ -61,7 +61,7 @@
                                     </div>
                                     <div class="form-group hidden" id="size-display">
                                       <div class="row">
-                                        <div class="col-3">
+                                        <div class="col-12 col-md-3">
                                           <label>
                                             {{ __('admin.Size_Name') }}
                                             <span>
@@ -70,28 +70,28 @@
                                           </label>
                                           <input type="text" class="form-control sizename" name="sizes[]" placeholder="{{ __('admin.Size_Name') }}">
                                         </div>
-                                        <div class="col-3">
+                                        <div class="col-6 col-md-2">
                                           <label>
                                             {{ __('admin.Color') }}
-                                            <span>
+                                            {{-- <span>
 																							{{ __('(eg. Red, Green, Blue etc)') }}
-																						</span>
+																						</span> --}}
                                           </label>
                                           <input type="text" class="form-control colorname" name="colors[]" placeholder="{{ __('admin.Color') }}">
                                         </div>
-                                        <div class="col-1">
+                                        <div class="col-6 col-md-2">
                                           <label>{{ __('admin.quantity') }}</label>
                                           <input type="text" class="form-control quantity" name="qtys[]" placeholder="Qty">
                                         </div>
-                                        <div class="col-2">
+                                        <div class="col-6 col-md-2">
                                           <label>{{__('admin.purchase')}} {{ __('admin.price') }}</label>
                                           <input type="text" class="form-control price" name="buyprices[]" placeholder="{{__('admin.purchase')}} {{ __('admin.price') }}">
                                         </div>
-                                        <div class="col-2">
+                                        <div class="col-6 col-md-2">
                                           <label>{{__('admin.sales')}} {{ __('admin.price') }}</label>
                                           <input type="text" class="form-control price" name="saleprices[]" placeholder="{{__('admin.sales')}} {{ __('admin.price') }}">
                                         </div>
-                                        <div class="col-1">
+                                        <div class="col-12 col-md-1">
                                           <br />
                                           <button type="button" class="add_item_row btn btn-inverse-success btn-icon">
                                             <i class="mdi mdi-plus"></i>
@@ -101,7 +101,7 @@
                                     </div>
                                     <div class="form-group" id="stckprod">
                                       <div class="row">
-                                        <div class="col-3">
+                                        <div class="col-12 col-md-3">
                                           <label for="productmeasure">{{ __('admin.Product_Measurement') }}</label>
                                           <input list="product_measure" name="size" id="productmeasure">
                                           <datalist id="product_measure">
@@ -112,15 +112,15 @@
                                             <option value="Pcs">{{ __('Pcs') }}</option>
                                           </datalist>
                                         </div>
-                                        <div class="col-3">
+                                        <div class="col-12 col-md-3">
                                           <label>{{ __('admin.quantity') }}</label>
                                           <input type="text" class="form-control quantity" name="qty" placeholder="{{ __('admin.quantity') }}">
                                         </div>
-                                        <div class="col-3">
+                                        <div class="col-12 col-md-3">
                                           <label>{{__('admin.purchase')}} {{ __('admin.price') }}</label>
                                           <input type="text" class="form-control price" name="buyprice" placeholder="{{__('admin.purchase')}} {{ __('admin.price') }}">
                                         </div>
-                                        <div class="col-3">
+                                        <div class="col-12 col-md-3">
                                           <label>{{__('admin.sales')}} {{ __('admin.price') }}</label>
                                           <input type="text" class="form-control price" name="saleprice" placeholder="{{__('admin.sales')}} {{ __('admin.price') }}">
                                         </div>
