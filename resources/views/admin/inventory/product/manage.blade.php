@@ -29,6 +29,12 @@
                               <tr>
                                 <th> {{__('admin.sl')}} </th>
                                 <th> {{__('admin.name')}} </th>
+                                <th> {{__('admin.brand')}} </th>
+                                <th> {{__('admin.category')}} </th>
+                                <th> {{__('admin.Size_Name')}} </th>
+                                <th> {{__('admin.quantity')}} </th>
+                                <th> {{__('admin.purchase')}} {{ __('admin.price') }} </th>
+                                <th> {{__('admin.sales')}} {{ __('admin.price') }} </th>
                                 <th> {{__('admin.action')}} </th>
                               </tr>
                             </thead>
@@ -41,8 +47,17 @@
                                   <tr>
                                     <td>{{$i++}}</td>
                                     <td> {{$row->name}} </td>
+                                    <td> {{$row->brand_name}} </td>
+                                    <td> {{$row->category_name}} </td>
+                                    <td> {{$row->size}} </td>
+                                    <td> {{$row->qty}} </td>
+                                    <td> {{$row->buy_price}} </td>
+                                    <td> {{$row->price}} </td>
                                     <td>
-                                      <a href="{{ URL::route('add-item', ['id' => $row->id]) }}" class="btn btn-info btn-rounded btn-sm">{{__('admin.edit')}}</a>
+                                      <a href="#" class="btn btn-info btn-rounded btn-sm">{{__('admin.barcode')}}</a>
+                                      <a href="#" class="btn btn-success btn-rounded btn-sm">{{__('admin.reorder')}}</a>
+                                      <a href="#" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a>
+                                      <a href="#" class="btn btn-danger btn-rounded btn-sm">{{__('admin.delete')}}</a>
                                     </td>
                                   </tr>
                                 @endforeach
@@ -55,6 +70,7 @@
                             </tbody>
                           </table>
                         </div>
+                        {{ $products->onEachSide(3)->links() }}
                       </div>
                     </div>
                 </div>
