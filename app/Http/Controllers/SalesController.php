@@ -262,7 +262,7 @@ class SalesController extends Controller
                             "order_type"=>'sales', 
                             "date"=>$request->input('date'),
                             "inout"=>'out',
-                            "qty"=>(float) $qty[$i], 
+                            "qty"=>(float) $qty[$i] * -1, 
                             "actual_sell_price"=>(float) $price[$i], 
                         );
                     }

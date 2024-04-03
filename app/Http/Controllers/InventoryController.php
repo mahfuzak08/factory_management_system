@@ -24,6 +24,7 @@ class InventoryController extends Controller
         $query = $request->input('query');
 
         $products = Product::select('products.*', 'categories.name as category_name', 'variants.id as variant_id', 'variants.buy_price as buy_price', 'variants.sell_price as price', 'variants.size', 'variants.color')
+            ->addSelect(DB::raw('COALESCE((SELECT SUM(qty) FROM product_tranxes WHERE product_id = products.id AND variant_id = variants.id), 0) as qty'))
             ->join('categories', 'products.category_id', '=', 'categories.id')
             ->join('variants', 'products.id', '=', 'variants.product_id')
             ->where('products.name', 'LIKE', "%$query%")

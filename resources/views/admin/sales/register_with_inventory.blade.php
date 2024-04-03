@@ -145,11 +145,11 @@
       <tr id="rowsample" class="item hidden sales">
         <td class="sl">1</td>
         <td>
-          <input type="text" disabled class="product_name form-control">
+          <p class="product_name"></p>
           <input type="hidden" name="product_name[]" class="product_name">
         </td>
         <td>
-          <input type="text" disabled class="product_details form-control">
+          <p class="product_details"></p>
           <input type="hidden" name="product_details[]" class="product_details">
         </td>
         <td>
