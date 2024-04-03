@@ -111,7 +111,7 @@ class InventoryController extends Controller
     }
 
     public function save_item(Request $request){
-        // dd($request->all());
+        dd($request->all());
         $input = $request->all();
         if(empty($request->input('size_check')) && !empty($request->input('qty'))){
             $input['sizes'][0] = $request->input('size');
