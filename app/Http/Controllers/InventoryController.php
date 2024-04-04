@@ -113,6 +113,14 @@ class InventoryController extends Controller
     public function save_item(Request $request){
         // dd($request->all());
         $input = $request->all();
+        $inputDate = $input['date'];
+        $today = date('Y-m-d');
+
+        if ($inputDate && strtotime($inputDate)) {
+            $today = date('Y-m-d', strtotime($inputDate));
+        }
+        
+        // dd($today);
         if(empty($request->input('size_check')) && !empty($request->input('qty'))){
             $input['sizes'][0] = $request->input('size');
             $input['qtys'][0] = $request->input('qty');
@@ -177,7 +185,7 @@ class InventoryController extends Controller
                     'variant_id' => $v[1],
                     'order_id' => $order_id,
                     'order_type' => 'purchase',
-                    'date' => $input['date'],
+                    'date' => $today,
                     'inout' => 'in',
                     'qty' => $v[0],
                     'batch_no' => $input['batchno'],
@@ -243,7 +251,7 @@ class InventoryController extends Controller
                 "user_id"=> Auth::id(),
                 "vendor_id"=> $vendor_id,
                 "products"=> json_encode($items),
-                "date"=> $input['date'],
+                "date"=> $today,
                 "discount"=> 0,
                 "total"=> $total,
                 "payment"=> json_encode($payments),
