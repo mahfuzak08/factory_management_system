@@ -117,7 +117,7 @@
                                   </form>
                                   @endif
                                   @if($employee->total_paid != 'yes')
-                                  <a href="{{ URL::route('employee-details', ['id' => $employee->id, 'action' => 'total_paid']) }}" class="btn btn-primary me-2 float-end">{{ __('admin.total_pay') }}</a>
+                                  <a href="{{ URL::route('employee-details', ['id' => $employee->id, 'action' => 'total_paid']) }}" class="btn btn-warning me-2 float-end">{{ __('admin.total_pay') }}</a>
                                   @endif
                                 </div>
                                 <div class="col-md-6 d-block d-md-none text-center">
