@@ -12,7 +12,7 @@ class Employee extends Model
     use HasFactory;
     use LogsActivity;
 
-    protected $fillable = ['name', 'mobile', 'designation', 'gender', 'address', 'nid', 'image', 'salary', 'bonus', 'emp_type', 'joining', 'closing'];
+    protected $fillable = ['name', 'mobile', 'designation', 'total_paid', 'gender', 'address', 'nid', 'image', 'salary', 'bonus', 'emp_type', 'joining', 'closing'];
 
     public function getActivitylogOptions(): LogOptions
     {

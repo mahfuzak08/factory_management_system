@@ -120,6 +120,11 @@ class EmployeeController extends Controller
     public function see_employee($id){
         $employee = Employee::findOrFail($id);
         $banks = Bankacc::where('type', '!=', 'Due')->get();
+        if(! empty(request()->input('action')) && request()->input('action') == 'total_paid'){
+            $employee->total_paid = 'yes';
+            $employee->save();
+            $employee = Employee::findOrFail($id);
+        }
         if(! empty(request()->input('search'))){
             $str = request()->input('search');
             $datas = AccountTranx::join('bankaccs', 'account_tranxes.account_id', '=', 'bankaccs.id')

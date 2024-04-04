@@ -14,6 +14,7 @@ return new class extends Migration
         if(! Schema::hasColumns('employees', ['designation'])) {
             Schema::table('employees', function (Blueprint $table) {
                 $table->string('designation')->default('Employee')->after('gender');
+                $table->string('total_paid')->nullable()->after('designation');
             });
         }
     }
@@ -25,6 +26,7 @@ return new class extends Migration
     {
         Schema::table('employees', function (Blueprint $table) {
             $table->dropColumn('designation');
+            $table->dropColumn('total_paid');
         });
     }
 };

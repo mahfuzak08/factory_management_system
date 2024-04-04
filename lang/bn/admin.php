@@ -128,6 +128,7 @@ return [
     'total_due' => 'মোট বাকি',
     'total_payment' => 'মোট জমা',
     'payment' => 'পরিশোধ',
+    'total_pay' => 'মোট পরিশোধ',
     'yearly_attendance' => 'বার্ষিক উপস্থিতি',
     'sms_manage' => 'এসএমএস ব্যবস্থাপনা',
     'status' => 'অবস্থা',
