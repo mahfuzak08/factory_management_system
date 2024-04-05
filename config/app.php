@@ -17,6 +17,21 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Application Name
+    |--------------------------------------------------------------------------
+    |
+    | This value is the name of your application. This value is used when the
+    | framework needs to place the application's name in a notification or
+    | any other location as required by the application or its packages.
+    |
+    */
+
+    'inv_name' => env('INV_NAME', 'Laravel'),
+    'inv_address' => env('INV_ADDRESS', 'Laravel'),
+    'inv_mobile' => env('INV_MOBILE', '017'),
 
     /*
     |--------------------------------------------------------------------------

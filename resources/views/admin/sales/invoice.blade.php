@@ -17,11 +17,17 @@
                         <h4 class="card-title">{{ __('admin.sales_register') }}</h4>
                           <div _ngcontent-tmn-c13="" class="row container-fluid d-flex justify-content-between">
                             <div _ngcontent-tmn-c13="" class="col-lg-3 pl-0">
+                              <p _ngcontent-tmn-c13="" class="mt-5 mb-2"><b _ngcontent-tmn-c13="">{{config('app.inv_name')}}</b></p>
+                              <p _ngcontent-tmn-c13="">{{config('app.inv_address')}},<br _ngcontent-tmn-c13="">{{config('app.inv_mobile')}}.</p>
+
                               <p _ngcontent-tmn-c13="" class="mt-5 mb-2"><b _ngcontent-tmn-c13="">{{$invoice[0]->customer_name}}</b></p>
                               <p _ngcontent-tmn-c13="">{{$invoice[0]->mobile}},<br _ngcontent-tmn-c13="">{{$invoice[0]->address}}.</p>
                             </div>
                             <div _ngcontent-tmn-c13="" class="col-lg-3 pr-0">
-                              <p _ngcontent-tmn-c13="" class="mt-5 mb-2 text-right"><b _ngcontent-tmn-c13="">#INV-{{$invoice[0]->order_id}}</b></p>
+                              <p _ngcontent-tmn-c13="" class="mt-5 mb-2 text-right">
+                                <img src="{{ asset('pollifeed-logo.png') }}" style="position: relative; right: -90px;" alt="{{config('app.name')}} logo" />
+                                <br>
+                                <b _ngcontent-tmn-c13="">#INV-{{$invoice[0]->order_id}}</b></p>
                               <p _ngcontent-tmn-c13="" class="text-right">Date : {{date('d-m-Y', strtotime($invoice[0]->date))}}</p>
                             </div>
                           </div>
