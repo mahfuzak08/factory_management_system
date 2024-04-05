@@ -104,8 +104,12 @@ class InventoryController extends Controller
         $tags = Tags::all();
         $vendors = Vendor::all();
         if(! empty(request()->input('id'))){
-            $product = Product::findOrFail(request()->input('id'));
-            return view('admin.inventory.product.edit', compact('products', 'product'));
+            if(! empty(request()->input('action')) && request()->input('action') == 'edit'){
+                $product_tranx = Product_tranx::findOrFail(request()->input('id'));
+                $product = Product::findOrFail($product_tranx->product_id);
+                $variant = Variant::findOrFail($product_tranx->variant_id);
+                return view('admin.inventory.product.edit', compact('products', 'product', 'product_tranx', 'variant'));
+            }
         }
         return view('admin.inventory.product.addnew', compact('products', 'categories', 'vendors', 'brands', 'tags'));
     }

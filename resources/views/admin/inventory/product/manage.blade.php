@@ -56,7 +56,7 @@
                                     <td>
                                       <a href="#" class="btn btn-info btn-rounded btn-sm">{{__('admin.barcode')}}</a>
                                       <a href="#" class="btn btn-success btn-rounded btn-sm">{{__('admin.reorder')}}</a>
-                                      <a href="#" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a>
+                                      <a href="{{ URL::route('add-item', ['id' => $row->id, 'action' => 'edit']) }}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a>
                                       <a href="#" class="btn btn-danger btn-rounded btn-sm">{{__('admin.delete')}}</a>
                                     </td>
                                   </tr>

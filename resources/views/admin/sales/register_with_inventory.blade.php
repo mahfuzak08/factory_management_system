@@ -44,9 +44,11 @@
                                 <input type="text" required name="customer_new" list="customer" id="customer_id" class="form-control" placeholder="{{__('admin.customer_name')}}">
                                 <input type="hidden" name="customer_id" id="customer_id_hidden">
                                 <datalist id="customer">
+                                  <select onchange="$('#country-input').val(this.value)">
                                   @foreach($customer as $v)
                                     <option value="{{$v->name}}" data-id="{{$v->id}}" data-mobile="{{$v->mobile}}" data-address="{{$v->address}}">
                                   @endforeach
+                                  </select>
                                 </datalist>
                               </td>
                               <td width="30%">
@@ -145,11 +147,11 @@
       <tr id="rowsample" class="item hidden sales">
         <td class="sl">1</td>
         <td>
-          <p class="product_name"></p>
+          <p class="product_name_txt"></p>
           <input type="hidden" name="product_name[]" class="product_name">
         </td>
         <td>
-          <p class="product_details"></p>
+          <p class="product_details_txt"></p>
           <input type="hidden" name="product_details[]" class="product_details">
         </td>
         <td>

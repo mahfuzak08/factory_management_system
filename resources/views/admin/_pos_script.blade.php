@@ -39,8 +39,10 @@
                   clonedRow.removeClass('hidden'); // remove hidden class
                   clonedRow.find('input[type="text"]').val(''); // clear text field
                   clonedRow.find('.product_id').val(ui.item.value.id + '@' + ui.item.value.variant_id); // add product name
-                  clonedRow.find('.product_name').text(ui.item.value.size ? ui.item.value.name + "(" + ui.item.value.size + ")" : ui.item.value.name); // add product name
-                  clonedRow.find('.product_details').html(ui.item.value.description + "<br>Stock Qty. = " + ui.item.value.qty); // add product description
+                  clonedRow.find('.product_name').val(ui.item.value.size ? ui.item.value.name + "(" + ui.item.value.size + ")" : ui.item.value.name); // add product name
+                  clonedRow.find('.product_name_txt').text(ui.item.value.size ? ui.item.value.name + "(" + ui.item.value.size + ")" : ui.item.value.name); // add product name
+                  clonedRow.find('.product_details').val(ui.item.value.description); // add product description
+                  clonedRow.find('.product_details_txt').html(ui.item.value.description + "<br>Stock Qty. = " + ui.item.value.qty); // add product description
                   clonedRow.find('.quantity').val(1); // add product quantity
                   if($("#rowsample").hasClass('sales'))
                     clonedRow.find('.price').val(ui.item.value.price); // add product sales price

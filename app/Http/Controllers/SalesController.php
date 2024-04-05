@@ -51,7 +51,7 @@ class SalesController extends Controller
         $rules = [
             'customer_new' => ['required', 'string', 'max:255'],
             'date' => ['required', 'date'],
-            'total' => ['required', 'integer']
+            'total' => ['required', 'numeric']
         ];
         $validator = Validator::make($request->all(), $rules);
 
@@ -119,16 +119,22 @@ class SalesController extends Controller
             ];
             $total += (float) $qty[$i] * (float) $price[$i];
         }
-        
+        $total_receive = 0;
         for($i=0; $i<count($ptype); $i++){
             $payments[] = [
                 "pid"=>$ptype[$i],
                 "receive_amount"=>(float) $receive_amount[$i]
             ];
+            $total_receive += (float) $receive_amount[$i];
             if(count($due_acc_id) > 0 && $ptype[$i] == $due_acc_id[0])
                 $due += (float) $receive_amount[$i];
             if(count($discount_acc_id) > 0 && $ptype[$i] == $discount_acc_id[0])
                 $discount += (float) $receive_amount[$i];
+        }
+
+        if((float)$total_receive < (float)$request->input('total') && $discount == 0){
+            $discount = (float) $request->input('total') - (float) $total_receive;
+            $payments[] = ["pid"=>$discount_acc_id[0], "receive_amount"=> $discount];
         }
 
         if(! empty($request->input('order_id')) && $request->input('order_id') > 0){
