@@ -156,6 +156,7 @@ return [
     'add_product' => 'Add Product',
     'products' => 'Products',
     'all_products' => 'All Products',
+    'edit_product' => 'Edit Product',
     'barcode' => 'Barcode',
     'reorder' => 'Re-order',
     'Allow_Product_Sizes_Color' => 'Allow Product Sizes and Color',

@@ -154,6 +154,7 @@ return [
     'category_name' => 'শ্রেণীর নাম',
     'parent_category' => 'মূল শ্রেণী',
     'add_product' => 'পণ্য যোগ করুন',
+    'edit_product' => 'পণ্য সম্পাদনা করুন',
     'products' => 'পণ্য',
     'all_products' => 'সব পণ্য',
     'barcode' => 'বারকোড',

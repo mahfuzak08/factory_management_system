@@ -29,7 +29,7 @@
                                         <input type="date" class="form-control" name="date" value="{{date('Y-m-d')}}">
                                     </div>
                                     <div class="form-group">
-                                        <label for="exampleInputName1">{{ __('admin.product_name') }}</label>
+                                        <label for="exampleInputName1" class="text-danger">{{ __('admin.product_name') }}</label>
                                         <input type="text" class="form-control" id="exampleInputName1" name="name" placeholder="{{ __('admin.product_name') }}" required="true">
                                     </div>
                                     <div class="form-group">
@@ -37,7 +37,7 @@
                                         <input type="text" class="form-control" id="exampleInputName2" name="description" placeholder="{{ __('admin.details') }}">
                                     </div>
                                     <div class="form-group">
-                                      <label for="cat">{{ __('admin.category') }}</label>
+                                      <label for="cat" class="text-danger">{{ __('admin.category') }}</label>
                                       <select id="cat" style="width: 100%;" name="category_id" required="true">
                                           <option value="">{{ __('Select Category') }}</option>
                                               @foreach($categories as $cat)

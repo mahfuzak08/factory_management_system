@@ -100,18 +100,45 @@ class InventoryController extends Controller
     public function add_item(){
         $brands = Brand::all();
         $categories = Category::all();
-        $products = Product::all();
+        // $products = Product::all();
         $tags = Tags::all();
         $vendors = Vendor::all();
-        if(! empty(request()->input('id'))){
+        if(! empty(request()->input('variant_id'))){
             if(! empty(request()->input('action')) && request()->input('action') == 'edit'){
-                $product_tranx = Product_tranx::findOrFail(request()->input('id'));
-                $product = Product::findOrFail($product_tranx->product_id);
-                $variant = Variant::findOrFail($product_tranx->variant_id);
-                return view('admin.inventory.product.edit', compact('products', 'product', 'product_tranx', 'variant'));
+                $variant = Variant::findOrFail(request()->input('variant_id'));
+                $product_tranx = Product_tranx::where('product_id', $variant->product_id)->where('variant_id', $variant->id)->where('from_inventory', 'yes')->latest()->get();
+                $product = Product::findOrFail($variant->product_id);
+                $vendor_info = Vendor::select('vendors.*', 'purchases.id as purchase_id', 'purchases.order_id')->join('purchases', 'vendors.id', '=', 'purchases.vendor_id')->where("purchases.order_id", $product_tranx[0]->order_id)->get();
+                // dd($vendor_info);
+                return view('admin.inventory.product.edit', compact('product', 'product_tranx', 'variant', 'vendor_info', 'categories', 'vendors', 'brands', 'tags'));
+            }
+            elseif(! empty(request()->input('action')) && request()->input('action') == 'delete'){
+                try{
+                    DB::beginTransaction();
+                    $variant = Variant::findOrFail(request()->input('variant_id'));
+                    $product_tranx = Product_tranx::where('product_id', $variant->product_id)->where('variant_id', $variant->id)->where('from_inventory', 'yes')->latest()->get();
+                    $purchase = Purchase::where("order_id", $product_tranx[0]->order_id)->get();
+                    $purchase[0]->order_type = 'purchase_delete';
+                    $total_variant = Variant::where('product_id', $variant->product_id)->get();
+                    
+                    $variant->delete();
+                    $product_tranx[0]->delete();
+                    $purchase[0]->save();
+                    if(count($total_variant)==0){
+                        $product = Product::where('id', $variant->product_id)->delete();
+                    }
+                    DB::commit();
+                    flash()->addSuccess('Product delete successfully.');
+                    return redirect('products');
+                }catch (\Exception $e) {
+                    // If any query fails, catch the exception and roll back the transaction
+                    dd($e);
+                    flash()->addError('Product delete not successfully...');
+                    DB::rollback();
+                }
             }
         }
-        return view('admin.inventory.product.addnew', compact('products', 'categories', 'vendors', 'brands', 'tags'));
+        return view('admin.inventory.product.addnew', compact('categories', 'vendors', 'brands', 'tags'));
     }
 
     public function save_item(Request $request){
@@ -152,8 +179,8 @@ class InventoryController extends Controller
         try{
             DB::beginTransaction();
             $input['user_id'] = Auth::id();
-            if(!empty($request->input('id'))){
-                $data = Product::findOrFail(request()->input('id'));
+            if(!empty($request->input('product_id'))){
+                $data = Product::findOrFail($request->input('product_id'));
             }else{
                 $data = new Product();
             }
@@ -170,23 +197,32 @@ class InventoryController extends Controller
                     'product_id' => $product_id,
                     'color' => @$input['colors'][$k],
                     'size' => @$input['sizes'][$k],
-                    'sell_price' => @$input['saleprices'][$k],
-                    'buy_price' => @$input['buyprices'][$k],
+                    'sell_price' => b2en(@$input['saleprices'][$k]),
+                    'buy_price' => b2en(@$input['buyprices'][$k]),
                 );
-                $vdata = new Variant();
+                if(!empty($request->input('variant_id'))){
+                    $vdata = Variant::findOrFail($request->input('variant_id'));
+                }else{
+                    $vdata = new Variant();
+                }
                 $vdata->fill($vi)->save();
-                $pt[] = array($v, $vdata->id, @$input['buyprices'][$k]);
+                $pt[] = array(b2en($v), $vdata->id, b2en(@$input['buyprices'][$k]));
             }
             
             $items = array();
             $total = 0;
-            $moid = Purchase::max("order_id");
-            $order_id = $moid > 0 ? $moid+1 : 786;
+            if(!empty($input['old_order_id'])){
+                $order_id = $input['old_order_id'];
+            }else{
+                $moid = Purchase::max("order_id");
+                $order_id = $moid > 0 ? $moid+1 : 786;
+            }
 
             foreach($pt as $v){
                 $pti = array(
                     'product_id' => $product_id,
                     'variant_id' => $v[1],
+                    'from_inventory' => 'yes',
                     'order_id' => $order_id,
                     'order_type' => 'purchase',
                     'date' => $today,
@@ -196,7 +232,11 @@ class InventoryController extends Controller
                     'expiry_date' => $input['expirydate'],
                     'actual_buy_price' => $v[2],
                 );
-                $pdata = new Product_tranx();
+                if(!empty($request->input('product_tranx_id'))){
+                    $pdata = Product_tranx::findOrFail($request->input('product_tranx_id'));
+                }else{
+                    $pdata = new Product_tranx();
+                }
                 $pdata->fill($pti)->save();
 
                 $items[] = [
@@ -263,7 +303,11 @@ class InventoryController extends Controller
                 "note"=> "system_genarated",
             ];
 
-            $order = New Purchase();
+            if(!empty($request->input('purchase_id'))){
+                $order = Purchase::findOrFail($request->input('purchase_id'));
+            }else{
+                $order = New Purchase();
+            }
             $order->fill($input_order)->save();
             
             
@@ -274,7 +318,7 @@ class InventoryController extends Controller
         }catch (\Exception $e) {
             // If any query fails, catch the exception and roll back the transaction
             dd($e);
-            flash()->addError('Fund Received Not Added Successfully.');
+            flash()->addError('Product Add or Update Successfully.');
             DB::rollback();
         }
         

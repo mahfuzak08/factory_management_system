@@ -16,6 +16,7 @@ return new class extends Migration
                 $table->id();
                 $table->unsignedBigInteger('product_id');
                 $table->unsignedBigInteger('variant_id');
+                $table->string('from_inventory')->nullable();
                 $table->unsignedBigInteger('order_id');
                 $table->string('order_type');
                 $table->date('date');

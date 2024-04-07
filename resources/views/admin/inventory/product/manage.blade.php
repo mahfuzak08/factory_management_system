@@ -50,14 +50,14 @@
                                     <td> {{$row->brand_name}} </td>
                                     <td> {{$row->category_name}} </td>
                                     <td> {{$row->size}} </td>
-                                    <td> {{$row->qty}} </td>
-                                    <td> {{$row->buy_price}} </td>
-                                    <td> {{$row->price}} </td>
+                                    <td> {{e2bn($row->qty)}} </td>
+                                    <td> {{e2bn($row->buy_price)}} </td>
+                                    <td> {{e2bn($row->price)}} </td>
                                     <td>
-                                      <a href="#" class="btn btn-info btn-rounded btn-sm">{{__('admin.barcode')}}</a>
-                                      <a href="#" class="btn btn-success btn-rounded btn-sm">{{__('admin.reorder')}}</a>
-                                      <a href="{{ URL::route('add-item', ['id' => $row->id, 'action' => 'edit']) }}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a>
-                                      <a href="#" class="btn btn-danger btn-rounded btn-sm">{{__('admin.delete')}}</a>
+                                      {{-- <a href="#" class="btn btn-info btn-rounded btn-sm">{{__('admin.barcode')}}</a> --}}
+                                      {{-- <a href="#" class="btn btn-success btn-rounded btn-sm">{{__('admin.reorder')}}</a> --}}
+                                      <a href="{{ URL::route('add-item', ['variant_id' => $row->variant_id, 'action' => 'edit']) }}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a>
+                                      <a href="{{ URL::route('add-item', ['variant_id' => $row->variant_id, 'action' => 'delete']) }}" class="btn btn-danger btn-rounded btn-sm">{{__('admin.delete')}}</a>
                                     </td>
                                   </tr>
                                 @endforeach
