@@ -79,21 +79,21 @@ class InventoryController extends Controller
     }
     
     public function products(){
-        $query = request()->input('query');
+        $query = request()->input('search');
+
         $products = Product::select('products.*', 'categories.name as category_name', 'variants.id as variant_id', 'variants.buy_price as buy_price', 'variants.sell_price as price', 'variants.size', 'variants.color')
-                    ->addSelect(DB::raw('(SELECT SUM(qty) FROM product_tranxes WHERE product_id = products.id AND variant_id = variants.id) as qty'))
-                    ->join('categories', 'products.category_id', '=', 'categories.id')
-                    ->join('variants', 'products.id', '=', 'variants.product_id')
-                    ->when(!empty($query), function ($query) {
-                        return $query->where('products.name', 'LIKE', "%$query%")
-                        ->orWhere('products.barcode', 'LIKE', "%$query%")
-                        ->orWhere('products.brand_name', 'LIKE', "%$query%")
-                        ->orWhere('products.description', 'LIKE', "%$query%")
-                        ->orWhere('products.tags', 'LIKE', "%$query%")
-                        ->orWhere('categories.name', 'LIKE', "%$query%")
-                        ->orWhere('variants.size', 'LIKE', "%$query%");
-                    })
-                    ->latest()->paginate(20)->withQueryString();
+            ->addSelect(DB::raw('COALESCE((SELECT SUM(qty) FROM product_tranxes WHERE product_id = products.id AND variant_id = variants.id), 0) as qty'))
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->join('variants', 'products.id', '=', 'variants.product_id')
+            ->where('products.name', 'LIKE', "%$query%")
+            ->orWhere('products.barcode', 'LIKE', "%$query%")
+            ->orWhere('products.brand_name', 'LIKE', "%$query%")
+            ->orWhere('products.description', 'LIKE', "%$query%")
+            ->orWhere('products.tags', 'LIKE', "%$query%")
+            ->orWhere('categories.name', 'LIKE', "%$query%")
+            ->orWhere('variants.size', 'LIKE', "%$query%")
+            ->latest()->paginate(20)->withQueryString();
+            
         return view('admin.inventory.product.manage', compact('products'));
     }
     
