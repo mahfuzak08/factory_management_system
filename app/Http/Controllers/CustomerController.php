@@ -16,11 +16,19 @@ class CustomerController extends Controller
 {
     public function index(){
         $ctotal = [];
+        $discount_acc_id = Bankacc::where('type', 'Discount')->pluck('id');
+        $discountids = "(";
+        foreach($discount_acc_id as $r){
+            $discountids .= $r.",";
+        }
+        $discountids = substr($discountids, 0, -1);
+        $discountids .= ")";
+
         if(! empty(request()->input('search'))){
             $str = request()->input('search');
             $datas = Customer::select('customers.*')
                             ->addSelect(DB::raw('(COALESCE((SELECT SUM(total) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer"), 0)) as due'))
-                            ->addSelect(DB::raw('COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer"), 0) as receive'))
+                            ->addSelect(DB::raw('COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND account_id NOT IN '.$discountids.'), 0) as receive'))
                             ->where(function ($query) use ($str){
                                 $query->where('name', 'like', '%'.$str.'%')
                                 ->orWhere('mobile', 'like', '%'.$str.'%')
@@ -34,7 +42,7 @@ class CustomerController extends Controller
         }else{
             $datas = Customer::select('customers.*')
                             ->addSelect(DB::raw('(COALESCE((SELECT SUM(total) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer"), 0)) as due'))
-                            ->addSelect(DB::raw('COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer"), 0) as receive'))
+                            ->addSelect(DB::raw('COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND account_id NOT IN '.$discountids.'), 0) as receive'))
                             ->latest()
                             ->where('is_delete', 0)
                             ->paginate(50)
@@ -43,7 +51,9 @@ class CustomerController extends Controller
             if(! $datas->hasMorePages()){
                 $ts = Sales::where('status', 1)->sum('total');
                 $tr = AccountTranx::where('ref_type', 'customer')->sum('amount');
-                $ctotal=array("total_sales" => $ts, "total_receive" => $tr);
+                $td = AccountTranx::where('ref_type', 'customer')->whereIn('account_id', (array) $discount_acc_id)->sum('amount');
+                // dd($ts, $tr, $td);
+                $ctotal=array("total_sales" => $ts - $td, "total_receive" => $tr);
             }
         }
         
@@ -161,13 +171,23 @@ class CustomerController extends Controller
     }
 
     public function see_customer($id){
-        // dd($this->fysd);
+        $discount_acc_id = Bankacc::where('type', 'Discount')->pluck('id');
+        $discountids = "(";
+        foreach($discount_acc_id as $r){
+            $discountids .= $r.",";
+        }
+        $discountids = substr($discountids, 0, -1);
+        $discountids .= ")";
+        
         $customer = Customer::where('id', $id)
                             ->select('customers.*')
                             ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND ref_tranx_id = "0"), 0)) as total_due'))
-                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer"), 0)) as total_pay'))
+
+                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND account_id NOT IN '.$discountids.'), 0)) as total_pay'))
+
                             ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM sales WHERE customer_id = customers.id AND status = 1 AND date >="'.$this->fysd.'" AND date <="'.$this->fyed.'"), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND ref_tranx_id = "0" AND tranx_date >="'.$this->fysd.'" AND tranx_date <="'.$this->fyed.'"), 0)) as cy_due'))
-                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND tranx_date >="'.$this->fysd.'" AND tranx_date <="'.$this->fyed.'"), 0)) as cy_pay'))
+
+                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND tranx_date >="'.$this->fysd.'" AND tranx_date <="'.$this->fyed.'" AND account_id NOT IN '.$discountids.'), 0)) as cy_pay'))
                             ->get();
         $cs = Sales::where('customer_id', $id)
                     ->where('order_type', 'sales')

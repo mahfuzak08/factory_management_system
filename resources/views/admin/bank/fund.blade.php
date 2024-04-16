@@ -98,7 +98,7 @@
                                                 <td>{{$row->bank_name}}</td>
                                                 <td>{{$row->note}}</td>
                                                 <td>{{$row->ref_tranx_type}}</td>
-                                                <td class="text-right">{{number_format($row->amount, 2)}}</td>
+                                                <td class="text-right {{$row->ref_tranx_type == 'Rejected' ? 'text-danger' : ''}}">{{number_format($row->amount, 2)}}</td>
                                                 <td>
                                                     @if($row->ref_tranx_type == 'Pending')
                                                       @if(hasModuleAccess('Fund_Transfer_Accept'))
@@ -112,7 +112,7 @@
                                                 </td>
                                               </tr>
                                               @php 
-                                              $total += $row->amount;
+                                              $total += $row->ref_tranx_type == 'Received' ? $row->amount : 0;
                                               @endphp
                                             @endif
                                           @endforeach
