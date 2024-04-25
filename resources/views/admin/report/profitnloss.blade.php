@@ -50,7 +50,6 @@
                                 @php
                                 $pnl = $total['sales'] - $total['purchase'] - ($total['salary']*-1);
                                 $te = $total['salary'] * -1;
-                                $te += $total['discount'];
                                 // $tbal = 0;
                                 @endphp
                                 <table style="border: 1px solid #000; width: 700px;">
