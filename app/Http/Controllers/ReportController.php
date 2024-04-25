@@ -223,7 +223,8 @@ class ReportController extends Controller
         $total['purchase'] = 0; 
         $total['sales'] = 0;
         $total['salary'] = 0;
-        $total['discount'] = 0;
+        $total['discount_given'] = 0;
+        $total['discount_receive'] = 0;
         $total['pay'] = 0;
         $total['receive'] = 0;
         $total['accounts_bal'] = [];
