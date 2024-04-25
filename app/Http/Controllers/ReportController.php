@@ -168,6 +168,7 @@ class ReportController extends Controller
                                 ->join("bankaccs", "expense_details.account_id", "=", "bankaccs.id")
                                 ->select("expense_details.*", "expenses.name as expense_name", "bankaccs.name as acc_name")
                                 ->where(function ($q) use ($sd, $ed, $expenseType) {
+                                    $q->where('expense_details.status', 1);
                                     if(! empty($sd) && ! empty($ed)){
                                         $q->where('trnx_date', '>=', $sd)
                                             ->where('trnx_date', '<=', $ed);
@@ -180,6 +181,7 @@ class ReportController extends Controller
 
             if(! $datas->hasMorePages()){
                 $etotal = Expense_detail::where(function ($q) use ($sd, $ed, $expenseType) {
+                                            $q->where('expense_details.status', 1);
                                             if(! empty($sd) && ! empty($ed)){
                                                 $q->where('trnx_date', '>=', $sd)
                                                     ->where('trnx_date', '<=', $ed);
@@ -198,11 +200,13 @@ class ReportController extends Controller
                                 ->select("expense_details.*", "expenses.name as expense_name", "bankaccs.name as acc_name")
                                 ->where('trnx_date', '>=', date('Y-m-d'))
                                 ->where('trnx_date', '<=', date('Y-m-d'))
+                                ->where('expense_details.status', 1)
                                 ->paginate(10)->withQueryString();
 
             if(! $datas->hasMorePages()){
                 $etotal = Expense_detail::where('trnx_date', '>=', date('Y-m-d'))
                                         ->where('trnx_date', '<=', date('Y-m-d'))
+                                        ->where('status', 1)
                                         ->sum('amount');
             }
             else{
@@ -237,6 +241,7 @@ class ReportController extends Controller
                                 ->where('expense_details.trnx_date', '>=', $sd)
                                 ->where('expense_details.trnx_date', '<=', $ed)
                                 ->where('expenses.status', '=', 1)
+                                ->where('expense_details.status', '=', 1)
                                 ->groupBy('expense_details.expense_id', 'expenses.name')
                                 ->select('expense_details.expense_id', 'expenses.name as expense_name', \DB::raw('SUM(expense_details.amount) as total_amount'))
                                 ->get();
@@ -246,9 +251,15 @@ class ReportController extends Controller
                                     ->sum('amount');
 
             $discount_acc_id = Bankacc::where('type', 'Discount')->pluck('id');
-            $total['discount'] = AccountTranx::where('tranx_date', '>=', $sd)
+            $total['discount_given'] = AccountTranx::where('tranx_date', '>=', $sd)
                                     ->where('tranx_date', '<=', $ed)
                                     ->where('account_id', $discount_acc_id[0])
+                                    ->where('ref_type', 'customer')
+                                    ->sum('amount');
+            $total['discount_receive'] = AccountTranx::where('tranx_date', '>=', $sd)
+                                    ->where('tranx_date', '<=', $ed)
+                                    ->where('account_id', $discount_acc_id[0])
+                                    ->where('ref_type', 'vendor')
                                     ->sum('amount');
             $total['receive'] = AccountTranx::where('tranx_date', '>=', $sd)
                                     ->where('tranx_date', '<=', $ed)

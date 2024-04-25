@@ -61,13 +61,33 @@
                                   </tr>
                                   <tr style="border: 1px solid #000;">
                                     <td style="padding: 5px 10px;">{{__('admin.sales')}}</td>
-                                    <td style="text-align: right; width: 200px;padding: 5px 10px;"></td>
                                     <td style="text-align: right; width: 200px;padding: 5px 10px;">{{number_format($total['sales'], 2)}}</td>
+                                    <td style="text-align: right; width: 200px;padding: 5px 10px;"></td>
+                                  </tr>
+                                  <tr style="border: 1px solid #000;">
+                                    <td style="padding: 5px 10px;">{{__('admin.cash_discount')}}</td>
+                                    <td style="text-align: right; width: 200px;padding: 5px 10px;">-{{number_format($total['discount_given'], 2)}}</td>
+                                    <td style="text-align: right; width: 200px;padding: 5px 10px;"></td>
+                                  </tr>
+                                  <tr style="border: 1px solid #000;">
+                                    <td style="padding: 5px 10px;"></td>
+                                    <td style="text-align: right; width: 200px;padding: 5px 10px;"></td>
+                                    <td style="text-align: right; width: 200px;padding: 5px 10px;">{{number_format($total['sales'] - $total['discount_given'], 2)}}</td>
                                   </tr>
                                   <tr style="border: 1px solid #000;">
                                     <td style="padding: 5px 10px;">{{__('admin.purchase')}}</td>
-                                    <td style="text-align: right; width: 200px;"></td>
                                     <td style="text-align: right; width: 200px;padding: 5px 10px;">{{number_format($total['purchase'], 2)}}</td>
+                                    <td style="text-align: right; width: 200px;padding: 5px 10px;"></td>
+                                  </tr>
+                                  <tr style="border: 1px solid #000;">
+                                    <td style="padding: 5px 10px;">{{__('admin.cash_discount')}}</td>
+                                    <td style="text-align: right; width: 200px;padding: 5px 10px;">{{number_format($total['discount_receive'], 2)}}</td>
+                                    <td style="text-align: right; width: 200px;padding: 5px 10px;"></td>
+                                  </tr>
+                                  <tr style="border: 1px solid #000;">
+                                    <td style="padding: 5px 10px;"></td>
+                                    <td style="text-align: right; width: 200px;"></td>
+                                    <td style="text-align: right; width: 200px;padding: 5px 10px;">{{number_format($total['purchase'] + $total['discount_receive'], 2)}}</td>
                                   </tr>
                                   <tr style="border: 1px solid #000; background: #CDC;">
                                     <td style="padding: 5px 10px;">{{__('admin.expense')}}</td>
@@ -88,11 +108,6 @@
                                   <tr style="border: 1px solid #000;">
                                     <td style="padding-left: 30px">{{__('admin.salary')}}</td>
                                     <td style="text-align: right; width: 200px;padding: 5px 10px;">{{number_format($total['salary'] * -1, 2)}}</td>
-                                    <td style="text-align: right; width: 200px;"></td>
-                                  </tr>
-                                  <tr style="border: 1px solid #000;">
-                                    <td style="padding-left: 30px">{{__('admin.cash_discount')}}</td>
-                                    <td style="text-align: right; width: 200px;padding: 5px 10px;">{{number_format($total['discount'], 2)}}</td>
                                     <td style="text-align: right; width: 200px;"></td>
                                   </tr>
                                   <tr style="border: 1px solid #000;">
