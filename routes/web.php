@@ -112,6 +112,7 @@ Route::middleware([
     Route::get('/reportSales', [ReportController::class, 'sales'])->name('sales-report');
     Route::get('/reportPurchase', [ReportController::class, 'purchase'])->name('purchase-report');
     Route::get('/reportExpense', [ReportController::class, 'expense'])->name('expense-report');
+    Route::get('/reportSalary', [ReportController::class, 'salary'])->name('salary-report');
     Route::get('/reportProfitAndLoss', [ReportController::class, 'profit_and_loss'])->name('profit-and-loss');
     
 
@@ -138,4 +139,6 @@ Route::middleware([
     Route::get('/add_fiscal_year', [SettingsController::class, 'open_fy_form'])->name('new-fy');
     Route::post('/save_fiscal_year', [SettingsController::class, 'set_fy'])->name('save-fy');
     
+    Route::get('/attendance_device', [SettingsController::class, 'attendance_device'])->name('device');
+    Route::post('/attendance_device_save', [SettingsController::class, 'attendance_device_save'])->name('save-device');
 });
