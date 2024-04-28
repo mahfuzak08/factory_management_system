@@ -176,7 +176,7 @@ class EmployeeController extends Controller
 
                 $input = $request->all();
                 $input['amount'] *= -1;
-                $input['note'] = $input['note'] . ' (Edited by ' . Auth::user()->name . ' and Old amount was ' . $data[0]->amount*-1;
+                $input['note'] = $input['note'] . ' (Edited by ' . Auth::user()->name . ' and Old amount was ' . $data[0]->amount*-1 .')';
                 $data[0]->fill($input)->save();
                 flash()->addSuccess('Data Update Successfully.');
             }else{

@@ -13,6 +13,7 @@ use App\Models\Sales;
 use App\Models\Customer;
 use App\Models\Expense;
 use App\Models\Expense_detail;
+use App\Models\Employee;
 // use App\Models\Vendor;
 
 class ReportController extends Controller
@@ -216,6 +217,46 @@ class ReportController extends Controller
         $expense = Expense::all();
 
         return view('admin.report.expense', compact('datas', 'expense', 'etotal'))->with('i', (request()->input('page', 1) - 1) * 10);
+    }
+    
+    public function salary(Request $request){
+        $sd = empty(request()->input('start_date')) ? date('Y-m-d') : request()->input('start_date');
+        $ed = empty(request()->input('end_date')) ? date('Y-m-d') : request()->input('end_date');
+        $eid = empty(request()->input('eid')) ? 'all' : request()->input('eid');
+        // dd($eid);
+        $datas = AccountTranx::join("employees", "account_tranxes.ref_id", "=", "employees.id")
+                            ->select("account_tranxes.*", "employees.name as employees_name")
+                            ->where(function ($q) use ($sd, $ed, $eid) {
+                                $q->where('ref_type', 'employee');
+                                if(! empty($sd) && ! empty($ed)){
+                                    $q->where('tranx_date', '>=', $sd)
+                                        ->where('tranx_date', '<=', $ed);
+                                }
+                                if ($eid != 'all') {
+                                    $q->where('ref_id', $eid);
+                                }
+                            })
+                            ->paginate(10)->withQueryString();
+
+        if(! $datas->hasMorePages()){
+            $etotal = AccountTranx::where(function ($q) use ($sd, $ed, $eid) {
+                                        $q->where('ref_type', 'employee');
+                                        if(! empty($sd) && ! empty($ed)){
+                                            $q->where('tranx_date', '>=', $sd)
+                                                ->where('tranx_date', '<=', $ed);
+                                        }
+                                        if ($eid != 'all') {
+                                            $q->where('ref_id', $eid);
+                                        }
+                                    })->sum('amount');
+        }
+        else{
+            $etotal = 0;
+        }
+    
+        $employees = Employee::all();
+        
+        return view('admin.report.employee', compact('datas', 'employees', 'etotal'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
     
     public function profit_and_loss(Request $request){
