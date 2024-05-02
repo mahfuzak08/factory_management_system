@@ -133,7 +133,8 @@ class ExpenseController extends Controller
         else{
             $etotal = 0;
         }
-        return view('admin.expense.details', compact('expense', 'etotal', 'banks', 'datas'))->with('i', (request()->input('page', 1) - 1) * 10);
+        $expense_total = Expense_detail::where('expense_id', $id)->where('status', 1)->whereBetween('trnx_date', [$this->fysd, $this->fyed])->sum('amount');
+        return view('admin.expense.details', compact('expense', 'expense_total', 'etotal', 'banks', 'datas'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
     public function add_expense_amount(Request $request){

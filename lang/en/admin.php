@@ -125,6 +125,7 @@ return [
     'not_allowed' => 'You are not allowed to access this page',
     'current_due' => 'Current Year Due',
     'current_payment' => 'Current Year Payment',
+    'current' => 'Current Year ',
     'total_due' => 'Total Due',
     'total_payment' => 'Total Payment',
     'payment' => 'Payment Done',

@@ -24,7 +24,7 @@
                             <div class="card-body">
                               @if(hasModuleAccess('Expense_Transection_Add'))
                               <div class="row">
-                                <div class="col-md-6 d-none d-md-block" id="addForm">
+                                <div class="col-md-8 d-none d-md-block" id="addForm">
                                   <form class="forms-sample" method="POST" action="{{ route('save-expense-amount') }}">
                                     @csrf
                                     <input type="hidden" name="ref_id" value="{{$expense->id}}" />
@@ -35,6 +35,12 @@
                                       <label for="input1" class="col-sm-3 col-form-label">{{__('admin.name')}}</label>
                                       <div class="col-sm-9">
                                         <input type="text" class="form-control form-control-border-off" disabled="true" id="input1" value="{{$expense->name}}">
+                                      </div>
+                                    </div>
+                                    <div class="form-group form-group-margin-bottom-off row">
+                                      <label for="input1" class="col-sm-3 col-form-label">{{__('admin.current')}} {{__('admin.expense')}}</label>
+                                      <div class="col-sm-9">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input1" value="{{number_format($expense_total, 2)}}">
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">

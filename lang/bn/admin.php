@@ -125,6 +125,7 @@ return [
     'not_allowed' => 'আপনার এই পৃষ্ঠায় অ্যাক্সেস করার অনুমতি নেই',
     'current_due' => 'চলতি বছরের বাকি',
     'current_payment' => 'চলতি বছরের জমা',
+    'current' => 'চলতি বছরের ',
     'total_due' => 'মোট বাকি',
     'total_payment' => 'মোট জমা',
     'payment' => 'পরিশোধ',
