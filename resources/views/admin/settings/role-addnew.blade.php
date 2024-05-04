@@ -176,6 +176,18 @@
                                                     <label class="form-check-label">
                                                     <input type="checkbox" class="form-check-input" name="module[]" value="Fiscal_Year_Delete"> {{__('Fiscal Year Delete')}} <i class="input-helper"></i></label>
                                                 </div>
+                                                <div class="form-check submodule">
+                                                    <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input" name="module[]" value="Device"> {{__('Device')}} <i class="input-helper"></i></label>
+                                                </div>
+                                                <div class="form-check submodule">
+                                                    <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input" name="module[]" value="Device_Add"> {{__('Device Add')}} <i class="input-helper"></i></label>
+                                                </div>
+                                                <div class="form-check submodule">
+                                                    <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input" name="module[]" value="Device_Delete"> {{__('Device Delete')}} <i class="input-helper"></i></label>
+                                                </div>
                                         </div>
                                         <div class="form-group col-md-6">
                                             <div class="form-check">

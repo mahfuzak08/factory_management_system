@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Sms_log;
 use App\Models\Fiscal_year;
+use App\Models\Device;
 use App\Notifications\SendSms;
+use Rats\Zkteco\Lib\ZKTeco;
 
 class SettingsController extends Controller
 {
@@ -227,4 +230,126 @@ class SettingsController extends Controller
         
         return redirect('fiscal_year');
     }
+
+    /**
+     * attendance device manage
+     */
+    public function device(){
+        if(!empty($_GET['type']) && !empty($_GET['id'])){
+            switch($_GET['type']){
+                case 'delete':
+                    Device::where('id', $_GET['id'])->delete();
+                    flash()->addSuccess('Device Delete Successfully.');
+                    return redirect('device');
+                    break;
+                case 'edit':
+                    break;
+                case 'active':
+                    try{
+                        $d = Device::findOrFail($_GET['id']);
+                        $ip = getHostByName(getHostName());
+                        $same_ip = $this->isSameSubnet($d->ip, $ip);
+                        if($same_ip){
+                            $fp = fsockopen($d->ip, $d->port, $errno, $errstr, 10);
+                            if(!$fp){
+                                flash()->addError("The IP address $d->ip is not reachable.");
+                            }
+                            else{
+                                // echo "The IP address $d->ip is reachable.";
+                                $zk = new ZKTeco($d->ip, $d->port);
+                                $zk->connect();
+                                $d->status = 'Connected';
+                                $d->save();
+                                $zk->disconnect();
+                            }
+                        }
+                    } catch (\Exception $e) {
+                        dd($e->getMessage());
+                    }
+                    return redirect('device');
+                    break;
+                case 'getUsers':
+                    try{
+                        $d = Device::findOrFail($_GET['id']);
+                        $ip = getHostByName(getHostName());
+                        $same_ip = $this->isSameSubnet($d->ip, $ip);
+                        if($same_ip){
+                            $fp = fsockopen($d->ip, $d->port, $errno, $errstr, 10);
+                            if(!$fp){
+                                flash()->addError("The IP address $d->ip is not reachable.");
+                            }
+                            else{
+                                $zk = new ZKTeco($d->ip, $d->port);
+                                $zk->connect();
+                                $users = $zk->getUser();
+                                $zk->disconnect();
+                            }
+                            return view('admin.settings.device-user', compact('d', 'users'));
+                        }
+                    } catch (\Exception $e) {
+                        dd($e->getMessage());
+                    }
+                    break;
+                case 'inactive':
+                    try{
+                        $d = Device::findOrFail($_GET['id']);
+                        $ip = getHostByName(getHostName());
+                        $same_ip = $this->isSameSubnet($d->ip, $ip);
+                        if($same_ip){
+                            $fp = fsockopen($d->ip, $d->port, $errno, $errstr, 10);
+                            if(!$fp){
+                                flash()->addError("The IP address $d->ip is not reachable.");
+                            }
+                            else{
+                                $zk = new ZKTeco($d->ip, $d->port);
+                                $zk->connect();
+                                $d->status = 'Disconnected';
+                                $d->save();
+                                $zk->disconnect();
+                            }
+                        }
+                    } catch (\Exception $e) {
+                        dd($e->getMessage());
+                    }
+                    return redirect('device');
+                    break;
+            }
+        }
+        $devices = Device::all();
+        return view('admin.settings.device', compact('devices'));
+    }
+    
+    public function add_device(){
+        return view('admin.settings.add-device');
+    }
+    
+    public function device_save(Request $request){
+        $rules = [
+            'name' => ['string', 'max:40'],
+            'ip' => ['required', 'string', 'max:15'],
+            'port' => ['required', 'integer']
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            foreach ($validator->messages()->toArray() as $key => $value) { 
+                flash()->addError($value[0]);
+            }
+            return redirect('add_device');
+        }
+        
+        if(! empty($request->input('id'))){
+            $db = Device::findOrFail($request->input('id'));
+            flash()->addSuccess('Device Update Successfully.');
+        }else{
+            $db = new Device();
+            $input = $request->all();
+            $input['status'] = 'Not Connected';
+            $db->fill($input)->save();
+            flash()->addSuccess('Device Added Successfully.');
+        }
+        
+        return redirect('device');
+    }
+    
 }

@@ -58,5 +58,8 @@
         </div>
       </div>
     </div>
+    {{-- @php 
+    dd($data['attendance'])
+    @endphp --}}
   </div>
 </div>

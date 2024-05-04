@@ -121,14 +121,16 @@
       <div class="collapse" id="ui-basic">
         <ul class="nav flex-column sub-menu">
           <li class="nav-item"> <a class="nav-link" href="{{route('language')}}">{{__('admin.language')}}</a></li>
+          <li class="nav-item"> <a class="nav-link" href="{{route('sms')}}">{{__('admin.sms_manage')}}</a></li>
+          @if(hasModuleAccess("Device"))
+          <li class="nav-item"> <a class="nav-link" href="{{route('device')}}">{{__('Device Management')}}</a></li>
+          @endif
+          @if(hasModuleAccess("Fiscal_Year"))
+          <li class="nav-item"> <a class="nav-link" href="{{route('fy')}}">{{__('admin.fy')}}</a></li>
+          @endif
           @if(Auth::user()->role->name == 'Super Admin')
           <li class="nav-item"> <a class="nav-link" href="{{route('user-manage')}}">{{__('admin.user_management')}}</a></li>
           <li class="nav-item"> <a class="nav-link" href="{{route('role-manage')}}">{{__('admin.role_management')}}</a></li>
-          {{-- <li class="nav-item"> <a class="nav-link" href="{{route('device')}}">{{__('Attendance Device')}}</a></li> --}}
-          @endif
-          <li class="nav-item"> <a class="nav-link" href="{{route('sms')}}">{{__('admin.sms_manage')}}</a></li>
-          @if(hasModuleAccess("Fiscal_Year"))
-          <li class="nav-item"> <a class="nav-link" href="{{route('fy')}}">{{__('admin.fy')}}</a></li>
           @endif
         </ul>
       </div>

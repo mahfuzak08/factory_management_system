@@ -33,3 +33,17 @@
         console.error("Service workers are not supported.");
     }
 </script>
+@if(@$run_script)
+<script>
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(40, JSON.parse(xhttp.responseText));
+            }
+        };
+        xhttp.open("GET", "{{ route("device-attendance") }}", true);
+        xhttp.send();
+    }, 300000);
+</script>
+@endif

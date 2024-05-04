@@ -79,6 +79,7 @@ Route::middleware([
     Route::get('/delete_employee/{id}', [EmployeeController::class, 'delete_employee'])->name('delete-employee');
     Route::get('/employee_details/{id}', [EmployeeController::class, 'see_employee'])->name('employee-details');
     Route::post('/save_employee_amount', [EmployeeController::class, 'add_amount'])->name('save-employee-amount');
+    Route::get('/device_attendance', [EmployeeController::class, 'device_attendance'])->name('device-attendance');
     Route::get('/attendance', [EmployeeController::class, 'attendance'])->name('attendance');
     Route::post('/save_attendance', [EmployeeController::class, 'save_attendance'])->name('save-attendance');
     Route::get('/emp_report', [EmployeeController::class, 'attendance_report'])->name('emp-report');
@@ -139,6 +140,7 @@ Route::middleware([
     Route::get('/add_fiscal_year', [SettingsController::class, 'open_fy_form'])->name('new-fy');
     Route::post('/save_fiscal_year', [SettingsController::class, 'set_fy'])->name('save-fy');
     
-    Route::get('/attendance_device', [SettingsController::class, 'attendance_device'])->name('device');
-    Route::post('/attendance_device_save', [SettingsController::class, 'attendance_device_save'])->name('save-device');
+    Route::get('/device', [SettingsController::class, 'device'])->name('device');
+    Route::get('/add_device', [SettingsController::class, 'add_device'])->name('add-device');
+    Route::post('/device_save', [SettingsController::class, 'device_save'])->name('save-device');
 });

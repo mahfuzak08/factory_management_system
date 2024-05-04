@@ -26,4 +26,18 @@ class Controller extends BaseController
             $this->fyed = date('Y').'-12-31';
         }
     }
+
+    public function isSameSubnet($ip1, $ip2, $subnetMask = 24)
+    {
+        // Convert IP addresses to binary strings
+        $binaryIp1 = inet_pton($ip1);
+        $binaryIp2 = inet_pton($ip2);
+
+        // Extract network portions based on the subnet mask
+        $networkPortionIp1 = substr($binaryIp1, 0, $subnetMask / 8);
+        $networkPortionIp2 = substr($binaryIp2, 0, $subnetMask / 8);
+
+        // Compare network portions
+        return $networkPortionIp1 === $networkPortionIp2;
+    }
 }

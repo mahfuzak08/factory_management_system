@@ -6,10 +6,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\Models\Activity;
 use App\Models\AccountTranx;
 use App\Models\Bankacc;
 use App\Models\Employee;
 use App\Models\Attendance;
+use App\Models\Device;
+use App\Models\Device_attendance;
+use Rats\Zkteco\Lib\ZKTeco;
+
 
 class EmployeeController extends Controller
 {
@@ -200,6 +205,74 @@ class EmployeeController extends Controller
         return redirect($request->input('redirect_url'));
     }
 
+    public function device_attendance(){
+        try{
+            $device = Device::all();
+            foreach($device as $d){
+                DB::beginTransaction();
+                try{
+                    $fp = fsockopen($d->ip, $d->port, $errno, $errstr, 10);
+                    if(!$fp){
+                        // dd('Failed to connect to device '. $d->ip);
+                        activity()->log('Failed to connect to device '. $d->ip);
+                    }else{
+                        $zk = new ZKTeco($d->ip, $d->port);
+                        $zk->connect();
+                        activity()->log("The device address $d->ip is connected successfully.");
+                        $d->status = 'Connected';
+                        $d->save();
+                        $device_attendance = $zk->getAttendance();
+                        if(count($device_attendance)>0){
+                            // $last_row = Device_attendance::orderBy('id', 'desc')->first();
+                            $ddata = array();
+                            $eattdata = array();
+                            $flag = array();
+                            foreach($device_attendance as $row){
+                                $ddata[] = array(
+                                    'uid'=>$row['uid'],
+                                    'emp_id'=>$row['id'],
+                                    'state'=>$row['state'],
+                                    'timestamp'=>$row['timestamp'],
+                                    'type'=>$row['type']
+                                );
+                                if($row['id'] != '902770'){
+                                    $empatt = Attendance::where('emp_id', $row['id'])->where('date', date('Y-m-d', strtotime($row['timestamp'])))->pluck('id');
+                                    if(count($empatt) == 0 && array_search($row['id'],$flag,true) == FALSE){
+                                        // dd(count($empatt), $row['id']);
+                                        $flag[] = $row['id'];
+                                        $eattdata[] = array(
+                                            'date'=>date('Y-m-d', strtotime($row['timestamp'])),
+                                            'emp_id'=>$row['id'],
+                                            'hours'=>8,
+                                            'user_id'=>Auth::id(),
+                                            'created_at'=>date('Y-m-d H:i:s', time()),
+                                            'updated_at'=>date('Y-m-d H:i:s', time()),
+                                        );
+                                    }
+                                }
+                            }
+                            if(count($ddata)>0)
+                                Device_attendance::insert($ddata);
+                            if(count($eattdata)>0)
+                                Attendance::insert($eattdata);
+
+                            DB::commit();
+                            $zk->clearAttendance();
+                        }
+                        $zk->disconnect();
+                    }
+                }catch(\Exception $e) {
+                    DB::rollback();
+                    activity()->log('Failed to connect to device: ' . $e->getMessage());
+                    return response()->json(array("status"=> false, "error1"=>$e->getMessage()));
+                }
+            }
+            return response()->json(array("status"=> true));
+        } catch (\Exception $e) {
+            activity()->log($e->getMessage());
+            return response()->json(array("status"=> false, "error2"=>$e->getMessage()));
+        }
+    }
 
     public function attendance(Request $request){
         $d = $request->input('oldDate') ? $request->input('oldDate') : date('Y-m-d');
