@@ -190,6 +190,7 @@ class CustomerController extends Controller
                             ->addSelect(DB::raw('(COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND tranx_date >="'.$this->fysd.'" AND tranx_date <="'.$this->fyed.'" AND account_id NOT IN '.$discountids.'), 0)) as cy_pay'))
                             ->get();
         $cs = Sales::where('customer_id', $id)
+                    ->whereBetween('date', [$this->fysd, $this->fyed])
                     ->where('order_type', 'sales')
                     ->get();
         $quantity = 0;
