@@ -16,7 +16,7 @@ class HomeController extends Controller
         activity()->log('Logged in');
         $device = Device::all();
         $ip = getHostByName(getHostName());
-        $run_script = $this->isSameSubnet($device[0]->ip, $ip);
+        $run_script = count($device)>0 ? $this->isSameSubnet($device[0]->ip, $ip) : false;
         
         $data['today_total_purchase'] = Purchase::where('status', 1)
                                                 ->where('date', '=', date('Y-m-d'))
