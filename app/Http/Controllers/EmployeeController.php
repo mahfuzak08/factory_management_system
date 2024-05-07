@@ -150,8 +150,14 @@ class EmployeeController extends Controller
                     ->select('account_tranxes.*', 'bankaccs.name as bank_name')
                     ->latest()->paginate(10)->withQueryString();
         }
-        $total_receive = AccountTranx::where('ref_id', $id)->where('ref_type', 'employee')->sum('amount');
-        $yearly_attendance = Attendance::where('emp_id', $id)->where('hours', 8)->count();
+        $total_receive = AccountTranx::where('ref_id', $id)
+                                    ->where('ref_type', 'employee')
+                                    ->whereBetween('tranx_date', [$this->fysd, $this->fyed])
+                                    ->sum('amount');
+        $yearly_attendance = Attendance::where('emp_id', $id)
+                                        ->where('hours', 8)
+                                        ->whereBetween('date', [$this->fysd, $this->fyed])
+                                        ->count();
         return view('admin.employee.details', compact('employee', 'banks', 'datas', 'total_receive', 'yearly_attendance'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
