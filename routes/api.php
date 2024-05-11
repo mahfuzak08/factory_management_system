@@ -19,6 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::get('/receive-data-test', function(){
-    return response()->json(array("status"=>true));
+    return response()->json(request()->all());
 });
 Route::post('/receive-data', 'ApiController@receiveData');
