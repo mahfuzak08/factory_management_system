@@ -217,6 +217,7 @@ class EmployeeController extends Controller
             foreach($device as $d){
                 DB::beginTransaction();
                 try{
+                    dd($d);
                     $fp = fsockopen($d->ip, $d->port, $errno, $errstr, 10);
                     if(!$fp){
                         // dd('Failed to connect to device '. $d->ip);
