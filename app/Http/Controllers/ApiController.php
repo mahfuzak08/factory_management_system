@@ -8,6 +8,7 @@ class ApiController extends Controller
 {
     public function receiveData(Request $request)
     {
+        dd($request->all());
         // Validate incoming data if needed
         // $validatedData = $request->validate([
         //     'key1' => 'required',
