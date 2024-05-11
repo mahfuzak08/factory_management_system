@@ -14,11 +14,11 @@ class HomeController extends Controller
 {
     public function dashboard(){
         activity()->log('Logged in');
-        $device = Device::all();
+        // $device = Device::all();
         // $ip = getHostByName(getHostName());
-        // dd($ip);
         // $run_script = count($device)>0 ? $this->isSameSubnet($device[0]->ip, $ip) : false;
         $run_script = true;
+        
         $data['today_total_purchase'] = Purchase::where('status', 1)
                                                 ->where('date', '=', date('Y-m-d'))
                                                 ->sum('total');

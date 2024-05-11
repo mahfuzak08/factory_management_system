@@ -218,11 +218,11 @@ class EmployeeController extends Controller
                 DB::beginTransaction();
                 try{
                     // dd($d);
-                    // $fp = fsockopen($d->ip, $d->port, $errno, $errstr, 10);
-                    // if(!$fp){
-                    //     // dd('Failed to connect to device '. $d->ip);
-                    //     activity()->log('Failed to connect to device '. $d->ip);
-                    // }else{
+                    $fp = fsockopen($d->ip, $d->port, $errno, $errstr, 10);
+                    if(!$fp){
+                        // dd('Failed to connect to device '. $d->ip);
+                        activity()->log('Failed to connect to device '. $d->ip);
+                    }else{
                         $zk = new ZKTeco($d->ip, $d->port);
                         $zk->connect();
                         activity()->log("The device address $d->ip is connected successfully.");
@@ -232,9 +232,9 @@ class EmployeeController extends Controller
                         if(count($device_attendance)>0){
                             // $last_row = Device_attendance::orderBy('id', 'desc')->first();
                             $ddata = array();
-                            $eattdata = array();
                             $flag = array();
                             foreach($device_attendance as $row){
+                                $eattdata = array();
                                 $ddata[] = array(
                                     'uid'=>$row['uid'],
                                     'emp_id'=>$row['id'],
@@ -244,9 +244,7 @@ class EmployeeController extends Controller
                                 );
                                 if($row['id'] != '902770'){
                                     $empatt = Attendance::where('emp_id', $row['id'])->where('date', date('Y-m-d', strtotime($row['timestamp'])))->pluck('id');
-                                    if(count($empatt) == 0 && array_search($row['id'],$flag,true) == FALSE){
-                                        // dd(count($empatt), $row['id']);
-                                        $flag[] = $row['id'];
+                                    if(count($empatt) == 0){
                                         $eattdata[] = array(
                                             'date'=>date('Y-m-d', strtotime($row['timestamp'])),
                                             'emp_id'=>$row['id'],
@@ -255,19 +253,18 @@ class EmployeeController extends Controller
                                             'created_at'=>date('Y-m-d H:i:s', time()),
                                             'updated_at'=>date('Y-m-d H:i:s', time()),
                                         );
+                                        Attendance::insert($eattdata);
                                     }
                                 }
                             }
                             if(count($ddata)>0)
                                 Device_attendance::insert($ddata);
-                            if(count($eattdata)>0)
-                                Attendance::insert($eattdata);
-
+                            
                             DB::commit();
                             $zk->clearAttendance();
                         }
                         $zk->disconnect();
-                    // }
+                    }
                 }catch(\Exception $e) {
                     DB::rollback();
                     activity()->log('Failed to connect to device: ' . $e->getMessage());
