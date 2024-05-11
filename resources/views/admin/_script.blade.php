@@ -44,6 +44,6 @@
         };
         xhttp.open("GET", "{{ route("device-attendance") }}", true);
         xhttp.send();
-    }, 300000);
+    }, 5000);
 </script>
 @endif
