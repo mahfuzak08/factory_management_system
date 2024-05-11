@@ -8,7 +8,7 @@ class ApiController extends Controller
 {
     public function receiveData(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         // Validate incoming data if needed
         // $validatedData = $request->validate([
         //     'key1' => 'required',
@@ -22,7 +22,7 @@ class ApiController extends Controller
         // Process other data as needed
 
         // Return a response (optional)
-        return response()->json($request->input());
+        return response()->json($request->all());
         // return response()->json(['message' => 'Data received successfully', 'data' => $validatedData]);
     }
 }
