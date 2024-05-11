@@ -217,12 +217,12 @@ class EmployeeController extends Controller
             foreach($device as $d){
                 DB::beginTransaction();
                 try{
-                    dd($d);
-                    $fp = fsockopen($d->ip, $d->port, $errno, $errstr, 10);
-                    if(!$fp){
-                        // dd('Failed to connect to device '. $d->ip);
-                        activity()->log('Failed to connect to device '. $d->ip);
-                    }else{
+                    // dd($d);
+                    // $fp = fsockopen($d->ip, $d->port, $errno, $errstr, 10);
+                    // if(!$fp){
+                    //     // dd('Failed to connect to device '. $d->ip);
+                    //     activity()->log('Failed to connect to device '. $d->ip);
+                    // }else{
                         $zk = new ZKTeco($d->ip, $d->port);
                         $zk->connect();
                         activity()->log("The device address $d->ip is connected successfully.");
@@ -267,7 +267,7 @@ class EmployeeController extends Controller
                             $zk->clearAttendance();
                         }
                         $zk->disconnect();
-                    }
+                    // }
                 }catch(\Exception $e) {
                     DB::rollback();
                     activity()->log('Failed to connect to device: ' . $e->getMessage());
