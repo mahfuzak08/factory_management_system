@@ -56,19 +56,19 @@
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input5" class="col-sm-3 col-form-label text-warning">{{__('admin.balance')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input5" value="{{number_format($vendor[0]->total_due, 2)}}">
+                                        <input type="text" class="form-control form-control-border-off" style="background-color: #ffc107" disabled="true" id="input5" value="{{number_format($vendor[0]->total_due, 2)}}">
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label class="col-sm-3 col-form-label text-warning">{{__('admin.total_payment')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-border-off" disabled="true" value="{{number_format($vendor[0]->total_pay * -1, 2)}}">
+                                        <input type="text" class="form-control form-control-border-off" style="background-color: #ffc107" disabled="true" value="{{number_format($vendor[0]->total_pay * -1, 2)}}">
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label class="col-sm-3 col-form-label text-warning">{{__('admin.total')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-border-off" disabled="true" value="{{number_format($vendor[0]->total_due + ($vendor[0]->total_pay * -1), 2)}}">
+                                        <input type="text" class="form-control form-control-border-off" style="background-color: #ffc107" disabled="true" value="{{number_format($vendor[0]->total_due + ($vendor[0]->total_pay * -1), 2)}}">
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">
