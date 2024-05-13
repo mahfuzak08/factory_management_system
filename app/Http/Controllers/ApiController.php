@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 class ApiController extends Controller
 {
+    public function receiveDataTest(Request $request){
+        return response()->json($request->all());
+    }
     public function receiveData(Request $request)
     {
         // dd($request->all());
