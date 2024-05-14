@@ -70,7 +70,8 @@
                                     @if(hasModuleAccess('Employee_Edit'))
                                       <a href="{{route('edit-employee', $employee->id)}}" class="btn btn-warning btn-sm">{{__('admin.edit')}}</a> 
                                     @endif
-                                    @if($employee->total_paid == 'yes')
+                                    {{-- @if($employee->total_paid == 'yes') --}}
+                                    @if($total_receive == 0)
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <button class="btn btn-danger me-2 float-end">{{__('admin.payment')}}</button>
                                     </div>
@@ -116,7 +117,7 @@
                                     <button type="submit" class="btn btn-primary me-2 float-end">{{ __('admin.save_now') }}</button>
                                   </form>
                                   @endif
-                                  @if($employee->total_paid != 'yes')
+                                  @if($employee->total_paid != 'yes' || $total_receive != 0)
                                   <a href="{{ URL::route('employee-details', ['id' => $employee->id, 'action' => 'total_paid']) }}" class="btn btn-warning me-2 float-end">{{ __('admin.total_pay') }}</a>
                                   @endif
                                 </div>
