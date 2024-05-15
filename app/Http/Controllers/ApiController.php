@@ -12,7 +12,9 @@ class ApiController extends Controller
 {
     public function receiveData(Request $request)
     {
-        $device_attendance = json_decode($request->all());
+        // $device_attendance = json_decode($request->all());
+        $device_attendance = json_decode($request->getContent(), true);
+
         // try{
         //     DB::beginTransaction();
         //     if(count($device_attendance)>0){
