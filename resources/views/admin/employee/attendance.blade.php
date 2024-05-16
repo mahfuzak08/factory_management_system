@@ -66,7 +66,7 @@
                                                 <input name="attendance[{{$sl}}]" value="false" type="hidden">
                                                 <input name="attendance[{{$sl++}}]" {{$row['attendance'] == 'yes' ? 'checked': '';}} value="true" class="form-check-input checkbox" type="checkbox">
                                               </td>
-                                              <td>{{$row['name']}}</td>
+                                              <td>ID-{{$row['id']}}::{{$row['name']}}</td>
                                               <td>{{$row['mobile']}}</td>
                                               <td>{{$row['designation']}}</td>
                                             </tr>

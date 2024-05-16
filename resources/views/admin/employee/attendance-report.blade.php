@@ -70,7 +70,7 @@
                                       @for($n=0; $n<count($employee); $n++)
                                         <tr>
                                             <td>{{$sl++}}</td>
-                                            <td>{{$employee[$n]['name']}}</td>
+                                            <td>ID-{{$employee[$n]['id']}}::{{$employee[$n]['name']}}</td>
                                             @php
                                             $total = 0;
                                             @endphp

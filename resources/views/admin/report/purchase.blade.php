@@ -125,7 +125,7 @@
                                         @foreach($datas as $row)
                                           <tr class="{{$row->status ? '' : 'text-light bg-danger'}}">
                                             <td><a href="{{route('purchase-invoice', $row->id)}}">{{$n++}}</a></td>
-                                            <td><a href="{{route('purchase-invoice', $row->id)}}">{{$row->order_id}}</a></td>
+                                            <td><a href="{{route('purchase-invoice', $row->id)}}">{{$row->id}}</a></td>
                                             <td>{{date('d-m-Y', strtotime($row->date))}}</td>
                                             <td><a href="{{route('purchase-invoice', $row->id)}}">{{$row->vendor_name}}</a></td>
                                             {{-- <td>{{$row->order_type}}</td> --}}

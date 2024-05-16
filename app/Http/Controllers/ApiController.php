@@ -13,29 +13,34 @@ class ApiController extends Controller
     public function receiveData(Request $request)
     {
         // $device_attendance = json_decode($request->all());
-        $device_attendance = json_decode($request->getContent(), true);
-
+        $device_attendance = json_decode(json_decode($request->getContent(), true));
+        // $filePath = storage_path('app/example.txt');
+        // $result = file_put_contents($filePath, $device_attendance);
         try{
             DB::beginTransaction();
+            // $result = file_put_contents($filePath, 1);
             if(count($device_attendance)>0){
+                // $result = file_put_contents($filePath, 2);
                 $ddata = array();
                 $flag = array();
                 $eattdata = array();
+                $c = 1;
                 foreach($device_attendance as $row){
+                    // $result = file_put_contents($filePath, $row->uid."=".$row->user_id."=".$row->status."=".$row->timestamp."=".$row->type);
                     $ddata[] = array(
-                        'uid'=>$row['uid'],
-                        'emp_id'=>$row['user_id'],
-                        'state'=>$row['status'],
-                        'timestamp'=>$row['timestamp'],
-                        'type'=>$row['type']
+                        'uid'=>$row->uid,
+                        'emp_id'=>$row->user_id,
+                        'state'=>$row->status,
+                        'timestamp'=>$row->timestamp,
+                        'type'=>$row->type
                     );
-                    if($row['user_id'] != '902770' && array_search($row['user_id'], $flag, true) === false){
-                        $empatt = Attendance::where('emp_id', $row['user_id'])->where('date', date('Y-m-d', strtotime($row['timestamp'])))->pluck('id');
+                    if($row->user_id != '902770' && array_search($row->user_id, $flag, true) === false){
+                        $empatt = Attendance::where('emp_id', $row->user_id)->where('date', date('Y-m-d', strtotime($row->timestamp)))->pluck('id');
                         if(count($empatt) == 0){
-                            $flag[] = $row["user_id"];
+                            $flag[] = $row->user_id;
                             $eattdata[] = array(
-                                'date'=>date('Y-m-d', strtotime($row['timestamp'])),
-                                'emp_id'=>$row['user_id'],
+                                'date'=>date('Y-m-d', strtotime($row->timestamp)),
+                                'emp_id'=>$row->user_id,
                                 'hours'=>8,
                                 'user_id'=>1,
                                 'created_at'=>date('Y-m-d H:i:s', time()),
@@ -46,17 +51,19 @@ class ApiController extends Controller
                 }
                 if(count($ddata)>0)
                     Device_attendance::insert($ddata);
-                // if(count($eattdata)>0)
-                //     Attendance::insert($eattdata);
-                
+                if(count($eattdata)>0)
+                    Attendance::insert($eattdata);
+                // $result = file_put_contents($filePath, 4);
                 DB::commit();
             }
         }catch(\Exception $e) {
             DB::rollback();
             // activity()->log('Failed to save device data. Bcoz' . $e->getMessage());
+            // $result = file_put_contents($filePath, $e->getMessage());
             return response()->json(array("status"=> false, "error1"=>$e->getMessage()));
         }
         activity()->log('Device data save successfully at ' . date('Y-m-d h:i:s a', time()));
+        // $result = file_put_contents($filePath, "Device data save successfully");
         return response()->json(["status"=> true, "message"=> "Device data save successfully", "device_attendance"=>$device_attendance ]);
     }
 }
