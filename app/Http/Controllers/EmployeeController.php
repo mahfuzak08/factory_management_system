@@ -21,7 +21,12 @@ class EmployeeController extends Controller
     public function index(){
         if(! empty(request()->input('search'))){
             $str = request()->input('search');
-            $datas = Employee::where(function ($query) use ($str){
+            $datas = Employee::select('employees.id', 'employees.name', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address', \DB::raw('SUM(account_tranxes.amount) as amount'))
+                            ->join('account_tranxes', 'account_tranxes.ref_id', '=', 'employees.id')
+                            ->where('account_tranxes.ref_type', 'employee')
+                            ->where('account_tranxes.tranx_date', '>=', $this->fysd)
+                            ->where('account_tranxes.tranx_date', '<=', $this->fyed)
+                            ->where(function ($query) use ($str){
                                 $query->where('name', 'like', '%'.$str.'%')
                                 ->orWhere('mobile', 'like', '%'.$str.'%')
                                 ->orWhere('gender', 'like', '%'.$str.'%')
@@ -29,10 +34,22 @@ class EmployeeController extends Controller
                                 ->orWhere('nid', 'like', '%'.$str.'%')
                                 ->orWhere('address', 'like', '%'.$str.'%');
                             })
-                            ->orderBy('name', 'ASC')->paginate(10)->withQueryString();
+                            ->orderBy('employees.name', 'ASC')
+                            ->groupBy('employees.id', 'employees.name', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address')
+                            ->paginate(10)->withQueryString();
         }else{
-            $datas = Employee::orderBy('name', 'ASC')->paginate(10)->withQueryString();
+            $datas = Employee::select('employees.id', 'employees.name', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address', \DB::raw('SUM(account_tranxes.amount) as amount'))
+                            ->join('account_tranxes', 'account_tranxes.ref_id', '=', 'employees.id')
+                            ->where('account_tranxes.ref_type', 'employee')
+                            ->where('account_tranxes.tranx_date', '>=', $this->fysd)
+                            ->where('account_tranxes.tranx_date', '<=', $this->fyed)
+                            ->orderBy('employees.name', 'ASC')
+                            ->groupBy('employees.id', 'employees.name', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address')
+                            ->paginate(10)
+                            ->withQueryString();
         }
+        
+        // dd($datas);
         return view('admin.employee.manage', compact('datas'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
