@@ -58,9 +58,9 @@
                                         @endphp
                                         @foreach($datas as $row)
                                           @php
-                                          $c = true;
+                                          $c = false;
                                           if($row->total_paid == 'yes' || $row->amount == '0.00')
-                                            $c = false;
+                                            $c = true;
                                           @endphp
                                           <tr>
                                             <td>{{$n++}}</td>
