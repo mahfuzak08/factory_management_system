@@ -27,8 +27,8 @@ class CustomerController extends Controller
         if(! empty(request()->input('search'))){
             $str = request()->input('search');
             $datas = Customer::select('customers.*')
-                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer"), 0)) as due'))
-                            ->addSelect(DB::raw('COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND account_id NOT IN '.$discountids.'), 0) as receive'))
+                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND status = 1 AND ref_type = "customer"), 0)) as due'))
+                            ->addSelect(DB::raw('COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND status = 1 AND ref_type = "customer" AND account_id NOT IN '.$discountids.'), 0) as receive'))
                             ->where(function ($query) use ($str){
                                 $query->where('name', 'like', '%'.$str.'%')
                                 ->orWhere('mobile', 'like', '%'.$str.'%')
@@ -41,8 +41,8 @@ class CustomerController extends Controller
             
         }else{
             $datas = Customer::select('customers.*')
-                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer"), 0)) as due'))
-                            ->addSelect(DB::raw('COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND account_id NOT IN '.$discountids.'), 0) as receive'))
+                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND status = 1 AND ref_type = "customer"), 0)) as due'))
+                            ->addSelect(DB::raw('COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND status = 1 AND ref_type = "customer" AND account_id NOT IN '.$discountids.'), 0) as receive'))
                             ->latest()
                             ->where('is_delete', 0)
                             ->paginate(50)
@@ -181,13 +181,13 @@ class CustomerController extends Controller
         
         $customer = Customer::where('id', $id)
                             ->select('customers.*')
-                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND ref_tranx_id = "0"), 0)) as total_due'))
+                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND ref_tranx_id = "0" AND status = 1), 0)) as total_due'))
 
-                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND account_id NOT IN '.$discountids.'), 0)) as total_pay'))
+                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND status = 1 AND ref_type = "customer" AND account_id NOT IN '.$discountids.'), 0)) as total_pay'))
 
-                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM sales WHERE customer_id = customers.id AND status = 1 AND date >="'.$this->fysd.'" AND date <="'.$this->fyed.'"), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND ref_tranx_id = "0" AND tranx_date >="'.$this->fysd.'" AND tranx_date <="'.$this->fyed.'"), 0)) as cy_due'))
+                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM sales WHERE customer_id = customers.id AND status = 1 AND date >="'.$this->fysd.'" AND date <="'.$this->fyed.'"), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND status = 1 AND ref_type = "customer" AND ref_tranx_id = "0" AND tranx_date >="'.$this->fysd.'" AND tranx_date <="'.$this->fyed.'"), 0)) as cy_due'))
 
-                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND tranx_date >="'.$this->fysd.'" AND tranx_date <="'.$this->fyed.'" AND account_id NOT IN '.$discountids.'), 0)) as cy_pay'))
+                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND status = 1 AND ref_type = "customer" AND tranx_date >="'.$this->fysd.'" AND tranx_date <="'.$this->fyed.'" AND account_id NOT IN '.$discountids.'), 0)) as cy_pay'))
                             ->get();
         $cs = Sales::where('customer_id', $id)
                     ->whereBetween('date', [$this->fysd, $this->fyed])
@@ -213,12 +213,14 @@ class CustomerController extends Controller
                             })
                             ->where('ref_id', $id)
                             ->where('ref_type', 'customer')
+                            ->where('status', 1)
                             ->select('account_tranxes.*', 'bankaccs.name as bank_name')
                             ->latest()->paginate(10)->withQueryString();
         }else{
             $datas = AccountTranx::join('bankaccs', 'account_tranxes.account_id', '=', 'bankaccs.id')
                     ->where('ref_id', $id)
                     ->where('ref_type', 'customer')
+                    ->where('status', 1)
                     ->select('account_tranxes.*', 'bankaccs.name as bank_name')
                     ->latest()->paginate(10)->withQueryString();
         }

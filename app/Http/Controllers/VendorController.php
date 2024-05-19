@@ -25,7 +25,7 @@ class VendorController extends Controller
         if(! empty(request()->input('search'))){
             $str = request()->input('search');
             $datas = Vendor::select('vendors.*')
-                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM purchases WHERE vendor_id = vendors.id AND status = 1), 0) + COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = vendors.id AND ref_type = "vendor" AND ref_tranx_id = "0"), 0)) as due'))
+                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM purchases WHERE vendor_id = vendors.id AND status = 1), 0) + COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = vendors.id AND ref_type = "vendor" AND status = 1 AND ref_tranx_id = "0"), 0)) as due'))
                             ->where(function ($query) use ($str){
                                 $query->where('name', 'like', '%'.$str.'%')
                                 ->orWhere('mobile', 'like', '%'.$str.'%')
@@ -36,7 +36,7 @@ class VendorController extends Controller
                             ->latest()->paginate(10)->withQueryString();
         }else{
             $datas = Vendor::select('vendors.*')
-                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM purchases WHERE vendor_id = vendors.id AND status = 1), 0) + COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = vendors.id AND ref_type = "vendor" AND ref_tranx_id = "0"), 0)) as due'))
+                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM purchases WHERE vendor_id = vendors.id AND status = 1), 0) + COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = vendors.id AND status = 1 AND ref_type = "vendor" AND ref_tranx_id = "0"), 0)) as due'))
                             ->latest()
                             ->where('is_delete', 0)
                             ->paginate(10)
@@ -174,10 +174,10 @@ class VendorController extends Controller
         
         $vendor = Vendor::where('id', $id)
                         ->select('vendors.*')
-                        ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM purchases WHERE vendor_id = vendors.id AND status = 1), 0) + COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = vendors.id AND ref_type = "vendor" AND ref_tranx_id = "0"), 0)) as total_due'))
-                        ->addSelect(DB::raw('(COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = vendors.id AND ref_type = "vendor" AND account_id NOT IN '.$discountids.'), 0)) as total_pay'))
-                        ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM purchases WHERE vendor_id = vendors.id AND status = 1 AND date >="'.$this->fysd.'" AND date <="'.$this->fyed.'"), 0) + COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = vendors.id AND ref_type = "vendor" AND ref_tranx_id = "0" AND tranx_date >="'.$this->fysd.'" AND tranx_date <="'.$this->fyed.'"), 0)) as cy_due'))
-                        ->addSelect(DB::raw('(COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = vendors.id AND ref_type = "vendor" AND tranx_date >="'.$this->fysd.'" AND tranx_date <="'.$this->fyed.'" AND account_id NOT IN '.$discountids.'), 0)) as cy_pay'))
+                        ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM purchases WHERE vendor_id = vendors.id AND status = 1), 0) + COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = vendors.id AND status = 1 AND ref_type = "vendor" AND ref_tranx_id = "0"), 0)) as total_due'))
+                        ->addSelect(DB::raw('(COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = vendors.id AND status = 1 AND ref_type = "vendor" AND account_id NOT IN '.$discountids.'), 0)) as total_pay'))
+                        ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM purchases WHERE vendor_id = vendors.id AND status = 1 AND date >="'.$this->fysd.'" AND date <="'.$this->fyed.'"), 0) + COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = vendors.id AND status = 1 AND ref_type = "vendor" AND ref_tranx_id = "0" AND tranx_date >="'.$this->fysd.'" AND tranx_date <="'.$this->fyed.'"), 0)) as cy_due'))
+                        ->addSelect(DB::raw('(COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = vendors.id AND status = 1 AND ref_type = "vendor" AND tranx_date >="'.$this->fysd.'" AND tranx_date <="'.$this->fyed.'" AND account_id NOT IN '.$discountids.'), 0)) as cy_pay'))
                         ->get();
                         // dd($vendor);
         $banks = Bankacc::where('type', '!=', 'Due')->get();
@@ -192,12 +192,14 @@ class VendorController extends Controller
                             })
                             ->where('ref_id', $id)
                             ->where('ref_type', 'vendor')
+                            ->where('status', 1)
                             ->select('account_tranxes.*', 'bankaccs.name as bank_name')
                             ->latest()->paginate(10)->withQueryString();
         }else{
             $datas = AccountTranx::join('bankaccs', 'account_tranxes.account_id', '=', 'bankaccs.id')
                     ->where('ref_id', $id)
                     ->where('ref_type', 'vendor')
+                    ->where('status', 1)
                     ->select('account_tranxes.*', 'bankaccs.name as bank_name')
                     ->latest()->paginate(10)->withQueryString();
         }
