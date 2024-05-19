@@ -58,11 +58,11 @@
                                         @endphp
                                         @foreach($datas as $row)
                                           @php
-                                          // print_r($row);
+                                          $c = $row->total_paid != 'yes' || $row->amount == '0.00';
                                           @endphp
                                           <tr>
                                             <td>{{$n++}}</td>
-                                            <td><a href="{{route('employee-details', $row->id)}}" class="{{$row->amount == '0.00' ? 'text-warning' : ''}}">ID-{{$row->id}}::{{$row->name}}</a></td>
+                                            <td><a href="{{route('employee-details', $row->id)}}" class="{{$c ? 'text-warning' : ''}}">ID-{{$row->id}}::{{$row->name}}</a></td>
                                             <td>{{$row->mobile}}</td>
                                             <td>{{$row->gender}}</td>
                                             <td>{{$row->designation}}</td>
