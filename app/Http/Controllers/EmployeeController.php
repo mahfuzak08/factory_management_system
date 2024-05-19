@@ -21,11 +21,13 @@ class EmployeeController extends Controller
     public function index(){
         if(! empty(request()->input('search'))){
             $str = request()->input('search');
-            $datas = Employee::select('employees.id', 'employees.name', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address', \DB::raw('SUM(account_tranxes.amount) as amount'))
-                            ->join('account_tranxes', 'account_tranxes.ref_id', '=', 'employees.id')
-                            ->where('account_tranxes.ref_type', 'employee')
-                            ->where('account_tranxes.tranx_date', '>=', $this->fysd)
-                            ->where('account_tranxes.tranx_date', '<=', $this->fyed)
+            $datas = Employee::select('employees.id', 'employees.name', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address', \DB::raw('COALESCE(SUM(account_tranxes.amount), 0) as amount'))
+                            ->leftJoin('account_tranxes', function($join) {
+                                $join->on('account_tranxes.ref_id', '=', 'employees.id')
+                                    ->where('account_tranxes.ref_type', '=', 'employee')
+                                    ->where('account_tranxes.tranx_date', '>=', $this->fysd)
+                                    ->where('account_tranxes.tranx_date', '<=', $this->fyed);
+                            })
                             ->where(function ($query) use ($str){
                                 $query->where('name', 'like', '%'.$str.'%')
                                 ->orWhere('mobile', 'like', '%'.$str.'%')
@@ -38,11 +40,13 @@ class EmployeeController extends Controller
                             ->groupBy('employees.id', 'employees.name', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address')
                             ->paginate(10)->withQueryString();
         }else{
-            $datas = Employee::select('employees.id', 'employees.name', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address', \DB::raw('SUM(account_tranxes.amount) as amount'))
-                            ->join('account_tranxes', 'account_tranxes.ref_id', '=', 'employees.id')
-                            ->where('account_tranxes.ref_type', 'employee')
-                            ->where('account_tranxes.tranx_date', '>=', $this->fysd)
-                            ->where('account_tranxes.tranx_date', '<=', $this->fyed)
+            $datas = Employee::select('employees.id', 'employees.name', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address', \DB::raw('COALESCE(SUM(account_tranxes.amount), 0) as amount'))
+                            ->leftJoin('account_tranxes', function($join) {
+                                $join->on('account_tranxes.ref_id', '=', 'employees.id')
+                                    ->where('account_tranxes.ref_type', '=', 'employee')
+                                    ->where('account_tranxes.tranx_date', '>=', $this->fysd)
+                                    ->where('account_tranxes.tranx_date', '<=', $this->fyed);
+                            })
                             ->orderBy('employees.name', 'ASC')
                             ->groupBy('employees.id', 'employees.name', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address')
                             ->paginate(10)
