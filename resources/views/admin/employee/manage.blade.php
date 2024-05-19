@@ -57,6 +57,9 @@
                                           $n = 1;
                                         @endphp
                                         @foreach($datas as $row)
+                                          @php
+                                          print_r($row);
+                                          @endphp
                                           <tr>
                                             <td>{{$n++}}</td>
                                             <td><a href="{{route('employee-details', $row->id)}}" class="{{$row->total_paid != 'yes' || $row->amount == 0 ? 'text-warning' : ''}}">ID-{{$row->id}}::{{$row->name}}</a></td>
