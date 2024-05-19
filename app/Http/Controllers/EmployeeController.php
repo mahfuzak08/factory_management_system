@@ -53,7 +53,7 @@ class EmployeeController extends Controller
                             ->withQueryString();
         }
         
-        // dd($datas);
+        dd($datas);
         return view('admin.employee.manage', compact('datas'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
