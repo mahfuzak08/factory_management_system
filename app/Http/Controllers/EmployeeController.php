@@ -175,10 +175,11 @@ class EmployeeController extends Controller
                                     ->where('ref_type', 'employee')
                                     ->whereBetween('tranx_date', [$this->fysd, $this->fyed])
                                     ->sum('amount');
-        $yearly_attendance = Attendance::where('emp_id', $id)
-                                        ->where('hours', 8)
-                                        ->whereBetween('date', [$this->fysd, $this->fyed])
-                                        ->count();
+        $yearly_attendance = 0;
+        // $yearly_attendance = Attendance::where('emp_id', $id)
+        //                                 ->where('hours', 8)
+        //                                 ->whereBetween('date', [$this->fysd, $this->fyed])
+        //                                 ->count();
         return view('admin.employee.details', compact('employee', 'banks', 'datas', 'total_receive', 'yearly_attendance'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
