@@ -44,7 +44,8 @@
                                     <thead>
                                         <tr>
                                             <th>
-                                              <input _ngcontent-gsm-c19="" checked="true" id="masterCheckbox" class="form-check-input" type="checkbox">
+                                              {{-- <input _ngcontent-gsm-c19="" checked="true" id="masterCheckbox" class="form-check-input" type="checkbox"> --}}
+                                              Full Day::Half Day
                                             </th>
                                             <th> {{__('admin.name')}} </th>
                                             <th> {{__('admin.mobile')}} </th>
@@ -54,7 +55,7 @@
                                     <tbody>
                                       <form class="forms-sample" method="POST" action="{{ route('save-attendance') }}">
                                         @csrf
-                                        <input type="date" name="attendance-date" value="{{isset($_GET['oldDate'])? $_GET['oldDate'] : date('d-m-Y');}}">
+                                        <input type="date" name="attendance-date" value="{{isset($_GET['oldDate'])? $_GET['oldDate'] : date('Y-m-d');}}">
                                         @if(count($employee) > 0)
                                           @php 
                                             $sl = 0;
@@ -64,7 +65,9 @@
                                               <td>
                                                 <input name="empid[{{$sl}}]" value="{{$row['id']}}" type="hidden">
                                                 <input name="attendance[{{$sl}}]" value="false" type="hidden">
-                                                <input name="attendance[{{$sl++}}]" {{$row['attendance'] == 'yes' ? 'checked': '';}} value="true" class="form-check-input checkbox" type="checkbox">
+                                                F: <input name="attendance[{{$sl}}]" {{$row['attendance'] == 'Y' ? 'checked': '';}} value="true" class="form-check-input checkbox" type="checkbox">
+                                                <input name="attendanceh[{{$sl}}]" value="false" type="hidden">
+                                                H: <input name="attendanceh[{{$sl++}}]" {{$row['attendance'] == 'H' ? 'checked': '';}} value="true" class="form-check-input checkbox" type="checkbox">
                                               </td>
                                               <td>ID-{{$row['id']}}::{{$row['name']}}</td>
                                               <td>{{$row['mobile']}}</td>

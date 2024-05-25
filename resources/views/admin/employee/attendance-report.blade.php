@@ -88,9 +88,9 @@
                                                 @endfor
                                                 @if($flag)
                                                     @php
-                                                    $total++;
+                                                    $total+= $employee[$n]['attendance'][$j]['hours']>=8 ? 1 : ($employee[$n]['attendance'][$j]['hours'] >= 4 ? 0.5 : 0);
                                                     @endphp
-                                                    <td>Y</td>
+                                                    <td>{{$employee[$n]['attendance'][$j]['hours']>=8 ? 'Y' : ($employee[$n]['attendance'][$j]['hours'] >= 4 ? 'H' : '')}}</td>
                                                 @else
                                                     <td> </td>
                                                 @endif

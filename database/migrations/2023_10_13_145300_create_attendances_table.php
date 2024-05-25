@@ -16,7 +16,8 @@ return new class extends Migration
                 $table->id();
                 $table->date('date');
                 $table->unsignedBigInteger('emp_id');
-                $table->integer('hours')->default(0);
+                $table->datetime('intime');
+                $table->datetime('outtime');
                 $table->integer('user_id');
                 $table->timestamps();
     

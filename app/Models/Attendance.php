@@ -13,7 +13,7 @@ class Attendance extends Model
     use HasFactory;
     use LogsActivity;
 
-    protected $fillable = ['date', 'emp_id', 'hours','user_id'];
+    protected $fillable = ['date', 'emp_id', 'intime', 'outtime','user_id'];
 
     public function getActivitylogOptions(): LogOptions
     {

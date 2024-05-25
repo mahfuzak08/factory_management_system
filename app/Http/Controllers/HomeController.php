@@ -27,9 +27,10 @@ class HomeController extends Controller
                                                 ->sum('total');
         $data['today_total_expense'] = Expense_detail::where('trnx_date', '=', date('Y-m-d'))
                                                 ->sum('amount');
-        $data['today_total_attendance'] = Attendance::where('date', '=', date('Y-m-d'))
-                                                ->where('hours', '=', 8)
-                                                ->count();
+        $data['today_total_attendance'] = 0;
+        // Attendance::where('date', '=', date('Y-m-d'))
+        //                                         ->where('hours', '=', 8)
+        //                                         ->count();
         return view('admin.home', compact('data', 'run_script'));
     }
 }

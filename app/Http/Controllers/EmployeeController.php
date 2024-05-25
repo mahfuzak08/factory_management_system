@@ -299,6 +299,13 @@ class EmployeeController extends Controller
         }
     }
 
+    public function getHour($in, $out){
+        $date1=date_create($in);
+        $date2=date_create($out);
+        $diff=date_diff($date1,$date2);
+        return ($diff->h + ($diff->d * 24));
+    }
+
     public function attendance(Request $request){
         $d = $request->input('oldDate') ? $request->input('oldDate') : date('Y-m-d');
         if(! empty(request()->input('search'))){
@@ -311,11 +318,14 @@ class EmployeeController extends Controller
             $employee = Employee::all()->toArray();
         }
         
-        $attendance = Attendance::where('date', $d)->where('hours', 8)->pluck('emp_id')->toArray();
+        $attendance = Attendance::where('date', $d)->get()->toArray();
         for($i=0; $i<count($employee); $i++){
-            $employee[$i]['attendance'] = 'no';
-            if(in_array($employee[$i]['id'], $attendance)){
-                $employee[$i]['attendance'] = 'yes';
+            $employee[$i]['attendance'] = 'N';
+            for($j=0;$j<count($attendance);$j++){
+                if($employee[$i]['id'] == $attendance[$j]['emp_id']){
+                    $h = $this->getHour($attendance[$j]['intime'], $attendance[$j]['outtime']);
+                    $employee[$i]['attendance'] = $h >= 8 ? 'Y' : ($h >= 4 ? 'H' : 'N');
+                }
             }
         }
         return view('admin.employee.attendance', compact('employee'));
@@ -325,26 +335,39 @@ class EmployeeController extends Controller
         $attendance_data = array();
         $d = $request->input('attendance-date');
         $attendance = $request->input('attendance');
+        $attendanceh = $request->input('attendanceh');
         $empid = $request->input('empid');
+    
         for($i=0; $i<count($attendance); $i++){
-            $status = $attendance[$i] == "true" ? 8 : 0;
+            $in = null;
+            $out = null;
+            if($attendance[$i] == "true"){
+                $in = $d . " 09:00:00";
+                $out = $d . " 21:00:00";
+            }elseif($attendanceh[$i] == "true"){
+                $in = $d . " 09:00:00";
+                $out = $d . " 15:00:00";
+            }
             $attendance_data = [
                 'date' => $d,
                 'emp_id'=> $empid[$i],
-                'hours'=> $status,
+                'intime'=> $in,
+                'outtime'=> $out,
                 'user_id'=> Auth::id()
             ];
-            $existingRecord = Attendance::where('date', $d)->where('emp_id', $empid[$i])->first();
-            if ($existingRecord) {
-                if($status != $existingRecord->hours){
+            // dd($attendance_data);
+            if(!empty($in) && !empty($out)){
+                $existingRecord = Attendance::where('date', $d)->where('emp_id', $empid[$i])->first();
+                if ($existingRecord) {
                     $existingRecord->update([
-                        'hours' => $status,
+                        'intime' => $in,
+                        'outtime' => $out,
                         'user_id' => Auth::id()
                     ]);
+                } else {
+                    $data = new Attendance();
+                    $data->fill($attendance_data)->save();
                 }
-            } else {
-                $data = new Attendance();
-                $data->fill($attendance_data)->save();
             }
         }
         
@@ -370,12 +393,13 @@ class EmployeeController extends Controller
         else
             $employee = Employee::all()->toArray();
         $attendance = Attendance::whereBetween('date', [$firstDay, $lastDay])->get()->toArray();
-        
+        // dd($attendance);
         for($i=0; $i<count($employee); $i++){
             $employee[$i]['attendance'] = array();
             for($j=0; $j<count($attendance); $j++){
                 if($attendance[$j]['emp_id'] == $employee[$i]['id']){
-                    $employee[$i]['attendance'][] = $attendance[$j];
+                    $h = $this->getHour($attendance[$j]['intime'], $attendance[$j]['outtime']);
+                    $employee[$i]['attendance'][] = array("date"=> $attendance[$j]['date'], "hours" =>$h);
                 }
             }
         }
