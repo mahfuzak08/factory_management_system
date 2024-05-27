@@ -74,8 +74,8 @@
                                               <td>ID-{{$row['id']}}::{{$row['name']}}</td>
                                               <td>{{$row['mobile']}}</td>
                                               <td>{{$row['designation']}}</td>
-                                              <td>{{ $row['intime'] != "" ? date('Y-m-d h:i A', strtotime($row['intime'])) ? "" }}</td>
-                                              <td>{{ $row['outtime'] != "" ? date('Y-m-d h:i A', strtotime($row['outtime'])) ? "" }}</td>
+                                              <td>{{ $row['intime'] != "" ? date('Y-m-d h:i A', strtotime($row['intime'])) : "" }}</td>
+                                              <td>{{ $row['outtime'] != "" ? date('Y-m-d h:i A', strtotime($row['outtime'])) : "" }}</td>
                                             </tr>
                                           @endforeach
                                           @if(hasModuleAccess('Employee_Attendance'))
