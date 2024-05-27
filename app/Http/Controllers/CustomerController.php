@@ -170,6 +170,14 @@ class CustomerController extends Controller
         return redirect('customer');
     }
 
+    public function isDateBetween($date, $startDate, $endDate) {
+        $date = date("Y-m-d", strtotime($date));
+        $startDate = date("Y-m-d", strtotime($startDate));
+        $endDate = date("Y-m-d", strtotime($endDate));
+    
+        return $date >= $startDate && $date <= $endDate;
+    }
+
     public function see_customer($id){
         $discount_acc_id = Bankacc::where('type', 'Discount')->pluck('id');
         $discountids = "(";
@@ -190,14 +198,19 @@ class CustomerController extends Controller
                             ->addSelect(DB::raw('(COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND tranx_date >="'.$this->fysd.'" AND tranx_date <="'.$this->fyed.'" AND account_id NOT IN '.$discountids.'), 0)) as cy_pay'))
                             ->get();
         $cs = Sales::where('customer_id', $id)
-                    ->whereBetween('date', [$this->fysd, $this->fyed])
+                    // ->whereBetween('date', [$this->fysd, $this->fyed])
                     ->where('order_type', 'sales')
+                    ->where('status', 1)
                     ->get();
+        $total_quantity = 0;
         $quantity = 0;
         for($i=0; $i<count($cs); $i++){
+            $cyq = $this->isDateBetween($cs[$i]->date, $this->fysd, $this->fyed);
             $q = json_decode($cs[$i]->products);
-            for($j=0; $j<count($q); $j++)
-                $quantity += $q[$j]->quantity;
+            for($j=0; $j<count($q); $j++){
+                $total_quantity += $q[$j]->quantity;
+                $quantity += $cyq ? $q[$j]->quantity : 0;
+            }
         }
         // dd($quantity);
 
@@ -222,7 +235,7 @@ class CustomerController extends Controller
                     ->select('account_tranxes.*', 'bankaccs.name as bank_name')
                     ->latest()->paginate(10)->withQueryString();
         }
-        return view('admin.customer.details', compact('customer', 'quantity', 'banks', 'datas'))->with('i', (request()->input('page', 1) - 1) * 10);
+        return view('admin.customer.details', compact('customer', 'total_quantity', 'quantity', 'banks', 'datas'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
     public function add_amount(Request $request){
