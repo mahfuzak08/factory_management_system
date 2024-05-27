@@ -322,10 +322,14 @@ class EmployeeController extends Controller
         $attendance = Attendance::where('date', $d)->get()->toArray();
         for($i=0; $i<count($employee); $i++){
             $employee[$i]['attendance'] = 'N';
+            $employee[$i]['intime'] = "";
+            $employee[$i]['outtime'] = "";
             for($j=0;$j<count($attendance);$j++){
                 if($employee[$i]['id'] == $attendance[$j]['emp_id']){
                     $h = $this->getHour($attendance[$j]['intime'], $attendance[$j]['outtime']);
                     $employee[$i]['attendance'] = $h >= 8 ? 'Y' : ($h >= 4 ? 'H' : 'N');
+                    $employee[$i]['intime'] = $attendance[$j]['intime'];
+                    $employee[$i]['outtime'] = $attendance[$j]['outtime'];
                 }
             }
         }

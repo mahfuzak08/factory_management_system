@@ -167,4 +167,6 @@ return [
     'batchno' => 'Batch No',
     'slno' => 'Serial No',
     'expirydate' => 'Expiry Date',
+    'intime' => 'In Time',
+    'outtime' => 'Out Time',
 ];

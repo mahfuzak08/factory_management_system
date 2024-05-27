@@ -50,6 +50,8 @@
                                             <th> {{__('admin.name')}} </th>
                                             <th> {{__('admin.mobile')}} </th>
                                             <th> {{__('admin.designation')}} </th>
+                                            <th> {{__('admin.intime')}} </th>
+                                            <th> {{__('admin.outtime')}} </th>
                                           </tr>
                                     </thead>
                                     <tbody>
@@ -72,16 +74,18 @@
                                               <td>ID-{{$row['id']}}::{{$row['name']}}</td>
                                               <td>{{$row['mobile']}}</td>
                                               <td>{{$row['designation']}}</td>
+                                              <td>{{ date('Y-m-d h:i A', strtotime($row['intime'])) }}</td>
+                                              <td>{{ date('Y-m-d h:i A', strtotime($row['outtime'])) }}</td>
                                             </tr>
                                           @endforeach
                                           @if(hasModuleAccess('Employee_Attendance'))
                                           <tr>
-                                            <td colspan="4"><button type="submit" class="btn btn-successbtn btn-rounded btn-primary btn-sm me-2" name="save">{{isset($_GET['oldDate']) ? __('admin.update') : __('admin.save_now')}}</button>
+                                            <td colspan="6"><button type="submit" class="btn btn-successbtn btn-rounded btn-primary btn-sm me-2" name="save">{{isset($_GET['oldDate']) ? __('admin.update') : __('admin.save_now')}}</button>
                                           </tr>
                                           @endif
                                         @else
                                             <tr>
-                                              <td colspan="4" class="text-center">{{__('admin.no_data_found')}}</td>
+                                              <td colspan="6" class="text-center">{{__('admin.no_data_found')}}</td>
                                             </tr>
                                         @endif
                                       </form>
