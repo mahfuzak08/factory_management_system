@@ -58,7 +58,7 @@
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input3" class="col-sm-3 col-form-label">{{__('admin.yearly_attendance')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input3" value="{{$yearly_attendance}}">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input3" value="{{ceil($yearly_attendance[0]->total_attend)}}">
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">
