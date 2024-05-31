@@ -332,49 +332,77 @@ class EmployeeController extends Controller
         return view('admin.employee.attendance', compact('employee'));
     }
 
+    public function edit_attendance(){
+        $id = $_GET["id"];
+        $d = $_GET["date"];
+        $employee = Employee::where('id', $id)->get();
+        $attendance = Attendance::where('date', $d)->where('emp_id', $id)->get()->toArray();
+        return view('admin.employee.attendance-edit', compact('employee', 'attendance'));
+    }
+
+    /**
+     * single
+     */
     public function save_attendance(Request $request){
-        $attendance_data = array();
-        $d = $request->input('attendance-date');
-        $attendance = $request->input('attendance');
-        $attendanceh = $request->input('attendanceh');
-        $empid = $request->input('empid');
-    
-        for($i=0; $i<count($attendance); $i++){
-            $in = null;
-            $out = null;
-            if($attendance[$i] == "true"){
-                $in = $d . " 09:00:00";
-                $out = $d . " 21:00:00";
-            }elseif($attendanceh[$i] == "true"){
-                $in = $d . " 09:00:00";
-                $out = $d . " 15:00:00";
-            }
-            $attendance_data = [
-                'date' => $d,
-                'emp_id'=> $empid[$i],
-                'intime'=> $in,
-                'outtime'=> $out,
-                'user_id'=> Auth::id()
-            ];
-            // dd($attendance_data);
-            if(!empty($in) && !empty($out)){
-                $existingRecord = Attendance::where('date', $d)->where('emp_id', $empid[$i])->first();
-                if ($existingRecord) {
-                    $existingRecord->update([
-                        'intime' => $in,
-                        'outtime' => $out,
-                        'user_id' => Auth::id()
-                    ]);
-                } else {
-                    $data = new Attendance();
-                    $data->fill($attendance_data)->save();
-                }
-            }
+        $input = $request->all();
+        $input['user_id'] = Auth::id();
+        if(!empty($request->input('att_id')) && $request->input('att_id') != ""){
+            $data = Attendance::findOrFail($request->input('att_id'));
+            $data->update($input);
+        }else{
+            $data = new Attendance();
+            $data->fill($input)->save();
         }
         
         flash()->addSuccess('Attendance taken successfully.');
         return redirect('attendance');
     }
+    /**
+     * multiple
+     */
+    // public function save_attendance(Request $request){
+    //     $attendance_data = array();
+    //     $d = $request->input('attendance-date');
+    //     $attendance = $request->input('attendance');
+    //     $attendanceh = $request->input('attendanceh');
+    //     $empid = $request->input('empid');
+    
+    //     for($i=0; $i<count($attendance); $i++){
+    //         $in = null;
+    //         $out = null;
+    //         if($attendance[$i] == "true"){
+    //             $in = $d . " 09:00:00";
+    //             $out = $d . " 21:00:00";
+    //         }elseif($attendanceh[$i] == "true"){
+    //             $in = $d . " 09:00:00";
+    //             $out = $d . " 15:00:00";
+    //         }
+    //         $attendance_data = [
+    //             'date' => $d,
+    //             'emp_id'=> $empid[$i],
+    //             'intime'=> $in,
+    //             'outtime'=> $out,
+    //             'user_id'=> Auth::id()
+    //         ];
+    //         // dd($attendance_data);
+    //         if(!empty($in) && !empty($out)){
+    //             $existingRecord = Attendance::where('date', $d)->where('emp_id', $empid[$i])->first();
+    //             if ($existingRecord) {
+    //                 $existingRecord->update([
+    //                     'intime' => $in,
+    //                     'outtime' => $out,
+    //                     'user_id' => Auth::id()
+    //                 ]);
+    //             } else {
+    //                 $data = new Attendance();
+    //                 $data->fill($attendance_data)->save();
+    //             }
+    //         }
+    //     }
+        
+    //     flash()->addSuccess('Attendance taken successfully.');
+    //     return redirect('attendance');
+    // }
 
     private function getLastDayOfMonth($year, $month) {
         $lastDayOfMonth = date('Y-m-d', strtotime($year . '-' . $month . '-' . date('t', strtotime($year . '-' . $month . '-01'))));

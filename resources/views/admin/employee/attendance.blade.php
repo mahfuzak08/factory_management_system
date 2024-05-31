@@ -45,13 +45,14 @@
                                         <tr>
                                             <th>
                                               {{-- <input _ngcontent-gsm-c19="" checked="true" id="masterCheckbox" class="form-check-input" type="checkbox"> --}}
-                                              Full Day::Half Day
+                                              SL
                                             </th>
                                             <th> {{__('admin.name')}} </th>
                                             <th> {{__('admin.mobile')}} </th>
                                             <th> {{__('admin.designation')}} </th>
                                             <th> {{__('admin.intime')}} </th>
                                             <th> {{__('admin.outtime')}} </th>
+                                            <th> {{__('admin.attendance')}} </th>
                                           </tr>
                                     </thead>
                                     <tbody>
@@ -65,27 +66,24 @@
                                           @foreach($employee as $row)
                                             <tr>
                                               <td>
-                                                <input name="empid[{{$sl}}]" value="{{$row['id']}}" type="hidden">
-                                                <input name="attendance[{{$sl}}]" value="false" type="hidden">
-                                                F: <input name="attendance[{{$sl}}]" {{$row['attendance'] == 'Y' ? 'checked': '';}} value="true" class="form-check-input checkbox" type="checkbox">
-                                                <input name="attendanceh[{{$sl}}]" value="false" type="hidden">
-                                                H: <input name="attendanceh[{{$sl++}}]" {{$row['attendance'] == 'H' ? 'checked': '';}} value="true" class="form-check-input checkbox" type="checkbox">
+                                                {{$sl++}}
                                               </td>
-                                              <td>ID-{{$row['id']}}::{{$row['name']}}</td>
+                                              <td><a href="{{ URL::route('edit-attendance', ['id' => $row['id'], 'date' => @$_GET['oldDate']]) }}">ID-{{$row['id']}}::{{$row['name']}}</a></td>
                                               <td>{{$row['mobile']}}</td>
                                               <td>{{$row['designation']}}</td>
                                               <td>{{ $row['intime'] != "" ? date('Y-m-d h:i A', strtotime($row['intime'])) : "" }}</td>
                                               <td>{{ $row['outtime'] != "" ? date('Y-m-d h:i A', strtotime($row['outtime'])) : "" }}</td>
+                                              <td>{{ $row['attendance'] }}</td>
                                             </tr>
                                           @endforeach
                                           @if(hasModuleAccess('Employee_Attendance'))
                                           <tr>
-                                            <td colspan="6"><button type="submit" class="btn btn-successbtn btn-rounded btn-primary btn-sm me-2" name="save">{{isset($_GET['oldDate']) ? __('admin.update') : __('admin.save_now')}}</button>
+                                            <td colspan="7"><button type="submit" class="btn btn-successbtn btn-rounded btn-primary btn-sm me-2" name="save">{{isset($_GET['oldDate']) ? __('admin.update') : __('admin.save_now')}}</button>
                                           </tr>
                                           @endif
                                         @else
                                             <tr>
-                                              <td colspan="6" class="text-center">{{__('admin.no_data_found')}}</td>
+                                              <td colspan="7" class="text-center">{{__('admin.no_data_found')}}</td>
                                             </tr>
                                         @endif
                                       </form>
