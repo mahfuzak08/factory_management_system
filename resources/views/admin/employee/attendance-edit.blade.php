@@ -39,7 +39,7 @@
                                         <div class="col-sm-4">
                                           <div class="form-check">
                                             <label class="form-check-label">
-                                              <input type="radio" class="form-check-input" name="attType" id="attType1" value="Y" checked="true"> {{__('admin.fullday')}} <i class="input-helper"></i></label>
+                                              <input type="radio" class="form-check-input" name="attType" id="attType1" value="Y" {{empty($attendance) || empty($attendance[0]['intime']) ? 'checked="true"' : ''}}> {{__('admin.fullday')}} <i class="input-helper"></i></label>
                                           </div>
                                         </div>
                                         <div class="col-sm-4">
@@ -51,15 +51,15 @@
                                         <div class="col-sm-4">
                                           <div class="form-check">
                                             <label class="form-check-label">
-                                              <input type="radio" class="form-check-input" name="attType" id="attType3" value="T"> {{__('admin.time')}} <i class="input-helper"></i></label>
+                                              <input type="radio" class="form-check-input" name="attType" id="attType3" value="T" {{!empty($attendance) && !empty($attendance[0]['intime']) ? 'checked="true"' : ''}}> {{__('admin.time')}} <i class="input-helper"></i></label>
                                           </div>
                                         </div>
                                     </div>
-                                    <div class="form-group timeshow hidden">
+                                    <div class="form-group timeshow {{empty($attendance) || empty($attendance[0]['intime']) ? 'hidden' : ''}}">
                                         <label for="exampleInputName12">{{ __('admin.intime') }}</label>
                                         <input type="datetime-local" value="{{!empty($attendance) && !empty($attendance[0]['intime']) ? $attendance[0]['intime'] : date('Y-m-d H:i')}}" class="form-control" id="exampleInputName12" name="intime" placeholder="{{ __('admin.intime') }}">
                                     </div>
-                                    <div class="form-group timeshow hidden">
+                                    <div class="form-group timeshow {{empty($attendance) || empty($attendance[0]['intime']) ? 'hidden' : ''}}">
                                         <label for="exampleInputName13">{{ __('admin.outtime') }}</label>
                                         <input type="datetime-local" value="{{!empty($attendance) && !empty($attendance[0]['outtime']) ? $attendance[0]['outtime'] : date('Y-m-d H:i')}}" class="form-control" id="exampleInputName13" name="outtime" placeholder="{{ __('admin.outtime') }}">
                                     </div>
