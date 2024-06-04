@@ -169,4 +169,7 @@ return [
     'expirydate' => 'Expiry Date',
     'intime' => 'In Time',
     'outtime' => 'Out Time',
+    'fullday' => 'Full Day',
+    'halfday' => 'Half Day',
+    'time' => 'Time',
 ];

@@ -334,7 +334,7 @@ class EmployeeController extends Controller
 
     public function edit_attendance(){
         $id = $_GET["id"];
-        $d = $_GET["date"];
+        $d = !empty($_GET["date"]) ? $_GET["date"] : date('Y-m-d');
         $employee = Employee::where('id', $id)->get();
         $attendance = Attendance::where('date', $d)->where('emp_id', $id)->get()->toArray();
         return view('admin.employee.attendance-edit', compact('employee', 'attendance'));
@@ -345,6 +345,14 @@ class EmployeeController extends Controller
      */
     public function save_attendance(Request $request){
         $input = $request->all();
+        if($request->input('attType') == 'Y'){
+            $input['intime'] = $input['date']." 09:00:00";
+            $input['outtime'] = $input['date']." 21:00:00";
+        }
+        elseif($request->input('attType') == 'H'){
+            $input['intime'] = $input['date']." 09:00:00";
+            $input['outtime'] = $input['date']." 15:00:00";
+        }
         $input['user_id'] = Auth::id();
         if(!empty($request->input('att_id')) && $request->input('att_id') != ""){
             $data = Attendance::findOrFail($request->input('att_id'));
