@@ -70,8 +70,7 @@
                                     @if(hasModuleAccess('Employee_Edit'))
                                       <a href="{{route('edit-employee', $employee->id)}}" class="btn btn-warning btn-sm">{{__('admin.edit')}}</a> 
                                     @endif
-                                    {{-- @if($employee->total_paid == 'yes') --}}
-                                    @if($total_receive == 0)
+                                    @if($total_receive == 0 || $employee->total_paid == 'yes')
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <button class="btn btn-danger me-2 float-end">{{__('admin.payment')}}</button>
                                     </div>
