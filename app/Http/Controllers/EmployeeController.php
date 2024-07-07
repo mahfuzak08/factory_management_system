@@ -21,7 +21,7 @@ class EmployeeController extends Controller
     public function index(){
         if(! empty(request()->input('search'))){
             $str = request()->input('search');
-            $datas = Employee::select('employees.id', 'employees.name', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address', \DB::raw('COALESCE(SUM(account_tranxes.amount), 0) as amount'))
+            $datas = Employee::select('employees.id', 'employees.name', 'employees.total_paid', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address', \DB::raw('COALESCE(SUM(account_tranxes.amount), 0) as amount'))
                             ->leftJoin('account_tranxes', function($join) {
                                 $join->on('account_tranxes.ref_id', '=', 'employees.id')
                                     ->where('account_tranxes.ref_type', '=', 'employee')
@@ -37,10 +37,10 @@ class EmployeeController extends Controller
                                 ->orWhere('address', 'like', '%'.$str.'%');
                             })
                             ->orderBy('employees.name', 'ASC')
-                            ->groupBy('employees.id', 'employees.name', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address')
+                            ->groupBy('employees.id', 'employees.name', 'employees.total_paid', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address')
                             ->paginate(10)->withQueryString();
         }else{
-            $datas = Employee::select('employees.id', 'employees.name', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address', \DB::raw('COALESCE(SUM(account_tranxes.amount), 0) as amount'))
+            $datas = Employee::select('employees.id', 'employees.name', 'employees.total_paid', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address', \DB::raw('COALESCE(SUM(account_tranxes.amount), 0) as amount'))
                             ->leftJoin('account_tranxes', function($join) {
                                 $join->on('account_tranxes.ref_id', '=', 'employees.id')
                                     ->where('account_tranxes.ref_type', '=', 'employee')
@@ -48,7 +48,7 @@ class EmployeeController extends Controller
                                     ->where('account_tranxes.tranx_date', '<=', $this->fyed);
                             })
                             ->orderBy('employees.name', 'ASC')
-                            ->groupBy('employees.id', 'employees.name', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address')
+                            ->groupBy('employees.id', 'employees.name', 'employees.total_paid', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address')
                             ->paginate(10)
                             ->withQueryString();
         }
@@ -215,6 +215,11 @@ class EmployeeController extends Controller
                 $input['amount'] *= -1;
                 $input['user_id'] = Auth::id();
                 $data->fill($input)->save();
+
+                $employee = Employee::findOrFail($request->input('ref_id'));
+                $employee->total_paid = 'no';
+                $employee->save();
+
                 flash()->addSuccess('New Data Added Successfully.');
             }
     
