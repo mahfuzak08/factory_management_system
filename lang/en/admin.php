@@ -87,6 +87,7 @@ return [
     'customer_name' => 'Customer Name',
     'subtotal' => 'Subtotal',
     'receive_amount' => 'Amount Receive',
+    'sabek_total' => 'Previous Total',
     'gender' => 'Gender',
     'designation' => 'Designation',
     'male' => 'Male',

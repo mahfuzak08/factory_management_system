@@ -147,9 +147,14 @@ class EmployeeController extends Controller
         $employee = Employee::findOrFail($id);
         $banks = Bankacc::where('type', '!=', 'Due')->get();
         if(! empty(request()->input('action')) && request()->input('action') == 'total_paid'){
+            $cy_total_receive = AccountTranx::where('ref_id', $id)
+                                    ->where('ref_type', 'employee')
+                                    ->whereBetween('tranx_date', [$this->fysd, $this->fyed])
+                                    ->sum('amount');
             $employee->total_paid = 'yes';
+            $employee->sabek_total = $employee->sabek_total + $cy_total_receive*-1;
             $employee->save();
-            $employee = Employee::findOrFail($id);
+            return redirect("employee_details/$id");
         }
         if(! empty(request()->input('search'))){
             $str = request()->input('search');
@@ -173,10 +178,15 @@ class EmployeeController extends Controller
         }
         $total_receive = AccountTranx::where('ref_id', $id)
                                     ->where('ref_type', 'employee')
+                                    // ->whereBetween('tranx_date', [$this->fysd, $this->fyed])
+                                    ->sum('amount');
+        $cy_total_receive = AccountTranx::where('ref_id', $id)
+                                    ->where('ref_type', 'employee')
                                     ->whereBetween('tranx_date', [$this->fysd, $this->fyed])
                                     ->sum('amount');
+        $cy_total_receive = $cy_total_receive + $employee->sabek_total;
         $yearly_attendance = DB::select("SELECT SUM(day_count) AS total_attend FROM `attendance_view` WHERE emp_id = ? AND `date` >= ? AND `date` <= ?", [$id, $this->fysd, $this->fyed]);
-        return view('admin.employee.details', compact('employee', 'banks', 'datas', 'total_receive', 'yearly_attendance'))->with('i', (request()->input('page', 1) - 1) * 10);
+        return view('admin.employee.details', compact('employee', 'banks', 'datas', 'total_receive', 'cy_total_receive', 'yearly_attendance'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
     public function add_amount(Request $request){
@@ -206,6 +216,11 @@ class EmployeeController extends Controller
                 $input = $request->all();
                 $input['amount'] *= -1;
                 $input['note'] = $input['note'] . ' (Edited by ' . Auth::user()->name . ' and Old amount was ' . $data[0]->amount*-1 .')';
+                $emp = Employee::findOrFail($request->input('ref_id'));
+                if($emp->sabek_total > 0){
+                    $emp->sabek_total = $emp->sabek_total + $data[0]->amount - $input['amount'];
+                    $emp->save();
+                }
                 $data[0]->fill($input)->save();
                 flash()->addSuccess('Data Update Successfully.');
             }else{
@@ -464,6 +479,12 @@ class EmployeeController extends Controller
     public function employee_trnx_delete($id){
         try{
             DB::beginTransaction();
+            $olddata = AccountTranx::findOrFail($id);
+            $emp = Employee::findOrFail($olddata->ref_id);
+            if($emp->sabek_total > 0){
+                $emp->sabek_total = $emp->sabek_total + $olddata->amount;
+                $emp->save();
+            }
             AccountTranx::where('id', $id)->delete();
             flash()->addSuccess('Employee Transection Deleted Successfully.');
             DB::commit();

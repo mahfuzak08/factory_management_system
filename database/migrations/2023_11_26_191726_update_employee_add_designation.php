@@ -15,6 +15,7 @@ return new class extends Migration
             Schema::table('employees', function (Blueprint $table) {
                 $table->string('designation')->default('Employee')->after('gender');
                 $table->string('total_paid')->nullable()->after('designation');
+                $table->float('sabek_total', 14, 2)->nullable()->after('designation');
             });
         }
     }
@@ -27,6 +28,7 @@ return new class extends Migration
         Schema::table('employees', function (Blueprint $table) {
             $table->dropColumn('designation');
             $table->dropColumn('total_paid');
+            $table->dropColumn('sabek_total');
         });
     }
 };

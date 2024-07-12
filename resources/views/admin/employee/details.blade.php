@@ -62,9 +62,21 @@
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">
-                                      <label for="input3" class="col-sm-3 col-form-label">{{__('admin.receive_amount')}}</label>
+                                      <label for="input3" class="col-sm-3 col-form-label">{{__('admin.total_pay')}}</label>
                                       <div class="col-sm-9">
                                         <input type="text" class="form-control form-control-border-off" disabled="true" id="input3" value="{{abs($total_receive)}}">
+                                      </div>
+                                    </div>
+                                    <div class="form-group form-group-margin-bottom-off row">
+                                      <label for="input3" class="col-sm-3 col-form-label">{{__('admin.current_payment')}}</label>
+                                      <div class="col-sm-9">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input3" value="{{abs($cy_total_receive)}}">
+                                      </div>
+                                    </div>
+                                    <div class="form-group form-group-margin-bottom-off row">
+                                      <label for="input3" class="col-sm-3 col-form-label">{{__('admin.sabek_total')}}</label>
+                                      <div class="col-sm-9">
+                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input3" value="{{abs($employee->sabek_total)}}">
                                       </div>
                                     </div>
                                     @if(hasModuleAccess('Employee_Edit'))
