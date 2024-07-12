@@ -87,6 +87,7 @@ return [
     'customer_name' => 'ক্রেতার নাম',
     'subtotal' => 'সর্ব মোট',
     'receive_amount' => 'প্রাপ্তির পরিমাণ',
+    'sabek_total' => 'সাবেক টোটাল',
     'gender' => 'লিঙ্গ',
     'designation' => 'পদবীর নাম',
     'male' => 'পুরুষ',
