@@ -50,6 +50,17 @@
     <div class="col-md-6 stretch-card grid-margin">
       <div class="card bg-gradient-primary card-img-holder text-white">
         <div class="card-body">
+          <a href="{{ route('customer') }}">
+            <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+            <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.customer')}}</h2>
+            {{-- <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.employee')}} {{$data['today_total_attendance']}}</h5> --}}
+          </a>
+        </div>
+      </div>
+    </div>
+    {{-- <div class="col-md-6 stretch-card grid-margin">
+      <div class="card bg-gradient-primary card-img-holder text-white">
+        <div class="card-body">
           <a href="{{ route('employee') }}">
             <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
             <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.employee')}}</h2>
@@ -57,6 +68,6 @@
           </a>
         </div>
       </div>
-    </div>
+    </div> --}}
   </div>
 </div>
