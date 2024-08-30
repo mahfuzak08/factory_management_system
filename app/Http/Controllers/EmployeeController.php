@@ -21,7 +21,7 @@ class EmployeeController extends Controller
     public function index(){
         if(! empty(request()->input('search'))){
             $str = request()->input('search');
-            $datas = Employee::select('employees.id', 'employees.name', 'employees.total_paid', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address', \DB::raw('COALESCE(SUM(account_tranxes.amount), 0) as amount'))
+            $datas = Employee::select('employees.id', 'employees.name', 'employees.total_paid', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address', 'employees.closing', \DB::raw('COALESCE(SUM(account_tranxes.amount), 0) as amount'))
                             ->leftJoin('account_tranxes', function($join) {
                                 $join->on('account_tranxes.ref_id', '=', 'employees.id')
                                     ->where('account_tranxes.ref_type', '=', 'employee')
@@ -36,19 +36,23 @@ class EmployeeController extends Controller
                                 ->orWhere('nid', 'like', '%'.$str.'%')
                                 ->orWhere('address', 'like', '%'.$str.'%');
                             })
+                            ->where('employees.closing', '>', date('Y-m-01'))
+                            ->orWhereNull('employees.closing')
                             ->orderBy('employees.name', 'ASC')
-                            ->groupBy('employees.id', 'employees.name', 'employees.total_paid', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address')
+                            ->groupBy('employees.id', 'employees.name', 'employees.total_paid', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address', 'employees.closing')
                             ->paginate(10)->withQueryString();
         }else{
-            $datas = Employee::select('employees.id', 'employees.name', 'employees.total_paid', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address', \DB::raw('COALESCE(SUM(account_tranxes.amount), 0) as amount'))
+            $datas = Employee::select('employees.id', 'employees.name', 'employees.total_paid', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address', 'employees.closing', \DB::raw('COALESCE(SUM(account_tranxes.amount), 0) as amount'))
                             ->leftJoin('account_tranxes', function($join) {
                                 $join->on('account_tranxes.ref_id', '=', 'employees.id')
                                     ->where('account_tranxes.ref_type', '=', 'employee')
                                     ->where('account_tranxes.tranx_date', '>=', $this->fysd)
                                     ->where('account_tranxes.tranx_date', '<=', $this->fyed);
                             })
+                            ->where('employees.closing', '>', date('Y-m-01'))
+                            ->orWhereNull('employees.closing')
                             ->orderBy('employees.name', 'ASC')
-                            ->groupBy('employees.id', 'employees.name', 'employees.total_paid', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address')
+                            ->groupBy('employees.id', 'employees.name', 'employees.total_paid', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address', 'employees.closing')
                             ->paginate(10)
                             ->withQueryString();
         }
@@ -448,7 +452,8 @@ class EmployeeController extends Controller
         if(! empty($request->input('empid')) && $request->input('empid') != 'all')
             $employee = Employee::where('id', $request->input('empid'))->get()->toArray();
         else
-            $employee = Employee::all()->toArray();
+            $employee = Employee::where('closing', '>', date('Y-m-01'))
+                                ->orWhereNull('closing')->get()->toArray();
         $attendance = Attendance::whereBetween('date', [$firstDay, $lastDay])->get()->toArray();
         // dd($attendance);
         for($i=0; $i<count($employee); $i++){
