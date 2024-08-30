@@ -141,7 +141,7 @@ class EmployeeController extends Controller
 
     public function delete_employee($id){
         $data = Employee::findOrFail($id);
-        $data->closing = date('Y-m-d');
+        $data->closing = date('Y-6-d');
         $data->save();
         flash()->addSuccess('Data Delete Successfully.');
         return redirect('employee');
