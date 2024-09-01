@@ -19,43 +19,60 @@ use Rats\Zkteco\Lib\ZKTeco;
 class EmployeeController extends Controller
 {
     public function index(){
-        if(! empty(request()->input('search'))){
+        if (!empty(request()->input('search'))) {
             $str = request()->input('search');
-            $datas = Employee::select('employees.id', 'employees.name', 'employees.total_paid', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address', 'employees.closing', \DB::raw('COALESCE(SUM(account_tranxes.amount), 0) as amount'))
+            $datas = Employee::select(
+                                'employees.id', 'employees.name', 'employees.total_paid', 
+                                'employees.mobile', 'employees.gender', 'employees.designation', 
+                                'employees.nid', 'employees.address', 'employees.closing', 
+                                \DB::raw('COALESCE(SUM(account_tranxes.amount), 0) as amount')
+                            )
                             ->leftJoin('account_tranxes', function($join) {
                                 $join->on('account_tranxes.ref_id', '=', 'employees.id')
-                                    ->where('account_tranxes.ref_type', '=', 'employee')
-                                    ->where('account_tranxes.tranx_date', '>=', $this->fysd)
-                                    ->where('account_tranxes.tranx_date', '<=', $this->fyed);
+                                     ->where('account_tranxes.ref_type', '=', 'employee')
+                                     ->whereBetween('account_tranxes.tranx_date', [$this->fysd, $this->fyed]);
                             })
-                            ->where(function ($query) use ($str){
+                            ->where(function ($query) use ($str) {
                                 $query->where('name', 'like', '%'.$str.'%')
-                                ->orWhere('mobile', 'like', '%'.$str.'%')
-                                ->orWhere('gender', 'like', '%'.$str.'%')
-                                ->orWhere('designation', 'like', '%'.$str.'%')
-                                ->orWhere('nid', 'like', '%'.$str.'%')
-                                ->orWhere('address', 'like', '%'.$str.'%');
+                                      ->orWhere('mobile', 'like', '%'.$str.'%')
+                                      ->orWhere('gender', 'like', '%'.$str.'%')
+                                      ->orWhere('designation', 'like', '%'.$str.'%')
+                                      ->orWhere('nid', 'like', '%'.$str.'%')
+                                      ->orWhere('address', 'like', '%'.$str.'%');
                             })
-                            ->where('employees.closing', '>', date('Y-m-01'))
-                            ->orWhereNull('employees.closing')
-                            ->orderBy('employees.name', 'ASC')
-                            ->groupBy('employees.id', 'employees.name', 'employees.total_paid', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address', 'employees.closing')
-                            ->paginate(10)->withQueryString();
-        }else{
-            $datas = Employee::select('employees.id', 'employees.name', 'employees.total_paid', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address', 'employees.closing', \DB::raw('COALESCE(SUM(account_tranxes.amount), 0) as amount'))
-                            ->leftJoin('account_tranxes', function($join) {
-                                $join->on('account_tranxes.ref_id', '=', 'employees.id')
-                                    ->where('account_tranxes.ref_type', '=', 'employee')
-                                    ->where('account_tranxes.tranx_date', '>=', $this->fysd)
-                                    ->where('account_tranxes.tranx_date', '<=', $this->fyed);
+                            ->where(function ($query) {
+                                $query->where('employees.closing', '>', date('Y-m-01'))
+                                      ->orWhereNull('employees.closing');
                             })
-                            ->where('employees.closing', '>', date('Y-m-01'))
-                            ->orWhereNull('employees.closing')
                             ->orderBy('employees.name', 'ASC')
-                            ->groupBy('employees.id', 'employees.name', 'employees.total_paid', 'employees.mobile', 'employees.gender', 'employees.designation', 'employees.nid', 'employees.address', 'employees.closing')
+                            ->groupBy('employees.id', 'employees.name', 'employees.total_paid', 
+                                      'employees.mobile', 'employees.gender', 'employees.designation', 
+                                      'employees.nid', 'employees.address', 'employees.closing')
                             ->paginate(10)
                             ->withQueryString();
-        }
+        } else {
+            $datas = Employee::select(
+                                'employees.id', 'employees.name', 'employees.total_paid', 
+                                'employees.mobile', 'employees.gender', 'employees.designation', 
+                                'employees.nid', 'employees.address', 'employees.closing', 
+                                \DB::raw('COALESCE(SUM(account_tranxes.amount), 0) as amount')
+                            )
+                            ->leftJoin('account_tranxes', function($join) {
+                                $join->on('account_tranxes.ref_id', '=', 'employees.id')
+                                     ->where('account_tranxes.ref_type', '=', 'employee')
+                                     ->whereBetween('account_tranxes.tranx_date', [$this->fysd, $this->fyed]);
+                            })
+                            ->where(function ($query) {
+                                $query->where('employees.closing', '>', date('Y-m-01'))
+                                      ->orWhereNull('employees.closing');
+                            })
+                            ->orderBy('employees.name', 'ASC')
+                            ->groupBy('employees.id', 'employees.name', 'employees.total_paid', 
+                                      'employees.mobile', 'employees.gender', 'employees.designation', 
+                                      'employees.nid', 'employees.address', 'employees.closing')
+                            ->paginate(10)
+                            ->withQueryString();
+        }        
         
         // dd($datas);
         return view('admin.employee.manage', compact('datas'))->with('i', (request()->input('page', 1) - 1) * 10);
