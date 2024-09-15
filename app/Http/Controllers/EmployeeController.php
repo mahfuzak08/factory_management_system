@@ -238,7 +238,7 @@ class EmployeeController extends Controller
                 $input['amount'] *= -1;
                 $input['note'] = $input['note'] . ' (Edited by ' . Auth::user()->name . ' and Old amount was ' . $data[0]->amount*-1 .')';
                 $emp = Employee::findOrFail($request->input('ref_id'));
-                if($emp->sabek_total > 0){
+                if($emp->sabek_total > 0 && $request->input('sabek_total_edit') == 'yes'){
                     $emp->sabek_total = $emp->sabek_total + $data[0]->amount - $input['amount'];
                     $emp->save();
                 }
@@ -503,10 +503,10 @@ class EmployeeController extends Controller
             DB::beginTransaction();
             $olddata = AccountTranx::findOrFail($id);
             $emp = Employee::findOrFail($olddata->ref_id);
-            if($emp->sabek_total > 0){
+            if($emp->sabek_total > 0 && request()->input('type') == 'sabek'){
                 $emp->sabek_total = $emp->sabek_total + $olddata->amount;
-                $emp->save();
             }
+            $emp->save();
             AccountTranx::where('id', $id)->delete();
             flash()->addSuccess('Employee Transection Deleted Successfully.');
             DB::commit();

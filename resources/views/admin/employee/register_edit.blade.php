@@ -67,6 +67,15 @@
                                         <input type="text" name="note" value="{{$order[0]->note}}" placeholder="{{__('admin.details')}}" class="form-control" id="input8">
                                       </div>
                                     </div>
+                                    <div class="form-group form-group-margin-bottom-off row">
+                                      <label for="input9" class="col-sm-3 col-form-label">{{__('admin.edit')}} {{__('admin.sabek_total')}}</label>
+                                      <div class="col-sm-9">
+                                        <select class="form-select" name="sabek_total_edit" id="input9" aria-label="Default select example">
+                                          <option value="no">{{__('admin.no')}}</option>
+                                          <option value="yes">{{__('admin.yes')}}</option>
+                                        </select>
+                                      </div>
+                                    </div>
                                     <button type="submit" class="btn btn-primary me-2 float-end">{{ __('admin.update') }}</button>
                                     <a href="{{route('employee-details', $order[0]->ref_id)}}" class="btn btn-secondary me-2 float-end">{{ __('admin.cancel') }}</a>
                                   </form>

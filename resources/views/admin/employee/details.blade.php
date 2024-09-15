@@ -191,6 +191,7 @@
                                                 @endif
                                                 @if(hasModuleAccess('Employee_Transection_Delete'))
                                                   <a href="{{route('employee-trnx-delete', $row->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a>
+                                                  <a href="{{ URL::route('employee-trnx-delete', ['id' => $row->id, 'type' => 'sabek']) }}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete with sabek total?')">{{__('admin.delete')}} + {{__('admin.sabek_total')}}</a>
                                                 @endif
                                               @endif
                                             </td>
