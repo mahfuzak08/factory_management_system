@@ -16,11 +16,19 @@ class CustomerController extends Controller
 {
     public function index(){
         $ctotal = [];
+        $banks = Bankacc::get();
+        $accounts_payable_bid = 0;
+        $cash_bid = 0;
+        foreach($banks as $r){
+            if($r->type == 'Due' && $r->name == 'Due')
+                $accounts_payable_bid = $r->id;
+            if($r->type == 'Cash' && $r->name == 'Cash')
+                $cash_bid = $r->id;
+        }
         if(! empty(request()->input('search'))){
             $str = request()->input('search');
             $datas = Customer::select('customers.*')
-                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer"), 0)) as due'))
-                            ->addSelect(DB::raw('COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer"), 0) as receive'))
+                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE account_id = "'.$cash_bid.'" AND ref_id = customers.id AND ref_type = "customer"), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE account_id = "'.$accounts_payable_bid.'" AND ref_id = customers.id AND ref_type = "customer"), 0)) as due'))
                             ->where(function ($query) use ($str){
                                 $query->where('name', 'like', '%'.$str.'%')
                                 ->orWhere('mobile', 'like', '%'.$str.'%')
@@ -29,22 +37,13 @@ class CustomerController extends Controller
                             })
                             ->where('is_delete', 0)
                             ->latest()->paginate(50)->withQueryString();
-
-            
         }else{
             $datas = Customer::select('customers.*')
-                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer"), 0)) as due'))
-                            ->addSelect(DB::raw('COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer"), 0) as receive'))
+                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE account_id = "'.$cash_bid.'" AND ref_id = customers.id AND ref_type = "customer"), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE account_id = "'.$accounts_payable_bid.'" AND ref_id = customers.id AND ref_type = "customer"), 0)) as due'))
                             ->latest()
                             ->where('is_delete', 0)
                             ->paginate(50)
                             ->withQueryString();
-
-            if(! $datas->hasMorePages()){
-                $ts = Sales::where('status', 1)->sum('total');
-                $tr = AccountTranx::where('ref_type', 'customer')->sum('amount');
-                $ctotal=array("total_sales" => $ts, "total_receive" => $tr);
-            }
         }
         
         return view('admin.customer.manage', compact('datas', 'ctotal'))->with('i', (request()->input('page', 1) - 1) * 50);
@@ -166,8 +165,6 @@ class CustomerController extends Controller
                             ->select('customers.*')
                             ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND ref_tranx_id = "0"), 0)) as total_due'))
                             ->addSelect(DB::raw('(COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer"), 0)) as total_pay'))
-                            // ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM sales WHERE customer_id = customers.id AND status = 1 AND date >="'.$this->fysd.'" AND date <="'.$this->fyed.'"), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND ref_tranx_id = "0" AND tranx_date >="'.$this->fysd.'" AND tranx_date <="'.$this->fyed.'"), 0)) as cy_due'))
-                            // ->addSelect(DB::raw('(COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND tranx_date >="'.$this->fysd.'" AND tranx_date <="'.$this->fyed.'"), 0)) as cy_pay'))
                             ->get();
         $cs = Sales::where('customer_id', $id)
                     ->where('order_type', 'sales')
@@ -180,7 +177,7 @@ class CustomerController extends Controller
         }
         // dd($quantity);
 
-        $banks = Bankacc::where('type', '!=', 'Due')->get();
+        $banks = Bankacc::get();
         if(! empty(request()->input('search'))){
             $str = request()->input('search');
             $datas = AccountTranx::join('bankaccs', 'account_tranxes.account_id', '=', 'bankaccs.id')
@@ -193,20 +190,67 @@ class CustomerController extends Controller
                             ->where('ref_id', $id)
                             ->where('ref_type', 'customer')
                             ->select('account_tranxes.*', 'bankaccs.name as bank_name')
-                            ->latest()->paginate(10)->withQueryString();
+                            ->paginate(10)->withQueryString();
         }else{
             $datas = AccountTranx::join('bankaccs', 'account_tranxes.account_id', '=', 'bankaccs.id')
                     ->where('ref_id', $id)
                     ->where('ref_type', 'customer')
                     ->select('account_tranxes.*', 'bankaccs.name as bank_name')
-                    ->latest()->paginate(10)->withQueryString();
+                    ->paginate(10)->withQueryString();
         }
-        return view('admin.customer.details', compact('customer', 'quantity', 'banks', 'datas'))->with('i', (request()->input('page', 1) - 1) * 10);
+        $balancesBefore = array();
+        $aidcash = 0;
+        $aiddue = 0;
+        $c = 0;
+        $d = 0;
+        foreach($banks as $bank){
+            if($bank->type == 'Cash') 
+                $aidcash = $bank->id;
+            elseif($bank->type == 'Due' && $bank->name == 'Due') 
+                $aiddue = $bank->id;
+        }
+        if(isset($_GET['page']) && $_GET['page']>1){
+            $balancesBefore = AccountTranx::where('ref_id', $id)
+                            ->where('ref_type', 'customer')
+                            ->where('id', '<', $datas->first()->id)
+                            ->groupBy('account_id')
+                            ->select('account_id', DB::raw('sum(amount) as total_amount')) // Select account_id and sum amount
+                            ->get()->toArray();
+            foreach($balancesBefore as $bf){
+                if($bf['account_id'] == $aidcash) $c+=$bf["total_amount"];
+                elseif($bf['account_id'] == $aiddue) $d+=$bf["total_amount"];
+            }
+        }
+        foreach($datas as $row){
+            if($aidcash == $row->account_id){
+                $c+=$row->amount;
+            }
+            elseif($aiddue == $row->account_id){
+                $d+=$row->amount;
+            }
+        }
+        $table = ["balancesBefore"=>$balancesBefore, "datas"=>$datas, "d"=>$d, "c"=>$c, "aidcash"=>$aidcash, "aiddue"=>$aiddue];
+        // dd($table);
+        return view('admin.customer.details', compact('customer', 'quantity', 'table'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
     public function add_amount(Request $request){
+        $input = $request->all();
+        $banks = Bankacc::get();
+        $aid = 0;
+        if($request->input('tranx_type') == 'debit'){
+            foreach($banks as $r){
+                if($r->type == 'Cash')
+                    $aid = $r->id;
+            }
+        }elseif($request->input('tranx_type') == 'credit'){
+            foreach($banks as $r){
+                if($r->type == 'Due' && $r->name == 'Due')
+                    $aid = $r->id;
+            }
+        }
+        $input['account_id'] = $aid;
         $rules = [
-            'account_id' => ['required'],
             'tranx_date' => ['required', 'date'],
             'amount' => ['required', 'numeric']
         ];
@@ -240,8 +284,7 @@ class CustomerController extends Controller
                 $data[0]->fill($input)->save();
             }else{
                 $data = new AccountTranx();
-
-                $input = $request->all();
+                $input['account_id'] = $aid;
                 $input['user_id'] = Auth::id();
                 
                 $data->fill($input)->save();

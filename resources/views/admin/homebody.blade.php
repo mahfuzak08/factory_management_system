@@ -17,39 +17,6 @@
     <div class="col-md-6 stretch-card grid-margin">
       <div class="card bg-gradient-info card-img-holder text-white">
         <div class="card-body">
-          <a href="{{ route('purchase') }}">
-            <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-            <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.purchase')}}</h2>
-            <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.purchase')}} {{number_format($data['today_total_purchase'], 2)}}</h5>
-          </a>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 stretch-card grid-margin">
-      <div class="card bg-gradient-danger card-img-holder text-white">
-        <div class="card-body">
-          <a href="{{ route('sales') }}">
-            <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-            <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.sales')}}</h2>
-            <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.sales')}} {{number_format($data['today_total_sale'], 2)}}</h5>
-          </a>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 stretch-card grid-margin">
-      <div class="card bg-gradient-success card-img-holder text-white">
-        <div class="card-body">
-          <a href="{{ route('expense') }}">
-            <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-            <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.expense')}}</h2>
-            <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.expense')}} {{number_format($data['today_total_expense'], 2)}}</h5>
-          </a>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 stretch-card grid-margin">
-      <div class="card bg-gradient-primary card-img-holder text-white">
-        <div class="card-body">
           <a href="{{ route('customer') }}">
             <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
             <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.customer')}}</h2>
@@ -58,16 +25,34 @@
         </div>
       </div>
     </div>
-    {{-- <div class="col-md-6 stretch-card grid-margin">
-      <div class="card bg-gradient-primary card-img-holder text-white">
+    <div class="col-md-6 stretch-card grid-margin">
+      <div class="card bg-gradient-danger card-img-holder text-white">
         <div class="card-body">
-          <a href="{{ route('employee') }}">
+          <a href="{{ route('vendor') }}">
             <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-            <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.employee')}}</h2>
-            <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.employee')}} {{$data['today_total_attendance']}}</h5>
+            <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.vendor')}}</h2>
+            {{-- <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.employee')}} {{$data['today_total_attendance']}}</h5> --}}
           </a>
         </div>
       </div>
-    </div> --}}
+    </div>
+    <div class="col-md-6 stretch-card grid-margin">
+      <div class="card bg-gradient-success card-img-holder text-white">
+        <div class="card-body">
+          <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+          <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.accounts_payable')}}</h2>
+          <h5 class="card-text">{{number_format($data['accounts_payable'], 2)}}</h5>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 stretch-card grid-margin">
+      <div class="card bg-gradient-primary card-img-holder text-white">
+        <div class="card-body">
+            <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+            <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.accounts_receivable')}}</h2>
+            <h5 class="card-text">{{number_format(abs($data['accounts_receivable']), 2)}}</h5>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

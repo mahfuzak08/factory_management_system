@@ -26,34 +26,17 @@
                                 <div class="col-md-6">
                                   <div class="forms-sample">
                                     <div class="form-group form-group-margin-bottom-off row">
-                                      <label for="input1" class="col-sm-3 col-form-label">{{__('admin.name')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input1" value="{{$vendor[0]->name}}">
-                                      </div>
-                                    </div>
-                                    <div class="form-group form-group-margin-bottom-off row">
-                                      <label for="input2" class="col-sm-3 col-form-label">{{__('admin.mobile')}}</label>
-                                      <div class="col-sm-9">
-                                        <input type="email" class="form-control form-control-border-off" disabled="true" id="input2" value="{{$vendor[0]->mobile}}">
-                                      </div>
-                                    </div>
-                                    <div class="form-group form-group-margin-bottom-off row">
-                                      <label for="input3" class="col-sm-3 col-form-label">{{__('admin.address')}}</label>
-                                      <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input3" value="{{$vendor[0]->address}}">
-                                      </div>
-                                    </div>
-                                    <div class="form-group form-group-margin-bottom-off row">
-                                      <label for="input4" class="col-sm-3 col-form-label">{{__('admin.email')}}</label>
-                                      <div class="col-sm-9">
-                                        <input type="text" class="form-control form-control-border-off" disabled="true" id="input4" value="{{$vendor[0]->email}}">
+                                        <p style="font-size: 20px;font-weight:700;">{{$vendor[0]->name}}</p>
+                                        <b>{{$vendor[0]->mobile}}</b>
+                                        <br>{{$vendor[0]->address}}                                        
                                       </div>
                                     </div>
                                     @php
                                     $vendor[0]->total_due = $vendor[0]->total_due >= 0 ? $vendor[0]->total_due : 0;
                                     // $vendor[0]->cy_due = $vendor[0]->cy_due >= 0 ? $vendor[0]->cy_due : 0;
                                     @endphp
-                                    <div class="form-group form-group-margin-bottom-off row">
+                                    {{-- <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input5" class="col-sm-3 col-form-label text-warning">{{__('admin.balance')}}</label>
                                       <div class="col-sm-9">
                                         <input type="text" class="form-control form-control-border-off" disabled="true" id="input5" value="{{number_format($vendor[0]->total_due, 2)}}">
@@ -70,7 +53,7 @@
                                       <div class="col-sm-9">
                                         <input type="text" class="form-control form-control-border-off" disabled="true" value="{{number_format($vendor[0]->total_due + ($vendor[0]->total_pay * -1), 2)}}">
                                       </div>
-                                    </div>
+                                    </div> --}}
                                     {{-- <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input5" class="col-sm-3 col-form-label">{{__('admin.current_due')}}</label>
                                       <div class="col-sm-9">
@@ -107,13 +90,13 @@
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input6" class="col-sm-3 col-form-label">{{__('admin.date')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="date" name="tranx_date" class="form-control" id="input6" value="{{date('d-m-Y')}}">
+                                        <input type="date" name="tranx_date" value="{{date('Y-m-d')}}" class="form-control" id="input6" required>
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">
-                                      <label for="input7" class="col-sm-3 col-form-label">{{__('admin.received_by')}}</label>
+                                      <label for="input7" class="col-sm-3 col-form-label">{{__('admin.Particulars')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="note" id="input7" placeholder="{{__('admin.received_by')}}">
+                                        <input type="text" class="form-control" name="note" id="input7" placeholder="{{__('admin.Particulars')}}">
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">
@@ -122,14 +105,29 @@
                                         <input type="text" name="amount" placeholder="{{__('admin.enter_your_amount')}}" required class="form-control" id="input8">
                                       </div>
                                     </div>
-                                    <div class="form-group form-group-margin-bottom-off row">
+                                    {{-- <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input9" class="col-sm-3 col-form-label">{{__('admin.account_name')}}</label>
                                       <div class="col-sm-9">
-                                        <select class="form-select" name="account_id" id="input9" aria-label="Default select example">
+                                        <select class="form-select" name="account_id" id="input9">
                                           @foreach($banks as $bank)
                                           <option value="{{$bank->id}}">{{$bank->name}}</option>
                                           @endforeach
                                         </select>
+                                      </div>
+                                    </div> --}}
+                                    <div class="form-group row">
+                                      <label class="col-sm-3 col-form-label">{{__('admin.tranx_type')}}</label>
+                                      <div class="col-sm-4">
+                                        <div class="form-check">
+                                          <label class="form-check-label">
+                                            <input type="radio" class="form-check-input" name="tranx_type" id="debit1" value="debit"> {{__('admin.debit')}} <i class="input-helper"></i></label>
+                                        </div>
+                                      </div>
+                                      <div class="col-sm-5">
+                                        <div class="form-check">
+                                          <label class="form-check-label">
+                                            <input type="radio" class="form-check-input" name="tranx_type" id="credit2" value="credit" checked="true"> {{__('admin.credit')}} <i class="input-helper"></i></label>
+                                        </div>
                                       </div>
                                     </div>
                                     <button type="submit" class="btn btn-primary me-2 float-end">{{ __('admin.save_now') }}</button>
@@ -167,58 +165,93 @@
                                         <tr>
                                             <th>{{__('admin.sl')}}</th>
                                             <th>{{__('admin.date')}}</th>
-                                            <th>{{__('admin.account_name')}}</th>
-                                            <th>{{__('admin.details')}}</th>
-                                            <th class="text-right">{{__('admin.enter_your_amount')}}</th>
+                                            <th>{{__('admin.Particulars')}}</th>
+                                            <th class="text-right">{{__('admin.debit')}}</th>
+                                            <th class="text-right">{{__('admin.credit')}}</th>
+                                            <th class="text-right">{{__('admin.balance')}}</th>
                                             <th>{{__('admin.action')}}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                      @if(count($datas) > 0)
+                                      @if(count($table["datas"]) > 0)
                                         @php 
                                         if(isset($_GET['page']) && $_GET['page']>0)
                                           $n = 1 + (($_GET['page'] - 1) * 10);
                                         else
                                           $n = 1;
                                         @endphp
-                                        @foreach($datas as $row)
+                                        @if(count($table["balancesBefore"])>0)
+                                          <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td>{{__('admin.Balance_Before')}}</td>
+                                            <td class="text-right">
+                                              @foreach($table["balancesBefore"] as $r)
+                                                @if($r["account_id"] == $table["aidcash"])
+                                                  @php 
+                                                    $total = $r["total_amount"];
+                                                    echo number_format($r["total_amount"], 2);
+                                                  @endphp
+                                                @endif
+                                              @endforeach
+                                            </td>
+                                            <td class="text-right">
+                                              @foreach($table["balancesBefore"] as $r)
+                                                @if($r["account_id"] == $table["aiddue"])
+                                                  @php 
+                                                    $total -= $r["total_amount"];
+                                                    echo number_format($r["total_amount"], 2);
+                                                  @endphp
+                                                @endif
+                                              @endforeach
+                                            </td>
+                                            <td class="text-right">
+                                              {{number_format($total, 2)}}
+                                            </td>
+                                            <td></td>
+                                          </tr>
+                                        @endif
+                                        @foreach($table["datas"] as $row)
+                                          @php 
+                                            $total += $row->account_id == $table["aidcash"] ? $row->amount : ($row->amount * -1);
+                                          @endphp
                                           <tr>
                                             <td>{{$n++}}</td>
                                             <td>{{date('d-m-Y', strtotime($row->tranx_date))}}</td>
-                                            <td>{{$row->bank_name}}</td>
                                             <td>{{$row->note}}</td>
-                                            <td class="text-right">{{number_format($row->amount, 2)}}</td>
+                                            <td class="text-right">{{$row->account_id == $table["aidcash"] ? number_format($row->amount, 2) : "-"}}</td>
+                                            <td class="text-right">{{$row->account_id == $table["aiddue"] ? number_format($row->amount, 2) : "-"}}</td>
+                                            <td class="text-right">{{number_format($total, 2)}}</td>
                                             <td>
-                                              @if($row->ref_tranx_type != 'purchase_order')
-                                                @if(hasModuleAccess('Vendor_Transection_Edit'))
-                                                  <a href="{{route('vendor-trnx-edit', $row->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
+                                              @if($row->ref_tranx_type != 'sales_order')
+                                                @if(hasModuleAccess('Customer_Transection_Edit'))
+                                                  <a href="{{route('customer-trnx-edit', $row->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
                                                 @endif
-                                                @if(hasModuleAccess('Vendor_Transection_Delete'))
-                                                  <a href="{{route('vendor-trnx-delete', $row->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a>
+                                                @if(hasModuleAccess('Customer_Transection_Delete'))
+                                                  <a href="{{route('customer-trnx-delete', $row->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a>
                                                 @endif
                                               @endif
                                             </td>
                                           </tr>
-                                          @php 
-                                          $total += $row->amount;
-                                          @endphp
                                         @endforeach
                                       @else
                                           <tr>
-                                            <td colspan="6" class="text-center">{{__('admin.no_data_found')}}</td>
+                                            <td colspan="7" class="text-center">{{__('admin.no_data_found')}}</td>
                                           </tr>
                                       @endif
                                     </tbody>
                                     <tfoot>
-                                      <tr>
-                                        <td colspan="4">Total</td>
-                                        <td class="text-right">{{number_format($total, 2)}}</td>
+                                      <tr style="background: #bab8bb">
+                                        <td colspan="3">{{__('admin.total')}}</td>
+                                        <td class="text-right">{{number_format($table["c"], 2)}}</td>
+                                        <td class="text-right">{{number_format($table["d"], 2)}}</td>
+                                        <td class="text-right">{{number_format($table["c"] - $table["d"], 2)}}</td>
                                         <td></td>
                                       </tr>
                                     </tfoot>
                                 </table>
                               </div>
-                              {{ $datas->onEachSide(3)->links() }}
+                              {{ $table["datas"]->onEachSide(3)->links() }}
                             </div>
                         </div>
                     </div>

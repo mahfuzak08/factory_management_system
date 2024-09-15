@@ -164,7 +164,7 @@ class VendorController extends Controller
                         // ->addSelect(DB::raw('(COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = vendors.id AND ref_type = "vendor" AND tranx_date >="'.$this->fysd.'" AND tranx_date <="'.$this->fyed.'"), 0)) as cy_pay'))
                         ->get();
                         // dd($vendor);
-        $banks = Bankacc::where('type', '!=', 'Due')->get();
+        $banks = Bankacc::get();
         if(! empty(request()->input('search'))){
             $str = request()->input('search');
             $datas = AccountTranx::join('bankaccs', 'account_tranxes.account_id', '=', 'bankaccs.id')
@@ -177,20 +177,66 @@ class VendorController extends Controller
                             ->where('ref_id', $id)
                             ->where('ref_type', 'vendor')
                             ->select('account_tranxes.*', 'bankaccs.name as bank_name')
-                            ->latest()->paginate(10)->withQueryString();
+                            ->paginate(10)->withQueryString();
         }else{
             $datas = AccountTranx::join('bankaccs', 'account_tranxes.account_id', '=', 'bankaccs.id')
                     ->where('ref_id', $id)
                     ->where('ref_type', 'vendor')
                     ->select('account_tranxes.*', 'bankaccs.name as bank_name')
-                    ->latest()->paginate(10)->withQueryString();
+                    ->paginate(10)->withQueryString();
         }
-        return view('admin.vendor.details', compact('vendor', 'banks', 'datas'))->with('i', (request()->input('page', 1) - 1) * 10);
+        $balancesBefore = array();
+        $aidcash = 0;
+        $aiddue = 0;
+        $c = 0;
+        $d = 0;
+        foreach($banks as $bank){
+            if($bank->type == 'Cash') 
+                $aidcash = $bank->id;
+            elseif($bank->type == 'Due' && $bank->name == 'Due2') 
+                $aiddue = $bank->id;
+        }
+        if(isset($_GET['page']) && $_GET['page']>1){
+            $balancesBefore = AccountTranx::where('ref_id', $id)
+                            ->where('ref_type', 'vendor')
+                            ->where('id', '<', $datas->first()->id)
+                            ->groupBy('account_id')
+                            ->select('account_id', DB::raw('sum(amount) as total_amount')) // Select account_id and sum amount
+                            ->get()->toArray();
+            foreach($balancesBefore as $bf){
+                if($bf['account_id'] == $aidcash) $c+=$bf["total_amount"];
+                elseif($bf['account_id'] == $aiddue) $d+=$bf["total_amount"];
+            }
+        }
+        foreach($datas as $row){
+            if($aidcash == $row->account_id){
+                $c+=$row->amount;
+            }
+            elseif($aiddue == $row->account_id){
+                $d+=$row->amount;
+            }
+        }
+        $table = ["balancesBefore"=>$balancesBefore, "datas"=>$datas, "d"=>$d, "c"=>$c, "aidcash"=>$aidcash, "aiddue"=>$aiddue];
+        return view('admin.vendor.details', compact('vendor', 'table'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
     public function add_amount(Request $request){
+        $input = $request->all();
+        $banks = Bankacc::get();
+        $aid = 0;
+        if($request->input('tranx_type') == 'debit'){
+            foreach($banks as $r){
+                if($r->type == 'Cash')
+                    $aid = $r->id;
+            }
+        }elseif($request->input('tranx_type') == 'credit'){
+            foreach($banks as $r){
+                if($r->type == 'Due' && $r->name == 'Due2')
+                    $aid = $r->id;
+            }
+        }
+        $input['account_id'] = $aid;
         $rules = [
-            'account_id' => ['required'],
             'tranx_date' => ['required', 'date'],
             'amount' => ['required', 'numeric']
         ];
@@ -218,7 +264,6 @@ class VendorController extends Controller
                                     ->where('ref_type', $request->input('ref_type'))
                                     ->get();
                 
-                $input = $request->all();
                 $input['user_id'] = Auth::id();
                 $input['amount'] *= -1;
                 $input['note'] = $input['note'] . ' (Edited)';
@@ -226,9 +271,8 @@ class VendorController extends Controller
                 flash()->addSuccess('Vendor Transection Update Successfully.');
             }else{
                 $data = new AccountTranx();
-            
-                $input = $request->all();
                 $input['user_id'] = Auth::id();
+                $input['account_id'] = $aid;
                 $input['amount'] *= -1;
                 $data->fill($input)->save();
                 flash()->addSuccess('Vendor Transection Added Successfully.');

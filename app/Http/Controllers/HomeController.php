@@ -4,26 +4,28 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;
-use App\Models\Purchase;
-use App\Models\Sales;
-use App\Models\Expense_detail;
-use App\Models\Attendance;
+use App\Models\AccountTranx;
+use App\Models\Bankacc;
 
 class HomeController extends Controller
 {
     public function dashboard(){
         activity()->log('Logged in');
-        $data['today_total_purchase'] = Purchase::where('status', 1)
-                                                ->where('date', '=', date('Y-m-d'))
-                                                ->sum('total');
-        $data['today_total_sale'] = Sales::where('status', 1)
-                                                ->where('date', '=', date('Y-m-d'))
-                                                ->sum('total');
-        $data['today_total_expense'] = Expense_detail::where('trnx_date', '=', date('Y-m-d'))
-                                                ->sum('amount');
-        $data['today_total_attendance'] = Attendance::where('date', '=', date('Y-m-d'))
-                                                ->where('hours', '=', 8)
-                                                ->count();
+        // accounts_payable
+        $banks = Bankacc::get();
+        $accounts_payable_bid = 0;
+        $accounts_receivable_bid = 0;
+        foreach($banks as $r){
+            if($r->type == 'Due' && $r->name == 'Due')
+                $accounts_payable_bid = $r->id;
+            if($r->type == 'Due' && $r->name == 'Due2')
+                $accounts_receivable_bid = $r->id;
+        }
+        
+        $data['accounts_payable'] = AccountTranx::where('account_id', '=', $accounts_payable_bid)
+                                    ->sum('amount');
+        $data['accounts_receivable'] = AccountTranx::where('account_id', '=', $accounts_receivable_bid)
+                                    ->sum('amount');
         // dd($data);
         return view('admin.home', compact('data'));
     }

@@ -68,6 +68,8 @@ return [
     'tranx_type' => 'Transaction Type',
     'deposit' => 'Deposit',
     'withdrawal' => 'Withdrawal',
+    'debit' => 'Debit',
+    'credit' => 'Credit',
     'enter_your_amount' => 'Enter your amount',
     'no_data_found' => 'No Data Found',
     'product_name_barcode' => 'Product Name/ Barcode',
@@ -169,4 +171,5 @@ return [
     'expirydate' => 'Expiry Date',
     'brand' => 'Brand',
     'tag' => 'Tag',
+    'Balance_Before'=>'Balance Before',
 ];
