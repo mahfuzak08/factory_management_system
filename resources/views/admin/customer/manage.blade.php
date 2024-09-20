@@ -60,8 +60,8 @@
                                           <tr>
                                             <td>{{$n++}}</td>
                                             <td><a href="{{route('customer-details', $row->id)}}" class="{{$row->due == 0 ? 'text-warning' : ''}}">{{$row->name}}</a></td>
-                                            <td>{{$row->mobile}}</td>
-                                            <td>{{number_format($row->due, 2)}}</td>
+                                            <td>{{e2bn($row->mobile)}}</td>
+                                            <td>{{e2bn(number_format($row->due, 2))}}</td>
                                             <td>
                                               <a href="{{route('customer-details', $row->id)}}" class="btn btn-info btn-rounded btn-sm">{{__('admin.details')}}</a> 
                                               @if(hasModuleAccess('Customer_Edit'))

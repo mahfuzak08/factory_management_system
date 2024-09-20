@@ -177,12 +177,14 @@ class VendorController extends Controller
                             ->where('ref_id', $id)
                             ->where('ref_type', 'vendor')
                             ->select('account_tranxes.*', 'bankaccs.name as bank_name')
+                            ->latest()
                             ->paginate(10)->withQueryString();
         }else{
             $datas = AccountTranx::join('bankaccs', 'account_tranxes.account_id', '=', 'bankaccs.id')
                     ->where('ref_id', $id)
                     ->where('ref_type', 'vendor')
                     ->select('account_tranxes.*', 'bankaccs.name as bank_name')
+                    ->latest()
                     ->paginate(10)->withQueryString();
         }
         $balancesBefore = array();
@@ -223,6 +225,8 @@ class VendorController extends Controller
     public function add_amount(Request $request){
         $input = $request->all();
         $banks = Bankacc::get();
+        if($input['amount']) $input['amount'] = b2en($input['amount']);
+        // dd($request->all());
         $aid = 0;
         if($request->input('tranx_type') == 'debit'){
             foreach($banks as $r){
@@ -238,9 +242,9 @@ class VendorController extends Controller
         $input['account_id'] = $aid;
         $rules = [
             'tranx_date' => ['required', 'date'],
-            'amount' => ['required', 'numeric']
+            'amount' => ['required']
         ];
-        $id = $request->input('account_id');
+        // $id = $request->input('account_id');
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
@@ -253,10 +257,10 @@ class VendorController extends Controller
         DB::beginTransaction();
         try{
             $vendor = Vendor::findOrFail($request->input('ref_id'));
-            if($vendor){
-                $vendor->balance = $vendor->balance - $request->input('amount');
-                $vendor->save();
-            }
+            // if($vendor){
+            //     $vendor->balance = $vendor->balance - $request->input('amount');
+            //     $vendor->save();
+            // }
 
             if(!empty($request->input('id'))){
                 $data = AccountTranx::where('id', $request->input('id'))
@@ -265,8 +269,10 @@ class VendorController extends Controller
                                     ->get();
                 
                 $input['user_id'] = Auth::id();
+                $input['account_id'] = $request->input('account_id');
                 $input['amount'] *= -1;
                 $input['note'] = $input['note'] . ' (Edited)';
+                // dd($input);
                 $data[0]->fill($input)->save();
                 flash()->addSuccess('Vendor Transection Update Successfully.');
             }else{
@@ -281,6 +287,7 @@ class VendorController extends Controller
             // If all queries succeed, commit the transaction
             DB::commit();
         }catch (\Exception $e) {
+            dd($e);
             // If any query fails, catch the exception and roll back the transaction
             flash()->addError('Vendor Transection Not Added/ Update Successfully.');
             DB::rollback();

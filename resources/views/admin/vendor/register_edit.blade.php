@@ -41,15 +41,15 @@
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">
-                                      <label for="input7" class="col-sm-3 col-form-label">{{__('admin.received_by')}}</label>
+                                      <label for="input7" class="col-sm-3 col-form-label">{{__('admin.Particulars')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="note" id="input7" value="{{$order->note}}" placeholder="{{__('admin.received_by')}}">
+                                        <input type="text" class="form-control" name="note" id="input7" value="{{$order->note}}" placeholder="{{__('admin.Particulars')}}">
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input8" class="col-sm-3 col-form-label">{{__('admin.enter_your_amount')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="text" name="amount" placeholder="{{__('admin.enter_your_amount')}}" required class="form-control" value="{{$order->amount * -1}}" id="input8">
+                                        <input type="text" name="amount" placeholder="{{__('admin.enter_your_amount')}}" required class="form-control" value="{{e2bn($order->amount*-1)}}" id="input8">
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">
@@ -57,7 +57,12 @@
                                       <div class="col-sm-9">
                                         <select class="form-select" name="account_id" id="input9" aria-label="Default select example">
                                           @foreach($account as $bank)
-                                          <option value="{{$bank->id}}" {{$order->account_id == $bank->id ? 'selected' : ''}} >{{$bank->name}}</option>
+                                            @if($bank->type == 'Due' || $bank->type == 'Cash')
+                                              @if($bank->name == 'Due')
+                                              @else
+                                                <option value="{{$bank->id}}" {{$order->account_id == $bank->id ? 'selected' : ''}} >{{$bank->name == 'Cash' ? __('admin.debit') : __('admin.credit')}}</option>
+                                              @endif
+                                            @endif
                                           @endforeach
                                         </select>
                                       </div>

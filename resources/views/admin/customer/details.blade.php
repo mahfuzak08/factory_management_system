@@ -228,9 +228,9 @@
                                             <td>{{$n++}}</td>
                                             <td>{{date('d-m-Y', strtotime($row->tranx_date))}}</td>
                                             <td>{{$row->note}}</td>
-                                            <td class="text-right">{{$row->account_id == $table["aidcash"] ? number_format($row->amount, 2) : "-"}}</td>
-                                            <td class="text-right">{{$row->account_id == $table["aiddue"] ? number_format($row->amount, 2) : "-"}}</td>
-                                            <td class="text-right">{{number_format($total, 2)}}</td>
+                                            <td class="text-right">{{$row->account_id == $table["aidcash"] ? e2bn(number_format($row->amount, 2)) : "-"}}</td>
+                                            <td class="text-right">{{$row->account_id == $table["aiddue"] ? e2bn(number_format($row->amount, 2)) : "-"}}</td>
+                                            <td class="text-right">{{e2bn(number_format($total, 2))}}</td>
                                             <td>
                                               @if($row->ref_tranx_type != 'sales_order')
                                                 @if(hasModuleAccess('Customer_Transection_Edit'))
@@ -252,9 +252,9 @@
                                     <tfoot>
                                       <tr style="background: #bab8bb">
                                         <td colspan="3">{{__('admin.total')}}</td>
-                                        <td class="text-right">{{number_format($table["c"], 2)}}</td>
-                                        <td class="text-right">{{number_format($table["d"], 2)}}</td>
-                                        <td class="text-right">{{number_format($table["c"] - $table["d"], 2)}}</td>
+                                        <td class="text-right">{{e2bn(number_format($table["c"], 2))}}</td>
+                                        <td class="text-right">{{e2bn(number_format($table["d"], 2))}}</td>
+                                        <td class="text-right">{{e2bn(number_format($table["c"] - $table["d"], 2))}}</td>
                                         <td></td>
                                       </tr>
                                     </tfoot>

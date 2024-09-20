@@ -22,7 +22,7 @@
                     <div class="col-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-head">
-                                <h3>{{__('admin.customer')}} Transection Update</h3>
+                                <h3>{{__('admin.customer')}} {{__('admin.enter_your_amount')}} {{__('admin.update')}}</h3>
                             </div>
                             <div class="card-body">
                               <div class="row">
@@ -41,7 +41,7 @@
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">
-                                      <label for="input7" class="col-sm-3 col-form-label">{{__('admin.received_by')}}</label>
+                                      <label for="input7" class="col-sm-3 col-form-label">{{__('admin.Particulars')}}</label>
                                       <div class="col-sm-9">
                                         <input type="text" class="form-control" name="note" id="input7" value="{{$order->note}}" placeholder="{{__('admin.received_by')}}">
                                       </div>
@@ -49,7 +49,7 @@
                                     <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input8" class="col-sm-3 col-form-label">{{__('admin.enter_your_amount')}}</label>
                                       <div class="col-sm-9">
-                                        <input type="text" name="amount" placeholder="{{__('admin.enter_your_amount')}}" required class="form-control" value="{{$order->amount}}" id="input8">
+                                        <input type="text" name="amount" placeholder="{{__('admin.enter_your_amount')}}" required class="form-control" value="{{e2bn($order->amount)}}" id="input8">
                                       </div>
                                     </div>
                                     <div class="form-group form-group-margin-bottom-off row">
@@ -57,12 +57,17 @@
                                       <div class="col-sm-9">
                                         <select class="form-select" name="account_id" id="input9" aria-label="Default select example">
                                           @foreach($account as $bank)
-                                          <option value="{{$bank->id}}" {{$order->account_id == $bank->id ? 'selected' : ''}} >{{$bank->name}}</option>
+                                            @if($bank->type == 'Due' || $bank->type == 'Cash')
+                                              @if($bank->name == 'Due2')
+                                              @else
+                                                <option value="{{$bank->id}}" {{$order->account_id == $bank->id ? 'selected' : ''}} >{{$bank->name == 'Cash' ? __('admin.debit') : __('admin.credit')}}</option>
+                                              @endif
+                                            @endif
                                           @endforeach
                                         </select>
                                       </div>
                                     </div>
-                                    <div class="form-group form-group-margin-bottom-off row">
+                                    {{-- <div class="form-group form-group-margin-bottom-off row">
                                         <label for="input9" class="col-sm-3 col-form-label">{{__('admin.do_you_want_to_send_sms')}}</label>
                                         <div class="col-sm-9">
                                           <select class="form-select" name="sms_flag" id="input10">
@@ -70,7 +75,7 @@
                                             <option value="yes">{{__('admin.yes')}}</option>
                                           </select>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <button type="submit" class="btn btn-primary me-2 float-end">{{ __('admin.update') }}</button>
                                     <a href="{{route('customer-details', $order->ref_id)}}" class="btn btn-secondary me-2 float-end">{{ __('admin.cancel') }}</a>
                                   </form>

@@ -190,7 +190,7 @@
                                                 @if($r["account_id"] == $table["aidcash"])
                                                   @php 
                                                     $total = $r["total_amount"];
-                                                    echo number_format($r["total_amount"], 2);
+                                                    echo e2bn(number_format($r["total_amount"], 2));
                                                   @endphp
                                                 @endif
                                               @endforeach
@@ -200,13 +200,13 @@
                                                 @if($r["account_id"] == $table["aiddue"])
                                                   @php 
                                                     $total -= $r["total_amount"];
-                                                    echo number_format($r["total_amount"], 2);
+                                                    echo e2bn(number_format($r["total_amount"], 2));
                                                   @endphp
                                                 @endif
                                               @endforeach
                                             </td>
                                             <td class="text-right">
-                                              {{number_format($total, 2)}}
+                                              {{e2bn(number_format($total, 2))}}
                                             </td>
                                             <td></td>
                                           </tr>
@@ -219,16 +219,16 @@
                                             <td>{{$n++}}</td>
                                             <td>{{date('d-m-Y', strtotime($row->tranx_date))}}</td>
                                             <td>{{$row->note}}</td>
-                                            <td class="text-right">{{$row->account_id == $table["aidcash"] ? number_format($row->amount, 2) : "-"}}</td>
-                                            <td class="text-right">{{$row->account_id == $table["aiddue"] ? number_format($row->amount, 2) : "-"}}</td>
-                                            <td class="text-right">{{number_format($total, 2)}}</td>
+                                            <td class="text-right">{{$row->account_id == $table["aidcash"] ? e2bn(number_format($row->amount, 2)) : "-"}}</td>
+                                            <td class="text-right">{{$row->account_id == $table["aiddue"] ? e2bn(number_format($row->amount, 2)) : "-"}}</td>
+                                            <td class="text-right">{{e2bn(number_format($total, 2))}}</td>
                                             <td>
                                               @if($row->ref_tranx_type != 'sales_order')
-                                                @if(hasModuleAccess('Customer_Transection_Edit'))
-                                                  <a href="{{route('customer-trnx-edit', $row->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
+                                                @if(hasModuleAccess('Vendor_Transection_Edit'))
+                                                  <a href="{{route('vendor-trnx-edit', $row->id)}}" class="btn btn-warning btn-rounded btn-sm">{{__('admin.edit')}}</a> 
                                                 @endif
-                                                @if(hasModuleAccess('Customer_Transection_Delete'))
-                                                  <a href="{{route('customer-trnx-delete', $row->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a>
+                                                @if(hasModuleAccess('Vendor_Transection_Delete'))
+                                                  <a href="{{route('vendor-trnx-delete', $row->id)}}" class="btn btn-danger btn-rounded btn-sm" onclick="return confirm('Are you sure, you want to delete?')">{{__('admin.delete')}}</a>
                                                 @endif
                                               @endif
                                             </td>
@@ -243,9 +243,9 @@
                                     <tfoot>
                                       <tr style="background: #bab8bb">
                                         <td colspan="3">{{__('admin.total')}}</td>
-                                        <td class="text-right">{{number_format($table["c"], 2)}}</td>
-                                        <td class="text-right">{{number_format($table["d"], 2)}}</td>
-                                        <td class="text-right">{{number_format($table["c"] - $table["d"], 2)}}</td>
+                                        <td class="text-right">{{e2bn(number_format($table["c"], 2))}}</td>
+                                        <td class="text-right">{{e2bn(number_format($table["d"], 2))}}</td>
+                                        <td class="text-right">{{e2bn(number_format($table["c"] - $table["d"], 2))}}</td>
                                         <td></td>
                                       </tr>
                                     </tfoot>

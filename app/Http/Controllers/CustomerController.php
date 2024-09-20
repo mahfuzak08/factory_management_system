@@ -56,7 +56,7 @@ class CustomerController extends Controller
     public function set_customer(Request $request){
         $rules = [
             'name' => ['required', 'string', 'max:255'],
-            'mobile' => ['required', 'digits:13', 'unique:customers,mobile']
+            'mobile' => ['required', 'digits:11', 'unique:customers,mobile']
         ];
         $validator = Validator::make($request->all(), $rules);
 
@@ -72,6 +72,8 @@ class CustomerController extends Controller
             $data = new Customer();
             
             $input = $request->all();
+            if($input['mobile']) $input['mobile'] = b2en($input['mobile']);
+            if($input['balance']) $input['balance'] = b2en($input['balance']);
             $input['balance'] = empty($input['balance']) || $input['balance'] == null ? 0 : $input['balance'];
             $input['opening_balance'] = $input['balance'];
             $data->fill($input)->save();
@@ -190,12 +192,14 @@ class CustomerController extends Controller
                             ->where('ref_id', $id)
                             ->where('ref_type', 'customer')
                             ->select('account_tranxes.*', 'bankaccs.name as bank_name')
+                            ->latest()
                             ->paginate(10)->withQueryString();
         }else{
             $datas = AccountTranx::join('bankaccs', 'account_tranxes.account_id', '=', 'bankaccs.id')
                     ->where('ref_id', $id)
                     ->where('ref_type', 'customer')
                     ->select('account_tranxes.*', 'bankaccs.name as bank_name')
+                    ->latest()
                     ->paginate(10)->withQueryString();
         }
         $balancesBefore = array();
@@ -236,6 +240,7 @@ class CustomerController extends Controller
 
     public function add_amount(Request $request){
         $input = $request->all();
+        if($input['amount']) $input['amount'] = b2en($input['amount']);
         $banks = Bankacc::get();
         $aid = 0;
         if($request->input('tranx_type') == 'debit'){
@@ -252,9 +257,9 @@ class CustomerController extends Controller
         $input['account_id'] = $aid;
         $rules = [
             'tranx_date' => ['required', 'date'],
-            'amount' => ['required', 'numeric']
+            'amount' => ['required']
         ];
-        $id = $request->input('account_id');
+        // $id = $request->input('account_id');
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
@@ -278,7 +283,7 @@ class CustomerController extends Controller
                                     ->where('ref_type', $request->input('ref_type'))
                                     ->get();
                 
-                $input = $request->all();
+                $input['account_id'] = $request->input('account_id');
                 $input['user_id'] = Auth::id();
                 $input['note'] = $input['note'] . ' (Edited)';
                 $data[0]->fill($input)->save();
