@@ -26,7 +26,7 @@
                             </div>
                             <div class="card-body">
                               <div class="row">
-                                <div class="col-md-6 d-none d-md-block" id="addForm">
+                                <div class="col-md-6" id="addForm">
                                   <form class="forms-sample" method="POST" action="{{ route('save-vendor-amount') }}">
                                     @csrf
                                     <input type="hidden" name="id" value="{{$order->id}}" />
