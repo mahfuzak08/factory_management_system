@@ -36,7 +36,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-6 stretch-card grid-margin">
+    {{-- <div class="col-md-6 stretch-card grid-margin">
       <div class="card bg-gradient-success card-img-holder text-white">
         <div class="card-body">
           <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
@@ -53,6 +53,6 @@
             <h5 class="card-text">{{number_format(abs($data['accounts_receivable']), 2)}}</h5>
         </div>
       </div>
-    </div>
+    </div> --}}
   </div>
 </div>
