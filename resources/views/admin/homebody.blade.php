@@ -36,16 +36,18 @@
         </div>
       </div>
     </div>
-    {{-- <div class="col-md-6 stretch-card grid-margin">
+    <div class="col-md-6 stretch-card grid-margin">
       <div class="card bg-gradient-success card-img-holder text-white">
         <div class="card-body">
+          <a href="{{ route('total-due')}}">
           <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-          <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.accounts_payable')}}</h2>
-          <h5 class="card-text">{{number_format($data['accounts_payable'], 2)}}</h5>
+          <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.report')}}</h2>
+          {{-- <h5 class="card-text">{{number_format($data['accounts_payable'], 2)}}</h5> --}}
+          </a>
         </div>
       </div>
     </div>
-    <div class="col-md-6 stretch-card grid-margin">
+    {{-- <div class="col-md-6 stretch-card grid-margin">
       <div class="card bg-gradient-primary card-img-holder text-white">
         <div class="card-body">
             <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />

@@ -30,6 +30,7 @@
                                         <p style="font-size: 20px;font-weight:700;">{{$customer[0]->name}}</p>
                                         <b>{{$customer[0]->mobile}}</b>
                                         <br>{{$customer[0]->address}}
+                                        <br>{{__('admin.total_due')}}: {{number_format($customer[0]->total_due, 2)}}
                                       </div>
                                     </div>
                                     {{-- <div class="form-group form-group-margin-bottom-off row">

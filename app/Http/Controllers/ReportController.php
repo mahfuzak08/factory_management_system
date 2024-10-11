@@ -87,6 +87,24 @@ class ReportController extends Controller
         return view('admin.report.sales', compact('datas', 'total', 'account', 'customer'))->with('i', (request()->input('page', 1) - 1) * 10);
     }
 
+    public function total_due(){
+        activity()->log('Total due report open');
+        $data=array();
+        $banks = Bankacc::get();
+        $accounts_payable_bid = 0;
+        $accounts_receivable_bid = 0;
+        foreach($banks as $r){
+            if($r->type == 'Due' && $r->name == 'Due')
+                $accounts_payable_bid = $r->id;
+            if($r->type == 'Due' && $r->name == 'Due2')
+                $accounts_receivable_bid = $r->id;
+        }
+        
+        $data['accounts_payable'] = AccountTranx::where('account_id', '=', $accounts_payable_bid)->sum('amount');
+        $data['accounts_receivable'] = AccountTranx::where('account_id', '=', $accounts_receivable_bid)->sum('amount');
+        return view('admin.report.due', compact('data'));
+    }
+
     public function purchase(){
         $sd = request()->input('start_date');
         $ed = request()->input('end_date');

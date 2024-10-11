@@ -120,6 +120,7 @@ Route::middleware([
     Route::get('/fund_transfering_action/{type}/{id}', [BankaccController::class, 'transfer_action'])->name('fund-transfer-action');
     
     Route::get('/reportSales', [ReportController::class, 'sales'])->name('sales-report');
+    Route::get('/reportTotalDue', [ReportController::class, 'total_due'])->name('total-due');
     Route::get('/reportPurchase', [ReportController::class, 'purchase'])->name('purchase-report');
     Route::get('/reportExpense', [ReportController::class, 'expense'])->name('expense-report');
     Route::get('/reportProfitAndLoss', [ReportController::class, 'profit_and_loss'])->name('profit-and-loss');

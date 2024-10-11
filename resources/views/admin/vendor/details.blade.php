@@ -29,7 +29,8 @@
                                       <div class="col-sm-9">
                                         <p style="font-size: 20px;font-weight:700;">{{$vendor[0]->name}}</p>
                                         <b>{{$vendor[0]->mobile}}</b>
-                                        <br>{{$vendor[0]->address}}                                        
+                                        <br>{{$vendor[0]->address}}  
+                                        <br>{{__('admin.total_due')}}: {{$vendor[0]->total_due * -1}}
                                       </div>
                                     </div>
                                     @php
