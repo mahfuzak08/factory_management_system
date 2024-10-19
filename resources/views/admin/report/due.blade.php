@@ -30,7 +30,7 @@
                   <div class="card-body">
                     <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
                     <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.accounts_payable')}}</h2>
-                    <h5 class="card-text">{{number_format($data['accounts_receivable'], 2)}}</h5>
+                    <h5 class="card-text">{{e2bn(number_format($data['accounts_receivable'], 2))}}</h5>
                   </div>
                 </div>
               </div>
@@ -39,7 +39,7 @@
                   <div class="card-body">
                       <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
                       <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.accounts_receivable')}}</h2>
-                      <h5 class="card-text">{{number_format(abs($data['accounts_payable']), 2)}}</h5>
+                      <h5 class="card-text">{{e2bn(number_format(abs($data['accounts_payable']), 2))}}</h5>
                   </div>
                 </div>
               </div>
