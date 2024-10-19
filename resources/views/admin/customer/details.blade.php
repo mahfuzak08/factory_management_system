@@ -30,7 +30,7 @@
                                         <p style="font-size: 20px;font-weight:700;">{{$customer[0]->name}}</p>
                                         <b>{{$customer[0]->mobile}}</b>
                                         <br>{{$customer[0]->address}}
-                                        <br>{{__('admin.total_due')}}: {{number_format($customer[0]->total_due*-1, 2)}}
+                                        <br>{{__('admin.total_due')}}: {{number_format($customer[0]->due*-1, 2)}}
                                       </div>
                                     </div>
                                     {{-- <div class="form-group form-group-margin-bottom-off row">
@@ -39,10 +39,6 @@
                                         <input type="text" class="form-control form-control-border-off" disabled="true" id="input4" value="{{$customer[0]->email}}">
                                       </div>
                                     </div> --}}
-                                    @php
-                                    $customer[0]->total_due = $customer[0]->total_due >= 0 ? $customer[0]->total_due : 0;
-                                    // $customer[0]->cy_due = $customer[0]->cy_due >= 0 ? $customer[0]->cy_due : 0;
-                                    @endphp
                                     {{-- <div class="form-group form-group-margin-bottom-off row">
                                       <label for="input5" class="col-sm-3 col-form-label text-warning">{{__('admin.total_due')}}</label>
                                       <div class="col-sm-9">

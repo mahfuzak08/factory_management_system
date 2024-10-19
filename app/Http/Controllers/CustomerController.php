@@ -162,11 +162,18 @@ class CustomerController extends Controller
     }
 
     public function see_customer($id){
-        // dd($this->fysd);
+        $banks = Bankacc::get();
+        $accounts_payable_bid = 0;
+        $cash_bid = 0;
+        foreach($banks as $r){
+            if($r->type == 'Due' && $r->name == 'Due')
+                $accounts_payable_bid = $r->id;
+            if($r->type == 'Cash' && $r->name == 'Cash')
+                $cash_bid = $r->id;
+        }
         $customer = Customer::where('id', $id)
                             ->select('customers.*')
-                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND ref_tranx_id = "0"), 0)) as total_due'))
-                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer"), 0)) as total_pay'))
+                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE account_id = "'.$cash_bid.'" AND ref_id = customers.id AND ref_type = "customer"), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE account_id = "'.$accounts_payable_bid.'" AND ref_id = customers.id AND ref_type = "customer"), 0)) as due'))
                             ->get();
         $cs = Sales::where('customer_id', $id)
                     ->where('order_type', 'sales')
@@ -179,7 +186,6 @@ class CustomerController extends Controller
         }
         // dd($quantity);
 
-        $banks = Bankacc::get();
         if(! empty(request()->input('search'))){
             $str = request()->input('search');
             $datas = AccountTranx::join('bankaccs', 'account_tranxes.account_id', '=', 'bankaccs.id')
