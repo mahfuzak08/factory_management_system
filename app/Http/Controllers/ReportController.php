@@ -32,7 +32,7 @@ class ReportController extends Controller
                                     if($status != 'all')
                                         $q->where('status', $status);
                                     if($inv != '') {
-                                        $q->where('order_id', $inv);
+                                        $q->where('id', $inv);
                                     }
                                     else{
                                         if($sd && $ed)
