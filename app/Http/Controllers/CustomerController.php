@@ -36,17 +36,19 @@ class CustomerController extends Controller
                                 ->orWhere('address', 'like', '%'.$str.'%');
                             })
                             ->where('is_delete', 0)
-                            ->latest()->paginate(50)->withQueryString();
+                            ->orderByRaw('CASE WHEN due > 0 THEN 0 ELSE 1 END, due DESC, id DESC') // Fixes ordering issue
+                            ->paginate(50)
+                            ->withQueryString();;
 
             
         }else{
             $datas = Customer::select('customers.*')
-                            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer"), 0)) as due'))
-                            ->addSelect(DB::raw('COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND account_id NOT IN '.$discountids.'), 0) as receive'))
-                            ->latest()
-                            ->where('is_delete', 0)
-                            ->paginate(50)
-                            ->withQueryString();
+            ->addSelect(DB::raw('(COALESCE((SELECT SUM(total) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer"), 0)) as due'))
+            ->addSelect(DB::raw('COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND account_id NOT IN ' . $discountids . '), 0) as receive'))
+            ->where('is_delete', 0)
+            ->orderByRaw('CASE WHEN due > 0 THEN 0 ELSE 1 END, due DESC, id DESC') // Fixes ordering issue
+            ->paginate(50)
+            ->withQueryString();
 
             if(! $datas->hasMorePages()){
                 $ts = Sales::where('status', 1)->sum('total');

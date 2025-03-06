@@ -44,7 +44,7 @@ class EmployeeController extends Controller
                                 $query->where('employees.closing', '>', date('Y-m-01'))
                                       ->orWhereNull('employees.closing');
                             })
-                            ->orderBy('employees.name', 'ASC')
+                            ->orderBy('amount')
                             ->groupBy('employees.id', 'employees.name', 'employees.total_paid', 
                                       'employees.mobile', 'employees.gender', 'employees.designation', 
                                       'employees.nid', 'employees.address', 'employees.closing')
@@ -66,7 +66,7 @@ class EmployeeController extends Controller
                                 $query->where('employees.closing', '>', date('Y-m-01'))
                                       ->orWhereNull('employees.closing');
                             })
-                            ->orderBy('employees.name', 'ASC')
+                            ->orderBy('amount')
                             ->groupBy('employees.id', 'employees.name', 'employees.total_paid', 
                                       'employees.mobile', 'employees.gender', 'employees.designation', 
                                       'employees.nid', 'employees.address', 'employees.closing')
