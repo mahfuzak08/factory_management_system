@@ -186,7 +186,7 @@
                                       @if(count($datas) > 0)
                                         @php 
                                         if(isset($_GET['page']) && $_GET['page']>0)
-                                          $n = 1 + (($_GET['page'] - 1) * 50);
+                                          $n = 1 + (($_GET['page'] - 1) * 10);
                                         else
                                           $n = 1;
                                         @endphp

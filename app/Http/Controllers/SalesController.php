@@ -30,11 +30,12 @@ class SalesController extends Controller
                                 ->orWhere('address', 'like', '%'.$str.'%');
                             })
                             ->where('is_delete', 0)
-                            ->latest()->paginate(10)->withQueryString();
+                            ->orderByRaw('CASE WHEN due > 0 THEN 0 ELSE 1 END, due DESC, id DESC') // Fixes ordering issue
+                            ->paginate(10)->withQueryString();
         }else{
             $datas = Customer::select('customers.*')
                             ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM sales WHERE customer_id = customers.id AND status = 1), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = customers.id AND ref_type = "customer" AND ref_tranx_id = "0"), 0)) as due'))
-                            ->latest()
+                            ->orderByRaw('CASE WHEN due > 0 THEN 0 ELSE 1 END, due DESC, id DESC') // Fixes ordering issue
                             ->where('is_delete', 0)
                             ->paginate(10)
                             ->withQueryString();
