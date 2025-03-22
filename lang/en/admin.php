@@ -173,4 +173,5 @@ return [
     'fullday' => 'Full Day',
     'halfday' => 'Half Day',
     'time' => 'Time',
+    'chalan_no' => 'Chalan No',
 ];
