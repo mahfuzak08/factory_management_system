@@ -52,6 +52,12 @@
                                 <input type="text" required name="mobile" id="mobile" class="form-control" placeholder="{{__('admin.mobile')}}">
                               </td>
                             </tr>
+                            <tr>
+                              <td width="70%"> </td>
+                              <td width="30%">
+                                <input type="text" name="chalan_no" class="form-control" placeholder="Chalan No.">
+                              </td>
+                            </tr>
                           </table>
                           <table class="table">
                             <thead>

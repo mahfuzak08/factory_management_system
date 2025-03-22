@@ -54,6 +54,12 @@
                                 <input type="text" value="{{@$order[0]->mobile}}" required name="mobile" id="mobile" class="form-control" placeholder="{{__('admin.mobile')}}">
                               </td>
                             </tr>
+                            <tr>
+                              <td width="70%"> </td>
+                              <td width="30%">
+                                <input type="text" value="{{@$order[0]->chalan_no}}" name="chalan_no" id="chalan_no" class="form-control" placeholder="{{__('admin.chalan_no')}}">
+                              </td>
+                            </tr>
                           </table>
                           <table class="table">
                             <thead>

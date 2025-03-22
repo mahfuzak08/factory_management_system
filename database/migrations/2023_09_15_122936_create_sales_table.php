@@ -31,6 +31,7 @@ return new class extends Migration
                 $table->float('total', 14, 2)->default(0);
                 $table->string('payment')->nullable();
                 $table->float('asof_date_due', 14, 2)->default(0);
+                $table->string('chalan_no')->nullable();
                 $table->string('note')->nullable();
                 $table->timestamps();
             });
