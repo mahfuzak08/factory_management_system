@@ -55,7 +55,7 @@
                             <tr>
                               <td width="70%"> </td>
                               <td width="30%">
-                                <input type="text" name="chalan_no" class="form-control" placeholder="Chalan No.">
+                                <input type="text" name="chalan_no" class="form-control" placeholder="{{__('admin.chalan_no')}}">
                               </td>
                             </tr>
                           </table>
