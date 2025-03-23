@@ -8,11 +8,37 @@
     <nav aria-label="breadcrumb">
       <ul class="breadcrumb">
         <li class="breadcrumb-item active" aria-current="page">
-          <span></span>Overview <i class="mdi mdi-alert-circle-outline icon-sm text-primary align-middle"></i>
+          <span></span><a href="?mode=Select">{{$data["mode"]}} <i class="mdi mdi-close-circle icon-sm text-primary align-middle"></i></a>
         </li>
       </ul>
     </nav>
   </div>
+  @if($data["mode"] == "Select")
+  <div class="row" id="first-row">
+    <div class="col-md-6 stretch-card grid-margin">
+      <div class="card bg-gradient-info card-img-holder text-white">
+        <div class="card-body">
+          <a href="?mode=Fish">
+            <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+            <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.Fish')}}</h2>
+            {{-- <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.employee')}} {{$data['today_total_attendance']}}</h5> --}}
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 stretch-card grid-margin">
+      <div class="card bg-gradient-danger card-img-holder text-white">
+        <div class="card-body">
+          <a href="?mode=Chicken">
+            <img src="admin/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+            <h2 class="font-weight-normal mb-3" style="font-size: 50px;">{{__('admin.Chicken')}}</h2>
+            {{-- <h5 class="card-text">{{__('admin.today_total')}} {{__('admin.employee')}} {{$data['today_total_attendance']}}</h5> --}}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  @else
   <div class="row">
     <div class="col-md-6 stretch-card grid-margin">
       <div class="card bg-gradient-info card-img-holder text-white">
@@ -57,4 +83,5 @@
       </div>
     </div> --}}
   </div>
+  @endif
 </div>

@@ -172,4 +172,6 @@ return [
     'brand' => 'Brand',
     'tag' => 'Tag',
     'Balance_Before'=>'Balance Before',
+    'Fish'=>'Fish',
+    'Chicken'=>'Chicken',
 ];

@@ -27,6 +27,11 @@ class HomeController extends Controller
         // $data['accounts_receivable'] = AccountTranx::where('account_id', '=', $accounts_receivable_bid)
         //                             ->sum('amount');
         $data = array();
+        if(isset($_GET['mode'])){
+            session(['MY_MODE' => $_GET['mode']]);
+            return redirect('dashboard');
+        }
+        $data['mode'] = session('MY_MODE', 'Select');
         return view('admin.home', compact('data'));
     }
 }

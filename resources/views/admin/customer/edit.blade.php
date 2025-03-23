@@ -37,6 +37,13 @@
                                         <input type="text" class="form-control" id="exampleInputName6" name="email" value="{{$customer->email}}" placeholder="{{ __('admin.email') }}">
                                     </div>
                                     <div class="form-group">
+                                        <label for="exampleInputName9">{{ __('admin.category') }}</label>
+                                        <select class="form-select" id="exampleInputName9" name="category">
+                                          <option value="Fish" {{$customer->category == "Fish" ? "selected" : ""}}>{{__('admin.Fish')}}</option>
+                                          <option value="Chicken" {{$customer->category == "Chicken" ? "selected" : ""}}>{{__('admin.Chicken')}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
                                         <label for="exampleInputName7">{{ __('admin.address') }}</label>
                                         <input type="text" class="form-control" id="exampleInputName7" name="address" value="{{$customer->address}}" placeholder="{{ __('admin.address') }}">
                                     </div>
