@@ -182,7 +182,7 @@
                                             <td>{{$n++}}</td>
                                             <td>{{date('d-m-Y', strtotime($row->tranx_date))}}</td>
                                             <td>{{$row->bank_name}}</td>
-                                            <td>{{$row->note}}</td>
+                                            <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;">{{$row->note}}</td>
                                             <td class="text-right">{{number_format($row->amount, 2)}}</td>
                                             <td>
                                               @if($row->ref_tranx_type != 'sales_order')

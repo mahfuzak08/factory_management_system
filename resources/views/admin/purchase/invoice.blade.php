@@ -23,7 +23,7 @@
                             <div _ngcontent-tmn-c13="" class="col-lg-3 pr-0">
                               <p _ngcontent-tmn-c13="" class="mt-5 mb-2 text-right"><b _ngcontent-tmn-c13="">#INV-{{$invoice[0]->id}}</b></p>
                               <p _ngcontent-tmn-c13="" class="text-right">Date : {{date('d-m-Y', strtotime($invoice[0]->date))}}</p>
-                              <p _ngcontent-tmn-c13="" class="text-right">Chalan No : {{@$invoice[0]->chalan_no}}</p>
+                              <p _ngcontent-tmn-c13="" style="background: #F90;" class="text-right">{{__("admin.chalan_no")}} : {{@$invoice[0]->chalan_no}}</p>
                             </div>
                           </div>
                           <div _ngcontent-tmn-c13="" class="container-fluid mt-5 d-flex justify-content-center w-100">
