@@ -25,12 +25,14 @@ class VendorController extends Controller
                                 ->orWhere('address', 'like', '%'.$str.'%');
                             })
                             ->where('is_delete', 0)
+                            ->where('category', session('MY_MODE'))
                             ->latest()->paginate(10)->withQueryString();
         }else{
             $datas = Vendor::select('vendors.*')
                             ->addSelect(DB::raw('(COALESCE((SELECT SUM(total_due) FROM purchases WHERE vendor_id = vendors.id AND status = 1), 0) + COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE ref_id = vendors.id AND ref_type = "vendor" AND ref_tranx_id = "0"), 0)) as due'))
                             ->latest()
                             ->where('is_delete', 0)
+                            ->where('category', session('MY_MODE'))
                             ->paginate(10)
                             ->withQueryString();
         }
@@ -62,6 +64,7 @@ class VendorController extends Controller
             $input = $request->all();
             $input['balance'] = empty($input['balance']) || $input['balance'] == null ? 0 : $input['balance'];
             $input['opening_balance'] = $input['balance'];
+            $input['category'] = session('MY_MODE');
             $data->fill($input)->save();
     
             $vendor_id = $data->id;
@@ -117,6 +120,7 @@ class VendorController extends Controller
             $data = Vendor::findOrFail($id);
             
             $input = $request->all();
+            $input['category'] = session('MY_MODE');
             if($data->opening_balance != $input['opening_balance'])
                 $input['balance'] = $data->balance - ($data->opening_balance - $input['opening_balance']);
             else

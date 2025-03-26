@@ -36,12 +36,14 @@ class CustomerController extends Controller
                                 ->orWhere('address', 'like', '%'.$str.'%');
                             })
                             ->where('is_delete', 0)
+                            ->where('category', session('MY_MODE'))
                             ->latest()->paginate(50)->withQueryString();
         }else{
             $datas = Customer::select('customers.*')
                             ->addSelect(DB::raw('(COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE account_id = "'.$cash_bid.'" AND ref_id = customers.id AND ref_type = "customer"), 0) - COALESCE((SELECT SUM(amount) FROM account_tranxes WHERE account_id = "'.$accounts_payable_bid.'" AND ref_id = customers.id AND ref_type = "customer"), 0)) as due'))
                             ->latest()
                             ->where('is_delete', 0)
+                            ->where('category', session('MY_MODE'))
                             ->paginate(50)
                             ->withQueryString();
         }
@@ -76,6 +78,7 @@ class CustomerController extends Controller
             if($input['balance']) $input['balance'] = b2en($input['balance']);
             $input['balance'] = empty($input['balance']) || $input['balance'] == null ? 0 : $input['balance'];
             $input['opening_balance'] = $input['balance'];
+            $input['category'] = session('MY_MODE');
             $data->fill($input)->save();
     
             // $customer_id = $data->id;
@@ -135,6 +138,7 @@ class CustomerController extends Controller
             $data = Customer::findOrFail($id);
             
             $input = $request->all();
+            $input['category'] = session('MY_MODE');
             if($data->opening_balance != $input['opening_balance'])
                 $input['balance'] = $data->balance - ($data->opening_balance - $input['opening_balance']);
             else

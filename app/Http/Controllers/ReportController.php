@@ -27,6 +27,7 @@ class ReportController extends Controller
         if(! empty($sd) || ! empty($ed) || ! empty($cid) || ! empty($inv)){
             $datas = Sales::join("customers", "sales.customer_id", "=", "customers.id")
                                 ->select('sales.*', 'customers.name as customer_name')
+                                ->where('customers.category', session('MY_MODE'))
                                 ->where(function($q) use($status, $sd, $ed, $cid, $inv){
                                     if($status != 'all')
                                         $q->where('status', $status);
@@ -67,6 +68,7 @@ class ReportController extends Controller
         }else{
             $datas = Sales::join("customers", "sales.customer_id", "=", "customers.id")
                                 ->select('sales.*', 'customers.name as customer_name')
+                                ->where('customers.category', session('MY_MODE'))
                                 ->where('status', 1)
                                 ->where('date', '>=', date('Y-m-d'))
                                 ->where('date', '<=', date('Y-m-d'))
@@ -118,6 +120,7 @@ class ReportController extends Controller
         if(! empty($sd) || ! empty($ed) || ! empty($cid) || ! empty($inv)){
             $datas = Purchase::join("vendors", "purchases.vendor_id", "=", "vendors.id")
                                 ->select('purchases.*', 'vendors.name as vendor_name')
+                                ->where('vendors.category', session('MY_MODE'))
                                 ->where(function($q) use($status, $sd, $ed, $vid, $inv){
                                     if($status != 'all')
                                         $q->where('status', $status);
@@ -158,6 +161,7 @@ class ReportController extends Controller
         }else{
             $datas = Purchase::join("vendors", "purchases.vendor_id", "=", "vendors.id")
                             ->select('purchases.*', 'vendors.name as vendor_name')
+                            ->where('vendors.category', session('MY_MODE'))
                             ->where('status', 1)
                             ->where('date', '>=', date('Y-m-d'))
                             ->where('date', '<=', date('Y-m-d'))
