@@ -12551,6 +12551,7 @@ code {
 
 /* gradient buttons */
 .btn-gradient-primary {
+  background: linear-gradient(to right, #4CAF50, #2E7D32);
   background: -webkit-gradient(linear, left top, right top, from(#da8cff), to(#9a55ff));
   background: linear-gradient(to right, #da8cff, #9a55ff);
   border: 0;

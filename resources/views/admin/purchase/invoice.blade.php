@@ -15,6 +15,38 @@
                     <div class="card">
                       <div class="card-body">
                         <h4 class="card-title">{{ __('admin.purchase_register') }}</h4>
+                        
+<div class="d-flex justify-content-between align-items-start mb-4" style="border-bottom: 1px solid #ccc; padding-bottom: 10px;">
+
+    <!-- Left: Logo + Company Name -->
+    <div style="flex: 2; display: flex; align-items: flex-start;">
+        <!-- Logo -->
+        <div style="margin-right: 15px;">
+            <img src="/admin/assets/images/logo.PNG" 
+                 alt="Akash Global Trading" 
+                 style="height: 90px; width: auto;">
+        </div>
+
+        <!-- Company Name -->
+      <div>
+  <h2 style="margin: 0; font-weight: normal; font-size: 45px; font-family: 'Brush Script MT', cursive;">
+    Akash Global Trading
+  </h2>
+  <p style="margin: 0; font-style: italic; font-size: 25px; font-family: 'Brush Script MT', cursive;">
+    Importers, Exporters & General Suppliers
+  </p>
+</div>
+    </div>
+
+    <!-- Right: Company Address -->
+    <div style="flex: 1; text-align: left; font-size: 14px;">
+        <p style="margin: 0;">8/1 Iswar Das Lane, Sutrapur, Dhaka-1100</p>
+        <p style="margin: 0;">Cell: 01755595883</p>
+        <p style="margin: 0;">Email: apon_tel@yahoo.com</p>
+        <p style="margin: 0;">Website: www.akashglobaltrading.com</p>
+    </div>
+
+</div>
                           <div _ngcontent-tmn-c13="" class="row container-fluid d-flex justify-content-between">
                             <div _ngcontent-tmn-c13="" class="col-lg-3 pl-0">
                               <p _ngcontent-tmn-c13="" class="mt-5 mb-2"><b _ngcontent-tmn-c13="">{{$invoice[0]->vendor_name}}</b></p>
