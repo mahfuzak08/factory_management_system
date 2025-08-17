@@ -29,7 +29,7 @@ return new class extends Migration
                 $table->float('other_cost', 14, 2)->default(0);
                 $table->float('total', 14, 2)->default(0);
                 $table->float('asof_date_due', 14, 2)->default(0);
-                $table->float('note', 14, 2)->default(0);
+                $table->string('note')->nullable();
                 $table->timestamps();
             });
         }

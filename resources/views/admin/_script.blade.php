@@ -33,3 +33,13 @@
         console.error("Service workers are not supported.");
     }
 </script>
+<script>
+        function printDiv(divId) {
+            const printContent = document.getElementById(divId).innerHTML;
+            const originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = printContent;
+            window.print();
+             document.body.innerHTML = originalContent;
+        }
+    </script>

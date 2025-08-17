@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\SendSms;
@@ -57,7 +58,13 @@ class CustomerController extends Controller
     public function set_customer(Request $request){
         $rules = [
             'name' => ['required', 'string', 'max:255'],
-            'mobile' => ['required', 'digits:13', 'unique:customers,mobile']
+             'mobile' => [
+        'required',
+        'digits:13',
+        Rule::unique('customers', 'mobile')->where(function ($query) {
+            return $query->where('is_delete', 0); // or '1' depending on your DB
+        }),
+    ],
         ];
         $validator = Validator::make($request->all(), $rules);
 

@@ -14449,3 +14449,20 @@ dl {
   flex-grow: 1; }
 
 /*# sourceMappingURL=style.css.map */
+/*# sourceMappingURL=style.css.map */
+button[type="submit"] {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+  color: white;
+}
+
+
+a[onclick="history.back()"] {
+  background-color: red;
+}
+
+td[colspan="5"] a {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+  color: white;
+}

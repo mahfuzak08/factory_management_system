@@ -26,11 +26,11 @@
                                     @csrf
                                     <div class="form-group">
                                         <label for="exampleInputName1">{{ __('admin.name') }}</label>
-                                        <input type="text" class="form-control" id="exampleInputName1" name="name" placeholder="{{ __('admin.name') }}">
+                                        <input type="text" require="true" class="form-control" id="exampleInputName1" name="name" placeholder="{{ __('admin.name') }}">
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputName2">{{ __('admin.mobile') }}</label>
-                                        <input type="text" class="form-control" id="exampleInputName2" name="mobile" placeholder="{{ __('admin.mobile') }}">
+                                        <input type="text" required pattern="[0-9]{11,13}" class="form-control" id="exampleInputName2" name="mobile" placeholder="{{ __('admin.mobile') }}">
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputName6">{{ __('admin.email') }}</label>
