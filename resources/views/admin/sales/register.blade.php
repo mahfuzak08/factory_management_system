@@ -115,20 +115,30 @@
                               <tr class="payment_row">
                                 <td colspan="4" class="text-right">{{__('admin.receive_amount')}}</td>
                                 <td>
-                                  <select name="payment_type[]" required id="payment_type" style="width: 100%;">
+                                  <select name="payment_type[]" required id="payment_type_1" style="width: 100%;">
                                   @foreach($account as $ac)
                                     <option value="{{$ac->id}}">{{$ac->name}}</option>
                                   @endforeach
                                   </select>
                                 </td>
                                 <td>
-                                  <input type="text" required name="receive_amount[]" class="form-control" placeholder="{{__('admin.receive_amount')}}">
+                                  <input type="number" required name="receive_amount[]" id="receive_amount_1" class="form-control" placeholder="{{__('admin.receive_amount')}}" oninput="updateSecondAccount()">
+                                </td>
+                                <td></td>
+                              </tr>
+                              <tr class="payment_row">
+                                <td colspan="4" class="text-right">{{__('admin.due')}} </td>
+                                <td>
+                                  <select name="payment_type[]" required id="payment_type_2" style="width: 100%;">
+                                  @foreach($account as $k => $ac)
+                                    <option value="{{$ac->id}}" {{ $k == 1 ? 'selected' : '' }}>{{$ac->name}}</option>
+                                  @endforeach
+                                  </select>
                                 </td>
                                 <td>
-                                  <button type="button" class="add_payment_row btn btn-inverse-success btn-icon">
-                                    <i class="mdi mdi-plus"></i>
-                                  </button>
+                                  <input type="number" required name="receive_amount[]" id="receive_amount_2" class="form-control" placeholder="{{__('admin.receive_amount')}}" readonly>
                                 </td>
+                                <td></td>
                               </tr>
                               <tr>
                                 <td colspan="5" class="text-right">
@@ -320,22 +330,15 @@
         });
       });
       
-      // add new payment row
-      $(document).on("click", ".add_payment_row", function(){
-        let $tr = $(this).closest('.payment_row');
-        let $clone = $tr.clone();
-        $clone.find(':text').val('');
-        $tr.after($clone);
-        $(this).addClass('remove_payment_row').removeClass('add_payment_row');
-        $(this).addClass('btn-inverse-danger').removeClass('btn-inverse-success');
-        $(this).find('i').addClass('mdi-delete').removeClass('mdi-plus');
-      });
-      
-      // remove payment row
-      $(document).on("click", ".remove_payment_row", function(){
-        let $tr = $(this).closest('tr');
-        $tr.remove();
-      });
+      // Two account payment logic
+      function updateSecondAccount() {
+        var total = parseFloat(document.getElementById('total').value) || 0;
+        var first = parseFloat(document.getElementById('receive_amount_1').value) || 0;
+        var second = total - first;
+        document.getElementById('receive_amount_2').value = second > 0 ? second : 0;
+      }
+      document.getElementById('receive_amount_1').addEventListener('input', updateSecondAccount);
+      document.getElementById('total').addEventListener('input', updateSecondAccount);
     </script>
   </body>
 </html>
