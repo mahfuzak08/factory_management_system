@@ -20,11 +20,16 @@ class InventoryController extends Controller
     
     public function add_category(){
         $categories = Category::all();
+        $category = null;
         if(! empty(request()->input('id'))){
             $category = Category::findOrFail(request()->input('id'));
-            return view('admin.inventory.category.edit', compact('categories', 'category'));
         }
-        return view('admin.inventory.category.addnew', compact('categories'));
+        // Always pass $category to both views
+        if($category){
+            return view('admin.inventory.category.edit', compact('categories', 'category'));
+        }else{
+            return view('admin.inventory.category.addnew', compact('categories', 'category'));
+        }
     }
 
     public function save_category(Request $request){
@@ -52,10 +57,45 @@ class InventoryController extends Controller
         return redirect('category');
     }
     
+        public function destroy_category($id)
+        {
+            $category = Category::findOrFail($id);
+            $category->delete();
+            flash()->addSuccess('Category deleted successfully.');
+            return redirect('category');
+        }
+    
     public function products(){
         $products = Products::all();
         return view('admin.inventory.product.manage', compact('products'));
     }
+
+        public function show_item($id) {
+            $product = Products::with('variants', 'category')->findOrFail($id);
+            return view('admin.inventory.product.show', compact('product'));
+        }
+
+        public function edit_item($id) {
+            $product = Products::with('variants')->findOrFail($id);
+            $categories = Category::all();
+            return view('admin.inventory.product.edit', compact('product', 'categories'));
+        }
+
+        public function update_item(Request $request, $id) {
+            $product = Products::findOrFail($id);
+            $input = $request->all();
+            $product->fill($input)->save();
+            // Optionally update variants here
+            flash()->addSuccess('Product updated successfully.');
+            return redirect('products');
+        }
+
+        public function destroy_item($id) {
+            $product = Products::findOrFail($id);
+            $product->delete();
+            flash()->addSuccess('Product deleted successfully.');
+            return redirect('products');
+        }
     
     public function add_item(){
         $products = Products::all();

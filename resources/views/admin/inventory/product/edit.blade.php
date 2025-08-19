@@ -24,19 +24,23 @@
                             <div class="card-body">
                                 <form class="forms-sample" method="POST" action="{{ route('save-category') }}">
                                     @csrf
-                                    <input type="hidden" name="id" value="{{$category->id}}">
+                                    @if(isset($category) && $category)
+                                        <input type="hidden" name="id" value="{{$category->id}}">
+                                    @endif
                                     <div class="form-group">
                                         <label for="exampleInputName1">{{ __('admin.category_name') }}</label>
-                                        <input type="text" class="form-control" id="exampleInputName1" name="name" value="{{$category->name}}">
+                                        <input type="text" class="form-control" id="exampleInputName1" name="name" value="{{ isset($category) && $category ? $category->name : '' }}">
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputName5">{{ __('admin.parent_category') }}</label>
                                         <div class="form-check">
                                           <select class="form-select" name="parent" id="input9">
-                                            <option value="0" {{$category->parent == 0 ? 'selected' : ''}}>No Parent</option>
-                                            @foreach($categories as $row)
-                                            <option value="{{$row->id}}" {{$category->parent == $row->id ? 'selected' : ''}}>{{$row->name}}</option>
-                                            @endforeach
+                      <option value="0" {{ (isset($category) && $category && $category->parent == 0) ? 'selected' : '' }}>No Parent</option>
+                      @if(isset($categories) && is_iterable($categories))
+                        @foreach($categories as $row)
+                          <option value="{{$row->id}}" {{ (isset($category) && $category && $category->parent == $row->id) ? 'selected' : '' }}>{{$row->name}}</option>
+                        @endforeach
+                      @endif
                                           </select>
                                         </div>
                                     </div>

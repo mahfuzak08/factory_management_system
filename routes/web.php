@@ -45,6 +45,12 @@ Route::middleware([
     Route::get('/add_item', [InventoryController::class, 'add_item'])->name('add-item');
     Route::post('/save_item', [InventoryController::class, 'save_item'])->name('save-item');
     Route::get('/products', [InventoryController::class, 'products'])->name('products');
+
+        // Product CRUD routes
+        Route::get('/product/{id}', [InventoryController::class, 'show_item'])->name('product-show');
+        Route::get('/product/{id}/edit', [InventoryController::class, 'edit_item'])->name('product-edit');
+        Route::post('/product/{id}/update', [InventoryController::class, 'update_item'])->name('product-update');
+        Route::get('/product/{id}/delete', [InventoryController::class, 'destroy_item'])->name('product-delete');
     
     Route::get('/sales', [SalesController::class, 'index'])->name('sales');
     Route::post('/save_sales', [SalesController::class, 'set_sales'])->name('save-sales');

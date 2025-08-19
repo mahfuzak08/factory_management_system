@@ -73,7 +73,7 @@ return [
     'product_name_barcode' => 'Product Name/ Barcode',
     'product_name' => 'Product Name',
     'product_details' => 'Product Details',
-    'quantity' => 'Quantity',
+    'quantity' => 'Quantity (mt)',
     'price' => 'Price',
     'total' => 'Total',
     'amount' => 'Amount',
