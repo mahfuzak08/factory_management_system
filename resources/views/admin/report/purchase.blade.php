@@ -276,16 +276,6 @@
                             @endif
                           </tbody>
                           <tfoot>
-                            <tr>
-                              <td colspan="5" class="text-right">Page Total: </td>
-                              <td>{{$page_qty_total}}</td>
-                              <td></td>
-                              <td>{{number_format($page_rcv_total, 2)}}</td>
-                              <td>{{number_format($page_due_total, 2)}}</td>
-                              <td>{{number_format($page_total, 2)}}</td>
-                              <td class="screen-only note"></td>
-                              <td class="screen-only note"></td>
-                            </tr>
                             @if(count($total)>0)
                               <tr>
                                 <td colspan="7" class="text-right">Total: </td>
@@ -296,7 +286,7 @@
                                 <td class="screen-only note"></td>
                               </tr>
                             @endif
-                          </tfoot>
+                          </tfoot> 
                         </table>
                       </div>
 
@@ -337,7 +327,7 @@
           $('#purchaseTable').DataTable().clear().destroy();
         }
         // Only initialize once, and use the HTML table
-        $('#purchaseTable').DataTable({
+        var table = $('#purchaseTable').DataTable({
           dom: 'Bfrtip',
           buttons: [
             {
@@ -365,14 +355,17 @@
               text: 'Print',
               className: 'btn btn-rounded btn-sm btn-success',
               exportOptions: {
-                columns: ':not(.screen-only):not(.note)'
+                columns: ':not(.screen-only):not(.note)',
+                modifier: {
+                  page: 'all' // Print all rows
+                }
               },
               customize: function ( win ) {
                 $(win.document.body)
                   .prepend(`
-                    <div style="display:flex;justify-content:space-between;margin-bottom:20px;border-bottom:1px solid #ccc;padding-bottom:15px;">
-                      <div style="flex:2;display:flex;align-items:flex-start;">
-                        <div style="margin-right:15px;">
+                    <div style=\"display:flex;justify-content:space-between;margin-bottom:20px;border-bottom:1px solid #ccc;padding-bottom:15px;\">
+                      <div style=\"flex:2;display:flex;align-items:flex-start;\">
+                        <div style=\"margin-right:15px;\">
                           <img src='/admin/assets/images/logo.PNG' alt='Akash Global Trading' style='height:90px;width:auto;'>
                         </div>
                         <div style='font-family:Brush Script MT,cursive;'>
@@ -388,6 +381,21 @@
                       </div>
                     </div>
                   `);
+                // Remove any tfoot from the print table
+                var $table = $(win.document.body).find('table');
+                $table.find('tfoot').remove();
+                // Fix grand total row column alignment to match table header
+                var grandTotalHtml = '<table style="width:100%;margin-top:10px;font-weight:bold;">' +
+                  '<tr>' +
+                  '<td colspan="6" style="text-align:right;">Grand Total: </td>' +
+                  '<td></td>' + // Price column (empty)
+                  '<td>' + 'Amount Receive :'+'{{number_format($total[0]->total - $total[0]->total_due, 2)}}' + '</td>' + // Amount Receive
+                  '<td>'+'Due Amount :' + '{{number_format($total[0]->total_due, 2)}}' + '</td>' + // Due Amount
+                  '<td>'+'Total :' + '{{number_format($total[0]->total, 2)}}' + '</td>' + // Total
+                 
+                  '</tr>' +
+                  '</table>';
+                $(win.document.body).append(grandTotalHtml);
               }
             }
           ],

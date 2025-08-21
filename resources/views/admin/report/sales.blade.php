@@ -326,7 +326,7 @@
             $('#salesTable').DataTable().clear().destroy();
         }
         // Only initialize once, and use either HTML table or JS data, not both
-        $('#salesTable').DataTable({
+        var table = $('#salesTable').DataTable({
             dom: 'Bfrtip',
             buttons: [
                 {
@@ -354,7 +354,10 @@
                     text: 'Print',
                     className: 'btn btn-rounded btn-sm btn-success',
                     exportOptions: {
-                        columns: ':not(.screen-only):not(.note)'
+                        columns: ':not(.screen-only):not(.note)',
+                        modifier: {
+                            page: 'all' // Print all rows
+                        }
                     },
                     customize: function ( win ) {
                         $(win.document.body)
@@ -377,6 +380,20 @@
                                 </div>
                               </div>
                             `);
+                        // Remove any tfoot from the print table
+                        var $table = $(win.document.body).find('table');
+                        $table.find('tfoot').remove();
+                        // Fix grand total row column alignment to match table header
+                        var grandTotalHtml = '<table style="width:100%;margin-top:10px;font-weight:bold;">' +
+                          '<tr>' +
+                          '<td colspan="6" style="text-align:right;">Grand Total: </td>' +
+                          '<td></td>' + // Price column (empty)
+                          '<td>' + 'Amount Receive :'+'{{number_format($total[0]->total - $total[0]->total_due, 2)}}' + '</td>' + // Amount Receive
+                          '<td>'+'Due Amount :' + '{{number_format($total[0]->total_due, 2)}}' + '</td>' + // Due Amount
+                          '<td>'+'Total :' + '{{number_format($total[0]->total, 2)}}' + '</td>' + // Total
+                          '</tr>' +
+                          '</table>';
+                        $(win.document.body).append(grandTotalHtml);
                     }
                 }
             ],
