@@ -76,9 +76,7 @@
               <h3 class="page-title">{{__('admin.all_purchase')}}</h3>
               <div>
                 <a href="{{route('purchase')}}" class="btn btn-rounded btn-sm btn-success">{{__('admin.back')}}</a>
-                <button onclick="printDiv('printArea')" class="btn btn-primary btn-sm btn-rounded">
-                  {{__('print')}}
-                </button>
+                
               </div>
             </div>
 
@@ -302,7 +300,7 @@
                         </table>
                       </div>
 
-                      {{ $datas->onEachSide(3)->links() }}
+                    
                     </div>
                     <!-- ✅ PRINTABLE AREA END -->
 
@@ -334,6 +332,11 @@
 
       // DataTables integration
       $(document).ready(function() {
+        // Destroy any existing DataTable before initializing
+        if ($.fn.DataTable.isDataTable('#purchaseTable')) {
+          $('#purchaseTable').DataTable().clear().destroy();
+        }
+        // Only initialize once, and use the HTML table
         $('#purchaseTable').DataTable({
           dom: 'Bfrtip',
           buttons: [
@@ -365,7 +368,6 @@
                 columns: ':not(.screen-only):not(.note)'
               },
               customize: function ( win ) {
-                // Add company header to print
                 $(win.document.body)
                   .prepend(`
                     <div style="display:flex;justify-content:space-between;margin-bottom:20px;border-bottom:1px solid #ccc;padding-bottom:15px;">
@@ -389,7 +391,7 @@
               }
             }
           ],
-          pageLength: 25,
+          pageLength: 10,
           lengthMenu: [10, 25, 50, 100, 200],
           order: []
         });
