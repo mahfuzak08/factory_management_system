@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
   @include('admin._head')
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
 
   <style>
     /* Screen + Print base */
@@ -35,6 +38,16 @@
       vertical-align: top;
     }
 
+    .dt-button.btn-success {
+      background-color: #1bcfb4 !important;
+      color: #fff !important;
+      border: none !important;
+    }
+    .dt-button.btn-success:hover, .dt-button.btn-success:focus {
+      background-color: #1bcfb4 !important;
+      color: #fff !important;
+    }
+
     /* Print only */
     @media print {
       .no-print { display:none !important; }
@@ -63,7 +76,7 @@
             <h3 class="page-title">{{__('admin.all_sales')}}</h3>
             <div>
               <a href="{{route('sales')}}" class="btn btn-rounded btn-sm btn-success">{{__('admin.back')}}</a>
-              <button onclick="printDiv('printArea')" class="btn btn-primary btn-sm btn-rounded">{{__('print')}}</button>
+             
             </div>
           </div>
 
@@ -165,7 +178,7 @@
 
                     <!-- Table -->
                     <div>
-                      <table class="table table-striped">
+                      <table id="salesTable" class="table table-striped">
                         <thead>
                           <tr class="bg-dark">
                             <th>{{__('admin.sl')}}</th>
@@ -250,7 +263,8 @@
                             @endforeach
                           @else
                             <tr>
-                              <td colspan="12" class="text-center">{{__('admin.no_data_found')}}</td>
+                              <td class="text-center">{{__('admin.no_data_found')}}</td>
+                              <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                             </tr>
                           @endif
                         </tbody>
@@ -295,7 +309,7 @@
   <script>
     function openForm(){
         $('#addForm').removeClass('d-none');
-      }
+    }
     function printDiv(divId) {
       var printContents = document.getElementById(divId).innerHTML;
       var originalContents = document.body.innerHTML;
@@ -304,6 +318,76 @@
       document.body.innerHTML = originalContents;
       location.reload(); // restore scripts/events
     }
+
+    // DataTables integration
+    $(document).ready(function() {
+      $('#salesTable').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+          {
+            extend: 'copy',
+            text: 'Copy',
+            className: 'btn btn-rounded btn-sm btn-success'
+          },
+          {
+            extend: 'csv',
+            text: 'CSV',
+            className: 'btn btn-rounded btn-sm btn-success'
+          },
+          {
+            extend: 'excel',
+            text: 'Excel',
+            className: 'btn btn-rounded btn-sm btn-success'
+          },
+          {
+            extend: 'pdf',
+            text: 'PDF',
+            className: 'btn btn-rounded btn-sm btn-success'
+          },
+          {
+            extend: 'print',
+            text: 'Print',
+            className: 'btn btn-rounded btn-sm btn-success',
+            exportOptions: {
+              columns: ':not(.screen-only):not(.note)'
+            },
+            customize: function ( win ) {
+              // Add company header to print
+              $(win.document.body)
+                .prepend(`
+                  <div style="display:flex;justify-content:space-between;margin-bottom:20px;border-bottom:1px solid #ccc;padding-bottom:15px;">
+                    <div style="flex:2;display:flex;align-items:flex-start;">
+                      <div style="margin-right:15px;">
+                        <img src='/admin/assets/images/logo.PNG' alt='Akash Global Trading' style='height:90px;width:auto;'>
+                      </div>
+                      <div style='font-family:Brush Script MT,cursive;'>
+                        <h2 style='font-size:45px;margin:0;font-weight:normal;'>Akash Global Trading</h2>
+                        <p style='font-size:25px;margin:0;font-style:italic;'>Importers, Exporters & General Suppliers</p>
+                      </div>
+                    </div>
+                    <div style='flex:1;text-align:left;font-size:14px;'>
+                      <p style='margin:0;'>8/1 Iswar Das Lane, Sutrapur, Dhaka-1100</p>
+                      <p style='margin:0;'>Cell: 01755595883</p>
+                      <p style='margin:0;'>Email: apon_tel@yahoo.com</p>
+                      <p style='margin:0;'>Website: www.akashglobaltrading.com</p>
+                    </div>
+                  </div>
+                `);
+            }
+          }
+        ],
+        pageLength: 25,
+        lengthMenu: [10, 25, 50, 100, 200],
+        order: []
+      });
+    });
+  </script>
+  <!-- DataTables JS -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
   </script>
 </body>
 </html>

@@ -160,7 +160,7 @@
                     </div>
                   </div>
                 </div>
-                <!-- <div class="row">
+                <div class="row">
                     <div class="col-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
@@ -255,7 +255,7 @@
                             </div>
                         </div>
                     </div>
-                </div> -->
+                </div>
             </div>
           @include('admin._footer')
         </div>
