@@ -41,7 +41,7 @@ class ReportController extends Controller
                                 }
                             }
                         })
-                        ->get(); // No pagination, get all data
+                        ->orderBy('date', 'asc')->get(); // No pagination, get all data
             $total = Sales::where(function($q) use($status, $sd, $ed, $cid, $inv){
                 if($status != 'all')
                     $q->where('status', $status);
@@ -64,7 +64,7 @@ class ReportController extends Controller
                         ->where('status', 1)
                         ->where('date', '>=', date('Y-m-d'))
                         ->where('date', '<=', date('Y-m-d'))
-                        ->get(); // No pagination, get all data
+                        ->orderBy('date', 'asc')->get(); // No pagination, get all data
             $total = Sales::where('status', 1)
                         ->where('date', '>=', date('Y-m-d'))
                         ->where('date', '<=', date('Y-m-d'))
@@ -101,7 +101,7 @@ class ReportController extends Controller
                                 }
                             }
                         })
-                        ->get(); // No pagination, get all data
+                        ->orderBy('date', 'asc')->get(); // No pagination, get all data
             $total = Purchase::where(function($q) use($status, $sd, $ed, $vid, $inv){
                 if($status != 'all')
                     $q->where('status', $status);
@@ -124,7 +124,7 @@ class ReportController extends Controller
                         ->where('status', 1)
                         ->where('date', '>=', date('Y-m-d'))
                         ->where('date', '<=', date('Y-m-d'))
-                        ->get(); // No pagination, get all data
+                        ->orderBy('date', 'asc')->get(); // No pagination, get all data
             $total = Purchase::where('status', 1)
                         ->where('date', '>=', date('Y-m-d'))
                         ->where('date', '<=', date('Y-m-d'))

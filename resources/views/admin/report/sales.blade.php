@@ -28,14 +28,43 @@
 
     table {
       width:100% !important;
-      border-collapse: collapse;
-      margin:0;
+      table-layout: fixed; /* Prevents columns from stretching */
+ 
     }
     table th, table td {
       border: 1px solid #ddd;
       padding: 5px;
       text-align: left;
       vertical-align: top;
+      word-wrap: break-word;
+      white-space: normal;   /* Allow wrapping */
+      overflow-wrap: break-word; /* Break long words */
+      max-width: 200px; /* Adjust column width for Product Name */
+    }
+    table td:nth-child(1), table th:nth-child(1) {
+      max-width: 10px;   /* Set a fixed width */
+      white-space: normal !important;
+      word-break: break-word;
+    }
+    table td:nth-child(4), table th:nth-child(4) {
+      max-width: 250px;   /* Set a fixed width */
+      white-space: normal !important;
+      word-break: break-word;
+    }
+    table td:nth-child(5), table th:nth-child(5) {
+      max-width: 250px;   /* Set a fixed width */
+      white-space: normal !important;
+      word-break: break-word;
+    }
+    table td:nth-child(8), table th:nth-child(8) {
+      max-width: 200px;   /* Set a fixed width */
+      white-space: normal !important;
+      word-break: break-word;
+    }
+     table td:nth-child(11), table th:nth-child(11) {
+      max-width: 300px;   /* Set a fixed width */
+      white-space: normal !important;
+      word-break: break-word;
     }
 
     .dt-button.btn-success {
@@ -205,7 +234,7 @@
                             @foreach($datas as $row)
                               <tr class="{{$row->status ? '' : 'text-light bg-danger'}}">
                                 <td><a href="{{route('sales-invoice', $row->id)}}">{{$n++}}</a></td>
-                                <td><a href="{{route('sales-invoice', $row->id)}}">{{$row->order_id}}</a></td>
+                                <td><a href="{{route('sales-invoice', $row->id)}}">{{$row->id}}</a></td>
                                 <td>{{date('d-m-Y', strtotime($row->date))}}</td>
                                 <td><a href="{{route('sales-invoice', $row->id)}}">{{$row->customer_name}}</a></td>
                                 <td>
@@ -269,7 +298,7 @@
                           @endif
                         </tbody>
                         <tfoot>
-                          <tr>
+                          <!-- <tr>
                             <td colspan="5" class="text-right">Page Total: </td>
                             <td>{{$page_qty_total}}</td>
                             <td></td>
@@ -277,7 +306,7 @@
                             <td>{{number_format($page_due_total, 2)}}</td>
                             <td>{{number_format($page_total, 2)}}</td>
                             <td class="screen-only note" colspan="2"></td>
-                          </tr>
+                          </tr> -->
                           @if(count($total)>0)
                             <tr>
                               <td colspan="7" class="text-right">Total: </td>

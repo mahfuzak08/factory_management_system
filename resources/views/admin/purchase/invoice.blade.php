@@ -147,7 +147,7 @@
                                                 <p style="margin: 0;">{{$invoice[0]->mobile}},<br>{{$invoice[0]->address}}.</p>
                                             </div>
                                             <div style="width: 50%; text-align: right;">
-                                                <p style="margin: 0 0 5px 0;"><strong>#INV-{{$invoice[0]->order_id}}</strong></p>
+                                                <p style="margin: 0 0 5px 0;"><strong>#INV-{{$invoice[0]->id}}</strong></p>
                                                 <p style="margin: 0;">Date: {{date('d-m-Y', strtotime($invoice[0]->date))}}</p>
                                             </div>
                                         </div>
